@@ -24,6 +24,8 @@ import org.apache.http.client.HttpClient;
 
 import org.apache.http.client.methods.HttpGet;
 
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import org.apache.http.util.EntityUtils;
@@ -32,9 +34,11 @@ public class HttpUtil {
     private static final String AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
     private static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
     private static final String LANG = "zh-cn";
-
+    //httpClient
+    private static HttpClient httpClient = new DefaultHttpClient();
     public static String doGet() {
         //httpClient
+
         HttpClient httpClient = new DefaultHttpClient();
 
         // get method
@@ -48,8 +52,10 @@ public class HttpUtil {
         //response
         HttpResponse response = null;
         try {
+            SSLSocketFactory.getSocketFactory().setHostnameVerifier(new AllowAllHostnameVerifier());
             response = httpClient.execute(httpGet);
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         //get response into String
@@ -58,14 +64,14 @@ public class HttpUtil {
             HttpEntity entity = response.getEntity();
             temp = EntityUtils.toString(entity, "UTF-8");
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return temp;
     }
 
     public static String doGetMarket(String symbol, String period, int size) {
-        //httpClient
-        HttpClient httpClient = new DefaultHttpClient();
+
 
         // get method
         HttpGet httpGet = new HttpGet("https://api.huobi.pro/market/history/kline?period=" + period + "&size="+size+"&symbol=" + symbol);
@@ -80,6 +86,7 @@ public class HttpUtil {
         try {
             response = httpClient.execute(httpGet);
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         //get response into String
@@ -94,13 +101,14 @@ public class HttpUtil {
     }
 
 
+
     public static void main(String args[]) {
-//        String result = doGet();
-//        System.out.println(result);
-//        MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
-//        for (MarketDomain md : mmd.getData()) {
-//            System.out.println(md.getId());
-//        }
+        String result = doGet();
+        System.out.println(result);
+        MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
+        for (MarketDomain md : mmd.getData()) {
+            System.out.println(md.getId());
+        }
         System.out.println(Constants.Period.day.period);
         System.out.println(Constants.Period.min_1.period);
         Constants.Period[] periods = Constants.Period.values();
