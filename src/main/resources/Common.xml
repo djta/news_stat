@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+    <!-- 通过typeAlias使得我们在下面使用Student实体类的时候不需要写包名 -->
+    <typeAlias alias="SymbolsDomainEntity" type="domain.SymbolsDomain"/>
+    <statement id="insertSymbols"
+               parameterClass="SymbolsDomainEntity">
+        insert into symbols (base_currency,quote_currency,symbol_partition,price_precision,amount_precision)
+        values (#base_currency#,#quote_currency#,#symbol_partition#,#price_precision#,#amount_precision#)
+        ON DUPLICATE KEY UPDATE base_currency=base_currency,quote_currency=quote_currency,symbol_partition=symbol_partition
+    </statement>
+    <select id="getSymbols" resultClass="domain.SymbolsDomain"
+            parameterClass="java.lang.String">
+        SELECT base_currency,quote_currency,symbol_partition,price_precision,amount_precision FROM symbols;
+    </select>
+
+
+</sqlMap>

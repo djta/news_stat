@@ -36,6 +36,12 @@ public class HttpUtil {
     private static final String LANG = "zh-cn";
     //httpClient
     private static HttpClient httpClient = new DefaultHttpClient();
+
+    static{
+        SSLSocketFactory.getSocketFactory().setHostnameVerifier(new AllowAllHostnameVerifier());
+    }
+
+
     public static String doGet() {
         //httpClient
 
@@ -100,7 +106,31 @@ public class HttpUtil {
         return temp;
     }
 
+    public static String doGetData(String url) {
+        // get method
+        HttpGet httpGet = new HttpGet(url);
+        // set header
+        httpGet.setHeader("User-Agent", AGENT);
+        httpGet.setHeader("Content-Type", CONTENT_TYPE);
+        httpGet.setHeader("Accept-Language", LANG);
+        //response
+        HttpResponse response = null;
+        try {
+            response = httpClient.execute(httpGet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        //get response into String
+        String temp = "";
+        try {
+            HttpEntity entity = response.getEntity();
+            temp = EntityUtils.toString(entity, "UTF-8");
+        } catch (Exception e) {
+        }
+
+        return temp;
+    }
 
     public static void main(String args[]) {
         String result = doGet();

@@ -63,4 +63,18 @@ public class Constants {
         }
     }
 
+    //market depth
+    public static final String URL_MARKET_DEPTH = "https://api.huobi.pro/market/depth?";
+
+    //trade
+    public static final String URL_TRADE = "https://api.huobi.pro/market/trade?";
+    //trade history
+    public static final String URL_TRADE_HISTORY = "https://api.huobi.pro/market/history/trade?";
+    /*
+       common api
+     */
+    //currencys
+    public static final String URL_CURRENCYS = "https://api.huobi.pro/v1/common/currencys";
+    public static final String URL_SYMBOLS = "https://api.huobi.pro/v1/common/symbols";
+
 }

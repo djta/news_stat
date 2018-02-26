@@ -1,4 +1,4 @@
-package crawl;
+package crawl.market;
 
 import com.alibaba.fastjson.JSON;
 import domain.MarketDomain;
