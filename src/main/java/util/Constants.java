@@ -62,6 +62,8 @@ public class Constants {
             this.period = period;
         }
     }
+    //
+    public static final String URL_MARKET_KLINE="https://api.huobi.pro/market/history/kline?";
 
     //market depth
     public static final String URL_MARKET_DEPTH = "https://api.huobi.pro/market/depth?";

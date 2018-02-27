@@ -14,10 +14,10 @@ public class test {
 
     public static void main(String args[]) {
         long t = System.currentTimeMillis();
-        CrawlTask.updateSymbolsCache();
-        int size = CrawlTask.symbolQueue.size();
+        CrawlMarketTask.updateSymbolsCache();
+        int size = CrawlMarketTask.symbolQueue.size();
         for (int i = 0; i < size; i++) {
-            es.submit(new CrawlTask());
+            es.submit(new CrawlMarketTask());
         }
         es.shutdown();
         long cost = System.currentTimeMillis() - t;

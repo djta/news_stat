@@ -1,9 +1,13 @@
 package crawl.market;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import domain.MarketMainDomain;
 import domain.SymbolsDomain;
 import jdbc.impl.CommonDaoImpl;
+import util.Constants;
+import util.HttpUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -24,5 +28,12 @@ public class MarketKline {
         for (SymbolsDomain sd : list) {
             System.out.println(sd);
         }
+    }
+
+    public static MarketMainDomain getMarketKline(String symbol, String period, int size) {
+        String url = Constants.URL_MARKET_KLINE + "period=" + period + "&size=" + size + "&symbol=" + symbol;
+        String result = HttpUtil.doGetData(url);
+        MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
+        return mmd;
     }
 }

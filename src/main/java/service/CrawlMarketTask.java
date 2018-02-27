@@ -2,8 +2,12 @@ package service;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import crawl.market.MarketKline;
+import domain.MarketDomain;
+import domain.MarketMainDomain;
 import domain.SymbolsDomain;
 import jdbc.impl.CommonDaoImpl;
+import jdbc.impl.MarketDaoImpl;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -15,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @Description
  */
-public class CrawlTask implements Callable<List<SymbolsDomain>> {
+public class CrawlMarketTask implements Callable<String> {
     private static Cache<String, String> symbolsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS).build();
 
@@ -35,18 +39,27 @@ public class CrawlTask implements Callable<List<SymbolsDomain>> {
         symbolQueue.addAll(symbolsCache.asMap().keySet());
     }
 
-    public List<SymbolsDomain> call() throws InterruptedException {
+    public String call() throws InterruptedException {
         String symbols = symbolQueue.poll();
         System.out.println("queue poll:" + symbols);
-        List<SymbolsDomain> list = new ArrayList<SymbolsDomain>();
-        Thread.sleep(5000);
-        return list;
+        MarketMainDomain mtd = MarketKline.getMarketKline(symbols, "1min", 5);
+        MarketDaoImpl marketDao = new MarketDaoImpl();
+        if (mtd.getStatus().equals("ok")) {
+            List<MarketDomain> list = mtd.getData();
+            for (MarketDomain md : list) {
+                md.setSymbol(symbols);
+                marketDao.insertMarket(md);
+            }
+            return "ok";
+        }
+        return "error";
+
     }
 
     public static void main(String args[]) throws InterruptedException {
 //        symbolsCache.put("a", "b");
 //        System.out.println(symbolsCache.size());
-        CrawlTask ct = new CrawlTask();
+        CrawlMarketTask ct = new CrawlMarketTask();
         ct.call();
     }
 }
