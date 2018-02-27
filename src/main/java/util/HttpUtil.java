@@ -58,8 +58,9 @@ public class HttpUtil {
         HttpClient httpClient = new DefaultHttpClient();
 
         // get method
-        HttpGet httpGet = new HttpGet("https://api.huobi.pro/market/history/kline?period=1min&size=1&symbol=ruffusdt");
-
+        String url="https://api.huobi.pro/market/history/kline?period=1min&size=1&symbol=ruffusdt";
+        HttpGet httpGet = new HttpGet(url);
+        System.out.println(url);
         // set header
         httpGet.setHeader("User-Agent", AGENT);
         httpGet.setHeader("Content-Type", CONTENT_TYPE);
@@ -92,7 +93,7 @@ public class HttpUtil {
         // get method
         String url="https://api.huobi.pro/market/history/kline?period=" + period + "&size=" + size + "&symbol=" + symbol;
         HttpGet httpGet = new HttpGet(url);
-         System.out.println(url);
+
         // set header
         httpGet.setHeader("User-Agent", AGENT);
         httpGet.setHeader("Content-Type", CONTENT_TYPE);
@@ -126,6 +127,7 @@ public class HttpUtil {
         httpGet.setHeader("User-Agent", AGENT);
         httpGet.setHeader("Content-Type", CONTENT_TYPE);
         httpGet.setHeader("Accept-Language", LANG);
+
         //response
         HttpResponse response = null;
         try {
@@ -140,15 +142,14 @@ public class HttpUtil {
             HttpEntity entity = response.getEntity();
             temp = EntityUtils.toString(entity, "UTF-8");
         } catch (Exception e) {
-        }finally {
-
         }
 
         return temp;
     }
 
     public static void main(String args[]) {
-        String result = doGet();
+//        String result = doGet();
+        String result = doGetData("https://api.huobi.pro/market/history/kline?period=1min&size=5&symbol=btcusdt");
         System.out.println(result);
         MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
         for (MarketDomain md : mmd.getData()) {

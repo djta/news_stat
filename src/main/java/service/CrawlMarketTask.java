@@ -36,11 +36,16 @@ public class CrawlMarketTask implements Callable<String> {
                 symbolsCache.put(sd.getBase_currency() + sd.getQuote_currency(), "");
             }
         }
+        symbolQueue.clear();
         symbolQueue.addAll(symbolsCache.asMap().keySet());
     }
 
     public String call() throws InterruptedException {
         String symbols = symbolQueue.poll();
+        if(symbols==null){
+            System.out.println("queue poll error:null " );
+            return "null";
+        }
         System.out.println("queue poll:" + symbols);
         MarketMainDomain mtd = MarketKline.getMarketKline(symbols, "1min", 5);
         MarketDaoImpl marketDao = new MarketDaoImpl();
