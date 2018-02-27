@@ -5,10 +5,12 @@ import domain.CurrencysDomain;
 import domain.SymbolsDomain;
 import domain.SymbolsMainDomain;
 import jdbc.impl.CommonDaoImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import service.MultiThreadService;
 import util.Constants;
 import util.HttpUtil;
 
-import java.util.logging.Logger;
 
 /**
  * Created by hzyuyongmao on 2018/2/26.
@@ -16,16 +18,16 @@ import java.util.logging.Logger;
  * @Description
  */
 public class Symbols {
-    private static final Logger LOGGER = Logger.getLogger("Symbols.class");
+    private static final Logger logger = LoggerFactory.getLogger(Symbols.class);
 
     public static void main(String args[]) {
-        LOGGER.info("sysmbols init start!!!");
-        String result = HttpUtil.doGetData(Constants.URL_SYMBOLS);
-        SymbolsMainDomain smd = JSON.parseObject(result, SymbolsMainDomain.class);
-        CommonDaoImpl cdi = new CommonDaoImpl();
-        for (SymbolsDomain sd : smd.getData()) {
-            cdi.insertSymbols(sd);
-        }
-        LOGGER.info("sysmbols init end!!!");
+        logger.info("sysmbols init start!!!");
+//        String result = HttpUtil.doGetData(Constants.URL_SYMBOLS);
+//        SymbolsMainDomain smd = JSON.parseObject(result, SymbolsMainDomain.class);
+//        CommonDaoImpl cdi = new CommonDaoImpl();
+//        for (SymbolsDomain sd : smd.getData()) {
+//            cdi.insertSymbols(sd);
+//        }
+        logger.info("sysmbols init end!!!");
     }
 }
