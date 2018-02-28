@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import domain.MarketDomain;
 import domain.MarketMainDomain;
+import jdbc.impl.MarketDaoImpl;
 import org.apache.http.Header;
 
 import org.apache.http.HttpEntity;
@@ -58,7 +59,7 @@ public class HttpUtil {
         HttpClient httpClient = new DefaultHttpClient();
 
         // get method
-        String url="https://api.huobi.pro/market/history/kline?period=1min&size=1&symbol=ruffusdt";
+        String url = "https://api.huobi.pro/market/history/kline?period=1min&size=1&symbol=ruffusdt";
         HttpGet httpGet = new HttpGet(url);
         System.out.println(url);
         // set header
@@ -91,7 +92,7 @@ public class HttpUtil {
 
         HttpClient httpClient = new DefaultHttpClient();
         // get method
-        String url="https://api.huobi.pro/market/history/kline?period=" + period + "&size=" + size + "&symbol=" + symbol;
+        String url = "https://api.huobi.pro/market/history/kline?period=" + period + "&size=" + size + "&symbol=" + symbol;
         HttpGet httpGet = new HttpGet(url);
 
         // set header
@@ -149,17 +150,15 @@ public class HttpUtil {
 
     public static void main(String args[]) {
 //        String result = doGet();
-        String result = doGetData("https://api.huobi.pro/market/history/kline?period=1min&size=5&symbol=btcusdt");
+        String result = doGetData("https://api.huobi.pro/market/history/kline?period=15min&size=2000&symbol=btcusdt");
         System.out.println(result);
         MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
+        MarketDaoImpl mdi = new MarketDaoImpl();
         for (MarketDomain md : mmd.getData()) {
+            md.setSymbol("btcusdt");
             System.out.println(md.getId());
+            mdi.insertMarket(md, "kline15min");
         }
-        System.out.println(Constants.Period.day.period);
-        System.out.println(Constants.Period.min_1.period);
-        Constants.Period[] periods = Constants.Period.values();
-        for (Constants.Period p : periods) {
-            System.out.println(p.period);
-        }
+
     }
 }

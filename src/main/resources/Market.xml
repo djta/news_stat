@@ -5,10 +5,45 @@
 <sqlMap>
     <!-- 通过typeAlias使得我们在下面使用Student实体类的时候不需要写包名 -->
     <typeAlias alias="MarketDomainEntity" type="domain.MarketDomain"/>
-    <statement id="market1min"
+    <statement id="kline1min"
                parameterClass="MarketDomainEntity">
 
-        insert into market_1_min (ts,symbol,`count`,amount,`open`,`close`,low,vol)
+        insert into kline_1_min (ts,symbol,`count`,amount,`open`,`close`,low,vol)
+        values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#vol#)
+        ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,vol=vol
+    </statement>
+    <statement id="kline5min"
+               parameterClass="MarketDomainEntity">
+
+        insert into kline_5_min (ts,symbol,`count`,amount,`open`,`close`,low,vol)
+        values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#vol#)
+        ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,vol=vol
+    </statement>
+    <statement id="kline15min"
+               parameterClass="MarketDomainEntity">
+
+        insert into kline_15_min (ts,symbol,`count`,amount,`open`,`close`,low,vol)
+        values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#vol#)
+        ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,vol=vol
+    </statement>
+    <statement id="kline30min"
+               parameterClass="MarketDomainEntity">
+
+        insert into kline_30_min (ts,symbol,`count`,amount,`open`,`close`,low,vol)
+        values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#vol#)
+        ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,vol=vol
+    </statement>
+    <statement id="kline60min"
+               parameterClass="MarketDomainEntity">
+
+        insert into kline_60_min (ts,symbol,`count`,amount,`open`,`close`,low,vol)
+        values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#vol#)
+        ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,vol=vol
+    </statement>
+    <statement id="kline1day"
+               parameterClass="MarketDomainEntity">
+
+        insert into kline_1_day (ts,symbol,`count`,amount,`open`,`close`,low,vol)
         values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#vol#)
         ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,vol=vol
     </statement>

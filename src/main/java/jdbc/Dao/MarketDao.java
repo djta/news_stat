@@ -8,5 +8,5 @@ import domain.MarketDomain;
  * @Description
  */
 public interface MarketDao {
-    public void insertMarket(MarketDomain md);
+    public void insertMarket(MarketDomain md, String queryId);
 }

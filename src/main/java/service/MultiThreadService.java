@@ -1,11 +1,8 @@
 package service;
 
-import domain.SymbolsDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.*;
 
 /**
@@ -16,24 +13,13 @@ import java.util.concurrent.*;
 public class MultiThreadService {
     private static final Logger logger = LoggerFactory.getLogger(MultiThreadService.class);
 
-    private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(10, 10, 60, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(30));
-
-//    public List<SymbolsDomain> runCrawlTask() {
-//        int queue = executorService.getQueue().size();
-//        if (queue > 5) {
-//            logger.info("queue size :" + queue);
-//        }
-//        Future<List<SymbolsDomain>> future = executorService.submit(new CrawlMarketTask());
-//        List<SymbolsDomain> resultList = null;
-//        try {
-//            resultList = future.get(5, TimeUnit.SECONDS);
-//        } catch (Exception e) {
-//            resultList = new ArrayList<SymbolsDomain>();
-//            e.printStackTrace();
-//        } finally {
-//            future.cancel(true);
-//        }
-//        return resultList;
-//    }
+    public void getMarketKlineInfo(String period, int returnSize, String queryid) {
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 100L, TimeUnit.SECONDS, new LinkedBlockingQueue(30), new ThreadPoolExecutor.CallerRunsPolicy());
+        CrawlMarketKlineTask.updateSymbolsCache();
+        int size = CrawlMarketKlineTask.symbolQueue.size();
+        for (int i = 0; i < size; i++) {
+            threadPoolExecutor.submit(new CrawlMarketKlineTask(period, returnSize, queryid));
+        }
+        threadPoolExecutor.shutdown();
+    }
 }

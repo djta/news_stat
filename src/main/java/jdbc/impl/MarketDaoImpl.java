@@ -15,7 +15,7 @@ import java.sql.SQLException;
  *
  * @Description
  */
-public class MarketDaoImpl implements MarketDao{
+public class MarketDaoImpl implements MarketDao {
     public static SqlMapClient sqlMapClient = null;
 
     static {
@@ -27,9 +27,9 @@ public class MarketDaoImpl implements MarketDao{
         }
     }
 
-    public void insertMarket(MarketDomain md) {
+    public void insertMarket(MarketDomain md, String queryId) {
         try {
-            sqlMapClient.insert("market1min", md);
+            sqlMapClient.insert(queryId, md);
         } catch (SQLException e) {
             e.printStackTrace();
         }
