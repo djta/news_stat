@@ -12,6 +12,7 @@ public class MarketDomain {
     private double open;//开盘价
     private double close;//收盘价,当K线为最晚的一根时，是最新成交价
     private double low;//最低价
+    private double high;//最高价
     private double vol;//成交额, 即 sum(每一笔成交价 * 该笔的成交量)
     private String symbol;//币名;
 
@@ -79,9 +80,26 @@ public class MarketDomain {
         this.symbol = symbol;
     }
 
+    public double getHigh() {
+        return high;
+    }
+
+    public void setHigh(double high) {
+        this.high = high;
+    }
+
     @Override
     public String toString() {
-        return "[id=" + id + ",symbol=" + symbol + ",amount=" + amount + "," +
-                "count=" + count + ",open=" + open + ",close=" + close + ",low=" + low + ",vol=" + vol + "]";
+        return "MarketDomain{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", count=" + count +
+                ", open=" + open +
+                ", close=" + close +
+                ", low=" + low +
+                ", high=" + high +
+                ", vol=" + vol +
+                ", symbol='" + symbol + '\'' +
+                '}';
     }
 }

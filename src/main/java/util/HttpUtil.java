@@ -150,14 +150,14 @@ public class HttpUtil {
 
     public static void main(String args[]) {
 //        String result = doGet();
-        String result = doGetData("https://api.huobi.pro/market/history/kline?period=15min&size=2000&symbol=btcusdt");
+        String result = doGetData("https://api.huobi.pro/market/history/kline?period=60min&size=2000&symbol=btcusdt");
         System.out.println(result);
         MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
         MarketDaoImpl mdi = new MarketDaoImpl();
         for (MarketDomain md : mmd.getData()) {
             md.setSymbol("btcusdt");
             System.out.println(md.getId());
-            mdi.insertMarket(md, "kline15min");
+            mdi.insertMarket(md, "kline60min");
         }
 
     }
