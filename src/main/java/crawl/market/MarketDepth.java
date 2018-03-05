@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import domain.MarketDepthDomain;
 import domain.MarketDepthMainDomain;
 import domain.MarketMainDomain;
+import domain.stat.TradeDepthStatDomain;
 import util.Constants;
 import util.HttpUtil;
 
@@ -18,20 +19,30 @@ import java.util.List;
 public class MarketDepth {
     public static void main(String args[]) throws InterruptedException {
         while (true) {
-            getDepth();
+            TradeDepthStatDomain tdsd=   getDepth("zilusdt", "step0");
+            System.out.println(tdsd);
             Thread.sleep(500);
         }
 
     }
 
-    public static void getDepth() {
-        String url = Constants.URL_MARKET_DEPTH + "symbol=zilusdt&type=step1";
+    public static TradeDepthStatDomain getDepth(String symbol, String type) {
+        TradeDepthStatDomain tdsd = new TradeDepthStatDomain();
+
+        String url = Constants.URL_MARKET_DEPTH + "symbol=" + symbol + "&type=" + type;
         String result = HttpUtil.doGetData(url);
-        MarketDepthMainDomain mmd = JSON.parseObject(result, MarketDepthMainDomain.class);
-//        System.out.println(JSON.toJSON(mmd));
-        if (mmd.getStatus().equals("error")) {
-            System.out.println("error");
+        tdsd.setSymbol(symbol);
+        if (result == null) {
+            tdsd.setStatus("network");
+            return tdsd;
         }
+        MarketDepthMainDomain mmd = JSON.parseObject(result, MarketDepthMainDomain.class);
+        tdsd.setTs(mmd.getTs());
+        if (mmd.getStatus().equals("error")) {
+            tdsd.setStatus("error");
+            return tdsd;
+        }
+        tdsd.setStatus("ok");
         //ask mean
         List<List> asks = mmd.getTick().getAsks();
 //        double asksSum = 0;
@@ -57,7 +68,11 @@ public class MarketDepth {
             bidsCount += count.doubleValue();
         }
         double bidsMean = bidsSum / bidsCount;
-        System.out.println("asks mean：" + asksMean + "\tcount：" + asksSum);
-        System.out.println("bids mean：" + bidsMean + "\tcount：" + bidsSum);
+        tdsd.setAskAmount(asksSum);
+        tdsd.setAskPrice(asksMean);
+        tdsd.setBidAmount(bidsSum);
+        tdsd.setBidPrice(bidsMean);
+        return tdsd;
+
     }
 }

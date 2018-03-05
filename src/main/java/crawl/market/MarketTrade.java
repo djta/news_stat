@@ -1,6 +1,7 @@
 package crawl.market;
 
 import com.alibaba.fastjson.JSON;
+import crawl.common.Symbols;
 import domain.MarketTradeDomain;
 import domain.MarketTradeMainDomain;
 import util.Constants;
@@ -15,12 +16,21 @@ import java.util.List;
  */
 public class MarketTrade {
     public static void main(String args[]) {
-        String result = HttpUtil.doGetData(Constants.URL_TRADE + "symbol=ethusdt");
+
+        long ts = System.currentTimeMillis();
+        String result = HttpUtil.doGetData(Constants.URL_TRADE + "symbol=zilusdt");
         System.out.println(result);
         MarketTradeMainDomain mtd = JSON.parseObject(result, MarketTradeMainDomain.class);
+        if (mtd.getStatus().equals("error")) {
+            System.out.println("error");
+        }
+        long tsMtd = mtd.getTs();
+        long diff = ts - tsMtd;
+        System.out.println("ts:" + diff);
         List<MarketTradeDomain> list = mtd.getTick().getData();
         for (MarketTradeDomain md : list) {
             System.out.println(md);
+
         }
     }
 }

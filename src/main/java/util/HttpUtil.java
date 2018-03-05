@@ -48,8 +48,10 @@ public class HttpUtil {
 //           e.printStackTrace();
 //       }
 //   }
+    private static  HttpClient httpClient= MySSLSocketFactory.getNewHttpClient();
     static {
         SSLSocketFactory.getSocketFactory().setHostnameVerifier(new AllowAllHostnameVerifier());
+
     }
 
     //httpClient
@@ -123,7 +125,7 @@ public class HttpUtil {
 
     public static String doGetData(String url) {
 //        HttpClient httpClient = new DefaultHttpClient();
-        HttpClient httpClient = MySSLSocketFactory.getNewHttpClient();
+
         // get method
         HttpGet httpGet = new HttpGet(url);
         // set header
@@ -158,7 +160,6 @@ public class HttpUtil {
         MarketDaoImpl mdi = new MarketDaoImpl();
         for (MarketDomain md : mmd.getData()) {
             md.setSymbol("zilusdt");
-            System.out.println(md.getId());
             mdi.insertMarket(md, "kline1min");
         }
 

@@ -5,6 +5,7 @@ import domain.MarketTradeDomain;
 import domain.MarketTradeHistoryMainDomain;
 import domain.MarketTradeMainDomain;
 import domain.MarketTradeTickDomain;
+import domain.stat.TradeHistoryStatDomain;
 import util.Constants;
 import util.HttpUtil;
 
@@ -17,11 +18,32 @@ import java.util.List;
  */
 public class MarketTradeHistory {
     public static void main(String args[]) {
+
+//        TradeHistoryStatDomain mmd=getTradeHistoryStat("elausdt",100);
+//        System.out.println(mmd);
+        while (true){
+            TradeHistoryStatDomain mmd=getTradeHistoryStat("elausdt",100);
+            System.out.println(mmd);
+
+        }
+
+    }
+    public static TradeHistoryStatDomain getTradeHistoryStat(String symbol,int size){
         //0-2000
-        long tsSend = System.currentTimeMillis();
-        String result = HttpUtil.doGetData(Constants.URL_TRADE_HISTORY + "symbol=zilusdt&size=100");
-        System.out.println(result);
+        TradeHistoryStatDomain thsDoamin=new TradeHistoryStatDomain();
+        String result = HttpUtil.doGetData(Constants.URL_TRADE_HISTORY + "symbol="+symbol+"&size="+size);
+        thsDoamin.setSymbol(symbol);
+        if(result==null){
+            thsDoamin.setStatus("network");//网络出错
+            return thsDoamin;
+        }
         MarketTradeHistoryMainDomain mtd = JSON.parseObject(result, MarketTradeHistoryMainDomain.class);
+        thsDoamin.setTs(mtd.getTs());
+        if(mtd.getStatus().equals("error")){
+            thsDoamin.setStatus("error");//信息返回出错
+            return thsDoamin;
+        }
+        thsDoamin.setStatus("ok");
         List<MarketTradeTickDomain> list = mtd.getData();
         double sellAmount = 0;
         double sellSum = 0;
@@ -30,10 +52,8 @@ public class MarketTradeHistory {
         double buySum = 0;
         int buyCount = 0;//buy count
         long ts = mtd.getTs();
-        System.out.println(tsSend - ts);
         for (MarketTradeTickDomain mds : list) {
             for (MarketTradeDomain md : mds.getData()) {
-                System.out.println(md.toString());
                 String direct = md.getDirection();
                 double amount = md.getAmount();
                 double price = md.getPrice();
@@ -52,8 +72,12 @@ public class MarketTradeHistory {
         }
         double sellMean = sellSum / sellAmount;
         double buyMean = buySum / buyAmount;
-        System.out.println("buy mean:" + buyMean + "\tbuy amount:" + buyAmount + "\tbuy count:" + buyCount);
-        System.out.println("sell mean:" + sellMean + "\tsell amount:" + sellAmount + "\tsell count:" + sellCount);
-
+        thsDoamin.setBuyCount(buyCount);
+        thsDoamin.setBuyPrice(buyMean);
+        thsDoamin.setBuyMount(buyAmount);
+        thsDoamin.setSellCount(sellCount);
+        thsDoamin.setSellMount(sellAmount);
+        thsDoamin.setSellPrice(sellMean);
+        return thsDoamin;
     }
 }
