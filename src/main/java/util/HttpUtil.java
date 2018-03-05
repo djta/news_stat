@@ -27,8 +27,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContextBuilder;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -41,7 +39,8 @@ public class HttpUtil {
     private static final String AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
     private static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
     private static final String LANG = "zh-cn";
-//   static {
+
+    //   static {
 //       try {
 //           SSLContext sc = SSLContext.getInstance("TLS");
 //           SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(sc,SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
@@ -49,6 +48,9 @@ public class HttpUtil {
 //           e.printStackTrace();
 //       }
 //   }
+    static {
+        SSLSocketFactory.getSocketFactory().setHostnameVerifier(new AllowAllHostnameVerifier());
+    }
 
     //httpClient
 //    private static  HttpClient httpClient = new DefaultHttpClient();
@@ -120,8 +122,8 @@ public class HttpUtil {
     }
 
     public static String doGetData(String url) {
-//        SSLSocketFactory.getSocketFactory().setHostnameVerifier(new AllowAllHostnameVerifier());
-        HttpClient httpClient = new DefaultHttpClient();
+//        HttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = MySSLSocketFactory.getNewHttpClient();
         // get method
         HttpGet httpGet = new HttpGet(url);
         // set header
@@ -150,14 +152,14 @@ public class HttpUtil {
 
     public static void main(String args[]) {
 //        String result = doGet();
-        String result = doGetData("https://api.huobi.pro/market/history/kline?period=60min&size=2000&symbol=btcusdt");
+        String result = doGetData("https://api.huobi.pro/market/history/kline?period=1min&size=2000&symbol=zilusdt");
         System.out.println(result);
         MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
         MarketDaoImpl mdi = new MarketDaoImpl();
         for (MarketDomain md : mmd.getData()) {
-            md.setSymbol("btcusdt");
+            md.setSymbol("zilusdt");
             System.out.println(md.getId());
-            mdi.insertMarket(md, "kline60min");
+            mdi.insertMarket(md, "kline1min");
         }
 
     }
