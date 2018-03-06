@@ -14,8 +14,7 @@ public class MarketDomain {
     private double low;//最低价
     private double high;//最高价
     private double vol;//成交额, 即 sum(每一笔成交价 * 该笔的成交量)
-    private String symbol;//币名;
-
+    private String symbol;
     public long getId() {
         return id;
     }
@@ -72,20 +71,20 @@ public class MarketDomain {
         this.vol = vol;
     }
 
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
     public double getHigh() {
         return high;
     }
 
     public void setHigh(double high) {
         this.high = high;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     @Override

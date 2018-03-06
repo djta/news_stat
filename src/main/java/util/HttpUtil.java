@@ -154,12 +154,13 @@ public class HttpUtil {
 
     public static void main(String args[]) {
 //        String result = doGet();
-        String result = doGetData("https://api.huobi.pro/market/history/kline?period=1min&size=2000&symbol=zilusdt");
+        long ts=System.currentTimeMillis();
+        String result = doGetData("https://api.huobi.pro/market/history/kline?period=1min&size=2000&symbol=btcusdt");
         System.out.println(result);
         MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
         MarketDaoImpl mdi = new MarketDaoImpl();
         for (MarketDomain md : mmd.getData()) {
-            md.setSymbol("zilusdt");
+            md.setSymbol("btcusdt");
             mdi.insertMarket(md, "kline1min");
         }
 

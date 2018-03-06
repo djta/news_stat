@@ -21,25 +21,27 @@ public class MarketTradeHistory {
 
 //        TradeHistoryStatDomain mmd=getTradeHistoryStat("elausdt",100);
 //        System.out.println(mmd);
-        while (true){
-            TradeHistoryStatDomain mmd=getTradeHistoryStat("elausdt",100);
+        while (true) {
+            TradeHistoryStatDomain mmd = getTradeHistoryStat("htusdt", 200);
             System.out.println(mmd);
 
         }
 
     }
-    public static TradeHistoryStatDomain getTradeHistoryStat(String symbol,int size){
+
+    public static TradeHistoryStatDomain getTradeHistoryStat(String symbol, int size) {
         //0-2000
-        TradeHistoryStatDomain thsDoamin=new TradeHistoryStatDomain();
-        String result = HttpUtil.doGetData(Constants.URL_TRADE_HISTORY + "symbol="+symbol+"&size="+size);
+        TradeHistoryStatDomain thsDoamin = new TradeHistoryStatDomain();
+        String result = HttpUtil.doGetData(Constants.URL_TRADE_HISTORY + "symbol=" + symbol + "&size=" + size);
+        System.out.println(result);
         thsDoamin.setSymbol(symbol);
-        if(result==null){
+        if (result == null) {
             thsDoamin.setStatus("network");//网络出错
             return thsDoamin;
         }
         MarketTradeHistoryMainDomain mtd = JSON.parseObject(result, MarketTradeHistoryMainDomain.class);
         thsDoamin.setTs(mtd.getTs());
-        if(mtd.getStatus().equals("error")){
+        if (mtd.getStatus().equals("error")) {
             thsDoamin.setStatus("error");//信息返回出错
             return thsDoamin;
         }

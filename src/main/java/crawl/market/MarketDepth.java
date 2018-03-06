@@ -19,8 +19,10 @@ import java.util.List;
 public class MarketDepth {
     public static void main(String args[]) throws InterruptedException {
         while (true) {
-            TradeDepthStatDomain tdsd=   getDepth("zilusdt", "step0");
+            long ts = System.currentTimeMillis();
+            TradeDepthStatDomain tdsd = getDepth("zilusdt", "step0");
             System.out.println(tdsd);
+            System.out.println(ts - tdsd.getTs());
             Thread.sleep(500);
         }
 
@@ -31,6 +33,7 @@ public class MarketDepth {
 
         String url = Constants.URL_MARKET_DEPTH + "symbol=" + symbol + "&type=" + type;
         String result = HttpUtil.doGetData(url);
+        System.out.println(result);
         tdsd.setSymbol(symbol);
         if (result == null) {
             tdsd.setStatus("network");

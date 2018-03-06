@@ -12,6 +12,7 @@ public class MarketMainDomain {
     private String ch;//数据所属的 channel，格式： market.$symbol.kline.$period
     private List<MarketDomain> data;//KLine 数据
     private long ts;//响应生成时间点，单位：毫秒
+    private String symbol;
 
     public String getStatus() {
         return status;
@@ -43,5 +44,13 @@ public class MarketMainDomain {
 
     public void setTs(long ts) {
         this.ts = ts;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 }

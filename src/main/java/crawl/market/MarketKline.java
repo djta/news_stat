@@ -34,6 +34,7 @@ public class MarketKline {
         String url = Constants.URL_MARKET_KLINE + "period=" + period + "&size=" + size + "&symbol=" + symbol;
         String result = HttpUtil.doGetData(url);
         MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
+        mmd.setSymbol(symbol);
         return mmd;
     }
 }
