@@ -18,20 +18,29 @@ public class TradeDepthAndHistoryRealStat {
     private static Cache<String, Double> symbolsTradeCache = CacheBuilder.newBuilder().build();
 
     public static void main(String args[]) throws InterruptedException {
+        double init = 0;
+        int step = 0;
         while (true) {
-            upAndDown("zilusdt","1min",100);
-            Thread.sleep(30*1000);
+            double result = upAndDown("bchbtc", "1min", 5);
+            Thread.sleep(30 * 1000);
+            if(step==0){
+                init=result;
+            }else{
+               System.out.println( "step:"+(result-init));
+            }
+            step++;
         }
     }
 
     /*
            //1min kline,5min kline,15min kline
      */
-    public static void upAndDown(String symbol, String period, int size) {
+    public static double upAndDown(String symbol, String period, int size) {
         MarketMainDomain market1MinDomain = MarketKline.getMarketKline(symbol, period, size);
         List<MarketDomain> market1MinData = market1MinDomain.getData();
         int dataSize = market1MinData.size();
         double rate = 0;
+        double init = 0;//old data
         for (int i = dataSize - 1; i >= 0; i--) {
             MarketDomain md = market1MinData.get(i);
 //            System.out.println(md);
@@ -39,14 +48,20 @@ public class TradeDepthAndHistoryRealStat {
                 continue;
             }
             double mean = md.getVol() / md.getAmount();//trade mean
+//            System.out.println("mean:" + mean);
             if (i == dataSize - 1) {
-                rate = mean;
+                init = mean;
             } else {
-                double prof = rate / mean - 1;
+                double prof = (mean - init) / init;
+//                System.out.println("init:" + init);
+//                System.out.println("mean:" + (mean-init));
+//                System.out.println("prof:" + prof);
                 rate += prof;
+                init = mean;
             }
         }
         System.out.println("rate:" + rate);
+        return rate;
     }
 
 
