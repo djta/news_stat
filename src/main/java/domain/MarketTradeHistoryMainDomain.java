@@ -12,6 +12,7 @@ public class MarketTradeHistoryMainDomain {
     private String ch;
     private long ts;
     private List<MarketTradeTickDomain> data;
+    private String symbol;
 
     public String getStatus() {
         return status;
@@ -43,5 +44,24 @@ public class MarketTradeHistoryMainDomain {
 
     public void setData(List<MarketTradeTickDomain> data) {
         this.data = data;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    @Override
+    public String toString() {
+        return "MarketTradeHistoryMainDomain{" +
+                "status='" + status + '\'' +
+                ", ch='" + ch + '\'' +
+                ", ts=" + ts +
+                ", data=" + data +
+                ", symbol='" + symbol + '\'' +
+                '}';
     }
 }

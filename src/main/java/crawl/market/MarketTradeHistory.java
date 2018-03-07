@@ -29,6 +29,14 @@ public class MarketTradeHistory {
 
     }
 
+    public static MarketTradeHistoryMainDomain getTradeHistoryData(String symbol, int size) {
+        String result = HttpUtil.doGetData(Constants.URL_TRADE_HISTORY + "symbol=" + symbol + "&size=" + size);
+//        System.out.println(result);
+        MarketTradeHistoryMainDomain mtd = JSON.parseObject(result, MarketTradeHistoryMainDomain.class);
+        mtd.setSymbol(symbol);
+        return mtd;
+    }
+
     public static TradeHistoryStatDomain getTradeHistoryStat(String symbol, int size) {
         //0-2000
         TradeHistoryStatDomain thsDoamin = new TradeHistoryStatDomain();

@@ -13,7 +13,7 @@ public class EarnMoneyTest {
     public static void main(String args[]) {
          symbolsCache.put("htusdt","up");
          for(String symbol:symbolsCache.asMap().keySet()){
-             MarketDepth.getDepth(symbol,"step1");
+             MarketDepth.getDepthData(symbol,"step1");
 
          }
 

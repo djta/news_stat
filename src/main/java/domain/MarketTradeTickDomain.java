@@ -37,4 +37,13 @@ public class MarketTradeTickDomain {
     public void setData(List<MarketTradeDomain> data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "MarketTradeTickDomain{" +
+                "id=" + id +
+                ", ts=" + ts +
+                ", data=" + data +
+                '}';
+    }
 }

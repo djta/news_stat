@@ -45,4 +45,13 @@ public class MarketDepthDomain {
         this.asks = asks;
     }
 
+    @Override
+    public String toString() {
+        return "MarketDepthDomain{" +
+                "id=" + id +
+                ", ts=" + ts +
+                ", bids=" + bids +
+                ", asks=" + asks +
+                '}';
+    }
 }

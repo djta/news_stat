@@ -20,7 +20,7 @@ public class MarketDepth {
     public static void main(String args[]) throws InterruptedException {
         while (true) {
             long ts = System.currentTimeMillis();
-            TradeDepthStatDomain tdsd = getDepth("zilusdt", "step0");
+            TradeDepthStatDomain tdsd = getDepthStat("zilusdt", "step0");
             System.out.println(tdsd);
             System.out.println(ts - tdsd.getTs());
             Thread.sleep(500);
@@ -28,7 +28,15 @@ public class MarketDepth {
 
     }
 
-    public static TradeDepthStatDomain getDepth(String symbol, String type) {
+    public static MarketDepthMainDomain getDepthData(String symbol, String type) {
+        String url = Constants.URL_MARKET_DEPTH + "symbol=" + symbol + "&type=" + type;
+        String result = HttpUtil.doGetData(url);
+        MarketDepthMainDomain mmd = JSON.parseObject(result, MarketDepthMainDomain.class);
+        mmd.setSymbol(symbol);
+        return mmd;
+    }
+
+    public static TradeDepthStatDomain getDepthStat(String symbol, String type) {
         TradeDepthStatDomain tdsd = new TradeDepthStatDomain();
 
         String url = Constants.URL_MARKET_DEPTH + "symbol=" + symbol + "&type=" + type;
