@@ -21,4 +21,5 @@
     <!-- 这里可以写多个实体的映射文件 -->
     <sqlMap resource="Market.xml"/>
     <sqlMap resource="Common.xml"/>
+    <sqlMap resource="RealTimeSqlMap.xml"/>
 </sqlMapConfig>

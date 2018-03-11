@@ -33,6 +33,12 @@ public class MarketTradeHistory {
         String result = HttpUtil.doGetData(Constants.URL_TRADE_HISTORY + "symbol=" + symbol + "&size=" + size);
 //        System.out.println(result);
         MarketTradeHistoryMainDomain mtd = JSON.parseObject(result, MarketTradeHistoryMainDomain.class);
+        if(mtd==null){
+            MarketTradeHistoryMainDomain mdt=new MarketTradeHistoryMainDomain();
+            mdt.setStatus("network");
+            mdt.setSymbol(symbol);
+            return mdt;
+        }
         mtd.setSymbol(symbol);
         return mtd;
     }

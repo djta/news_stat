@@ -63,20 +63,23 @@ public class Constants {
         }
     }
     //
-    public static final String URL_MARKET_KLINE="https://api.huobi.pro/market/history/kline?";
+//    private static final String SERVICE="https://api.huobi.pro";
+    private static final String SERVICE="https://api.huobipro.com";
+    //
+    public static final String URL_MARKET_KLINE=SERVICE+"/market/history/kline?";
 
     //market depth
-    public static final String URL_MARKET_DEPTH = "https://api.huobi.pro/market/depth?";
+    public static final String URL_MARKET_DEPTH = SERVICE+"/market/depth?";
 
     //trade
-    public static final String URL_TRADE = "https://api.huobi.pro/market/trade?";
+    public static final String URL_TRADE = SERVICE+"/market/trade?";
     //trade history
-    public static final String URL_TRADE_HISTORY = "https://api.huobi.pro/market/history/trade?";
+    public static final String URL_TRADE_HISTORY = SERVICE+"/market/history/trade?";
     /*
        common api
      */
     //currencys
-    public static final String URL_CURRENCYS = "https://api.huobi.pro/v1/common/currencys";
-    public static final String URL_SYMBOLS = "https://api.huobi.pro/v1/common/symbols";
+    public static final String URL_CURRENCYS = SERVICE+"/v1/common/currencys";
+    public static final String URL_SYMBOLS = SERVICE+"/v1/common/symbols";
 
 }

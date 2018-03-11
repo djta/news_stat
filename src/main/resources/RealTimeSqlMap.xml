@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+    <!-- 通过typeAlias使得我们在下面使用Student实体类的时候不需要写包名 -->
+    <select id="getOpenCloseStat" resultClass="domain.realtime.OpenCloseStatDomain"
+            parameterClass="java.lang.String">
+        SELECT symbol,min_index,max_index FROM recsys.open_close_stat WHERE max_index>0;
+    </select>
+
+</sqlMap>

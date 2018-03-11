@@ -10,7 +10,10 @@ import domain.MarketTradeTickDomain;
 import domain.stat.TradeDepthStatDomain;
 import domain.stat.TradeHistoryStatDomain;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by hzyuyongmao on 2018/3/7.
@@ -20,9 +23,40 @@ import java.util.List;
 public class TestStat {
     private static Cache<String, String> symbolsCache = CacheBuilder.newBuilder().build();
 
-    public static void main(String args[]) {
-        TradeHistoryStatDomain ths = getHistroyMeanStat("zilusdt", 200);
-        TradeDepthStatDomain tdsd = getDepthMean("zilusdt", "step0");
+    public static void main(String args[]) throws InterruptedException {
+        double oldbuyPrice=0;
+//        while (true){
+//            Thread.sleep(1000);
+//            TradeHistoryStatDomain ths = getHistroyMeanStat("zilusdt", 200);
+//            TradeDepthStatDomain tdsd = getDepthMean("zilusdt", "step0");
+//            double buyPrice = ths.getBuyPrice();
+//            double sellPrice=ths.getSellPrice();
+//            double bidPrice = tdsd.getBidPrice();
+//            double askPrice = tdsd.getAskPrice();
+//            if(oldbuyPrice>buyPrice){
+//                System.out.println("up");
+//            }else if(oldbuyPrice<buyPrice){
+//                System.out.println("down");
+//            }else{
+//                System.out.println("null");
+//            }
+//            oldbuyPrice=buyPrice;
+//            System.out.println("buyPrice:"+buyPrice);
+//            System.out.println("sellPrice:"+sellPrice);
+//            System.out.println("bidPrice:"+bidPrice);
+//            System.out.println("askPrice:"+askPrice);
+//
+//        }
+
+        Map<String,TreeMap<String,TradeHistoryStatDomain> >map= new HashMap<String,TreeMap<String,TradeHistoryStatDomain>>();
+        TreeMap<Long,String> tm=new TreeMap<Long,String>();
+        tm.put(2L,"A");
+        tm.put(1L,"B");
+        tm.put(3L,"C");
+        for(long d:tm.keySet()){
+            System.out.println("key:"+d+"\tvalue:"+tm.get(d));
+            tm.size();
+        }
 
     }
 
@@ -62,16 +96,16 @@ public class TestStat {
                     sellSum += amount * price;
                     sellAmount += amount;
                 }
-                System.out.println(marketTradeDomain);
+//                System.out.println(marketTradeDomain);
 
             }
         }
         double buyMean = buySum / buyAmount;
         double sellMean = sellSum / sellAmount;
-        System.out.println("buy count:" + buyCount);
-        System.out.println("sell count:" + sellCount);
-        System.out.println("buy mean:" + buyMean);
-        System.out.println("sell mean:" + sellMean);
+//        System.out.println("buy count:" + buyCount);
+//        System.out.println("sell count:" + sellCount);
+//        System.out.println("buy mean:" + buyMean);
+//        System.out.println("sell mean:" + sellMean);
         thsd.setBuyCount(buyCount);
         thsd.setBuyMount(buyAmount);
         thsd.setBuyPrice(buyMean);
@@ -96,15 +130,15 @@ public class TestStat {
             tdsd.setStatus("ok");
         }
         tdsd.setTs(tradeDepth.getTs());
-        List asks1 = tradeDepth.getTick().getAsks();
-        for (int i = 0; i < asks1.size(); i++) {
-            System.out.println(asks1.get(i));
-        }
-        System.out.println("\n\n\n");
-        List bids1 = tradeDepth.getTick().getBids();
-        for (int i = 0; i < bids1.size(); i++) {
-            System.out.println(bids1.get(i));
-        }
+//        List asks1 = tradeDepth.getTick().getAsks();
+//        for (int i = 0; i < asks1.size(); i++) {
+//            System.out.println(asks1.get(i));
+//        }
+//        System.out.println("\n\n\n");
+//        List bids1 = tradeDepth.getTick().getBids();
+//        for (int i = 0; i < bids1.size(); i++) {
+//            System.out.println(bids1.get(i));
+//        }
         List<List> asks = tradeDepth.getTick().getAsks().subList(0, 50);
         double askSum = 0;// trade sum
         double askCount = 0;//trade amount
@@ -132,8 +166,8 @@ public class TestStat {
         }
         //asks mean
         double bidMean = bidSum / bidCount;
-        System.out.println("bidMean:" + bidMean);
-        System.out.println("askMean:" + askMean);
+//        System.out.println("bidMean:" + bidMean);
+//        System.out.println("askMean:" + askMean);
         tdsd.setAskAmount(askCount);
         tdsd.setAskPrice(askMean);
         tdsd.setBidAmount(bidCount);
