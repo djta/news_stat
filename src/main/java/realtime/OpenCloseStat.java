@@ -22,14 +22,19 @@ public class OpenCloseStat {
     private static Cache<String, OpenCloseStatDomain> symbolsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(5, TimeUnit.HOURS).build();
 
-    public static void main(String args[]) throws InterruptedException, ExecutionException, TimeoutException {
+    public static void main(String args[]) throws InterruptedException, ExecutionException {
         RealtimeDaoImpl rdi = new RealtimeDaoImpl();
         List<OpenCloseStatDomain> openCloseList = rdi.selectDiffValue();
         for (OpenCloseStatDomain domain : openCloseList) {
             symbolsCache.put(domain.getSymbol(), domain);
         }
         while (true) {
-            List<MarketMainDomain> resultDomain = KlineRealTimeService.getMarketKlineInfo("1min", 1);
+            List<MarketMainDomain>  resultDomain=null;
+            try {
+                resultDomain  =KlineRealTimeService.getMarketKlineInfo("1min", 1);
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
             for (MarketMainDomain mmd : resultDomain) {
                 String symbol = mmd.getSymbol();
                 OpenCloseStatDomain openCloseDomain = symbolsCache.getIfPresent(symbol);

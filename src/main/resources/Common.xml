@@ -13,7 +13,7 @@
     </statement>
     <select id="getSymbols" resultClass="domain.SymbolsDomain"
             parameterClass="java.lang.String">
-        SELECT base_currency,quote_currency,symbol_partition,price_precision,amount_precision FROM symbols;
+        SELECT base_currency,quote_currency,symbol_partition,price_precision,amount_precision FROM symbols  WHERE quote_currency='usdt';
     </select>
 
 
