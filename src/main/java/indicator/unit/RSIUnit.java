@@ -2,7 +2,6 @@ package indicator.unit;
 
 import domain.MarketDomain;
 import indicator.IndicatorUnit;
-import util.stat.StandardStatUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,6 @@
 package indicator.unit;
 
 import domain.MarketDomain;
-import domain.MarketMainDomain;
 import indicator.IndicatorUnit;
 
 import java.util.ArrayList;
