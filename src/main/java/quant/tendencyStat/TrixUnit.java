@@ -41,15 +41,26 @@ public class TrixUnit {
 
     public static List trix(List<MarketDomain> inputDomain, int period) {
         double[] inputData = DataFormatTransformUtil.marketDomainlist2Array(inputDomain);
+        return trix(inputData, period);
+
+    }
+
+    public static List mTrix(double[] inputData, int period, int maPeriod) {
         int inputLength = inputData.length;
         double[] outputData = new double[inputLength];
         if (period <= 1) {
             return new ArrayList();
         }
         core.trix(0, inputLength - 1, inputData, period, begin, length, outputData);
-        List list = DataFormatTransformUtil.result2List(outputData);
+        double[] mOutputData = new double[inputLength];
+        core.sma(0, inputLength - 1, outputData, maPeriod, begin, length, mOutputData);
+        List list = DataFormatTransformUtil.result2List(mOutputData);
         return list;
+    }
 
+    public static List mTrix(List<MarketDomain> marketDomainList, int period, int maPeriod) {
+        double[] inputData = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
+        return mTrix(inputData, period, maPeriod);
     }
 
 }

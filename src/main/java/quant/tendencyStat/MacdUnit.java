@@ -2,8 +2,12 @@ package quant.tendencyStat;
 
 import com.tictactec.ta.lib.Core;
 import com.tictactec.ta.lib.MInteger;
+import domain.MarketDomain;
+import domain.talib.MacdDomain;
 import talib.DataFormatTransformUtil;
 
+import javax.crypto.Mac;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +27,15 @@ public class MacdUnit {
         double[] outputMACD = new double[array.length];
         double[] outputSignl = new double[array.length];
         double[] outputHist = new double[array.length];
-        List result = dif(array, 2, 5);
-        System.out.println(result);
-        List dea = dea(array, 2, 5, 2);
-        System.out.println(dea);
-        core.macd(0, array.length - 1, array, 2, 5, 3, begin, length, outputMACD, outputSignl, outputHist);
+//        List<Double> result = dif(array, 2, 5);
+//        System.out.println(result);
+//        List<Double> dea = dea(array, 2, 5, 2);
+//        System.out.println(dea);
+//        for (int i = 0; i < dea.size(); i++) {
+//            System.out.print(2 * (result.get(i) - dea.get(i)) + "\t");
+//        }
+//        System.out.println();
+        core.macd(0, array.length - 1, array, 2, 5, 2, begin, length, outputMACD, outputSignl, outputHist);
         for (int i = 0; i < outputMACD.length; i++) {
             System.out.print(outputMACD[i] + "\t");
         }
@@ -39,8 +47,9 @@ public class MacdUnit {
         for (int i = 0; i < outputMACD.length; i++) {
             System.out.print(outputHist[i] + "\t");
         }
-
-
+        System.out.println();
+        List<MacdDomain> list = macd(array, 2, 5, 2);
+        System.out.println(list);
     }
 
     public static List dif(double[] input, int shortPeriod, int longPeriod) {
@@ -48,16 +57,6 @@ public class MacdUnit {
         core.ema(0, input.length - 1, input, shortPeriod, begin, length, shortOutput);
         double[] longOutput = new double[input.length];
         core.ema(0, input.length - 1, input, longPeriod, begin, length, longOutput);
-        //
-//        for (int i = 0; i < shortOutput.length; i++) {
-//            System.out.print(shortOutput[i] + "\t");
-//        }
-//        System.out.println();
-//        for (int i = 0; i < longOutput.length; i++) {
-//            System.out.print(longOutput[i] + "\t");
-//        }
-//        System.out.println();
-        //
         List<Double> diffList = new ArrayList();
         List<Double> shortList = DataFormatTransformUtil.result2List(shortOutput);
         List<Double> longList = DataFormatTransformUtil.result2List(longOutput);
@@ -87,6 +86,29 @@ public class MacdUnit {
             rawList.add(i, 0.0);
         }
         return rawList;
+    }
+
+    public static List<MacdDomain> macd(double[] input, int shortPeriod, int longPeriod, int midPeriod) {
+        int arraylength = input.length;
+        double[] outputMACD = new double[arraylength];
+        double[] outputSignl = new double[arraylength];
+        double[] outputHist = new double[arraylength];
+        core.macd(0, arraylength - 1, input, shortPeriod, longPeriod, midPeriod, begin, length, outputMACD, outputSignl, outputHist);
+        List<Double> difList = DataFormatTransformUtil.result2List(outputMACD);
+        List<Double> deaList = DataFormatTransformUtil.result2List(outputSignl);
+        List<MacdDomain> resultDomainList = new ArrayList<MacdDomain>();
+        for (int i = 0; i < difList.size(); i++) {
+            MacdDomain md = new MacdDomain();
+            md.setDea(deaList.get(i));
+            md.setDif(difList.get(i));
+            resultDomainList.add(md);
+        }
+        return resultDomainList;
+    }
+
+    public static List<MacdDomain> macd(List<MarketDomain> marketDomainList, int shortPeriod, int longPeriod, int midPeriod) {
+        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
+        return macd(input, shortPeriod, longPeriod, midPeriod);
     }
 
 

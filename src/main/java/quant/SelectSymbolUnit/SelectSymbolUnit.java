@@ -33,7 +33,7 @@ public abstract class SelectSymbolUnit {
 
         Long lastTime = treeMap.lastKey();
         System.out.println(lastTime);
-        if (!TimeAdjust.getMinDiff(lastTime, 5)) {
+        if (!TimeAdjust.getMinDiff(lastTime, 500)) {
             System.out.println("wait time out");
             return;
         }

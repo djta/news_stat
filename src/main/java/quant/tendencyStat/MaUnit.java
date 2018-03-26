@@ -44,6 +44,9 @@ public class MaUnit {
     }
 
     public static void main(String args[]) {
-
+        double[] array = {207.650, 205.160, 210.870, 209.350, 207.250, 209.960, 207.650, 205.160, 188.170, 186.020};
+        List list = sma(array, 2);
+        System.out.println(list);
+        System.out.println(list.get(0));
     }
 }
