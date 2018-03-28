@@ -60,6 +60,7 @@
         <result property="count" column="count" nullValue=""/>
         <result property="vol" column="vol" nullValue=""/>
         <result property="amount" column="amount" nullValue=""/>
+        <result property="id" column="ts" nullValue=""/>
     </resultMap>
 
     <select id="getKlineData" resultMap="MarketDomainMap"
