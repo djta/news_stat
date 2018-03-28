@@ -47,4 +47,23 @@
         values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#high#,#vol#)
         ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,high=high,vol=vol
     </statement>
+    <!--SELECT -->
+    <typeAlias alias="MarketDomainEntity"
+               type="domain.MarketDomain"/>
+
+    <resultMap id="MarketDomainMap" class="MarketDomainEntity">
+        <result property="symbol" column="symbol" nullValue=""/>
+        <result property="open" column="open" nullValue=""/>
+        <result property="close" column="close" nullValue=""/>
+        <result property="low" column="low" nullValue=""/>
+        <result property="high" column="high" nullValue=""/>
+        <result property="count" column="count" nullValue=""/>
+        <result property="vol" column="vol" nullValue=""/>
+        <result property="amount" column="amount" nullValue=""/>
+    </resultMap>
+
+    <select id="getKlineData" resultMap="MarketDomainMap"
+            parameterClass="java.lang.String">
+        SELECT * FROM kline_1_min WHERE symbol=#symbol# ORDER BY ts ;
+    </select>
 </sqlMap>

@@ -2,6 +2,8 @@ package jdbc.Dao;
 
 import domain.MarketDomain;
 
+import java.util.List;
+
 /**
  * Created by hzyuyongmao on 2018/2/23.
  *
@@ -9,4 +11,5 @@ import domain.MarketDomain;
  */
 public interface MarketDao {
     public void insertMarket(MarketDomain md, String queryId);
+    public List<MarketDomain> getKlineData(String symbol);
 }
