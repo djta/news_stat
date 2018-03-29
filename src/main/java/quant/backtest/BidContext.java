@@ -11,6 +11,54 @@ public class BidContext {
     private int buy = 0;//买次数；
     private int sell = 0;//卖次数；
 
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public double getFund() {
+        return fund;
+    }
+
+    public void setFund(double fund) {
+        this.fund = fund;
+    }
+
+    public double getRate() {
+        return rate;
+    }
+
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public int getBuy() {
+        return buy;
+    }
+
+    public void setBuy(int buy) {
+        this.buy = buy;
+    }
+
+    public int getSell() {
+        return sell;
+    }
+
+    public void setSell(int sell) {
+        this.sell = sell;
+    }
+
     public BidContext(double fund) {
         this.fund = fund;
     }
@@ -28,7 +76,7 @@ public class BidContext {
         amount = fund / close;
         buy++;
         fund = 0;
-        System.out.println("buy success:" + amount);
+//        System.out.println("buy success:" + amount);
         return true;
 
     }
@@ -40,7 +88,7 @@ public class BidContext {
         cost += amount * rate * close;
         amount -= amount * rate;
         fund = close * amount;
-        System.out.println("sell success:" + fund);
+//        System.out.println("sell success:" + fund);
         amount = 0;
         sell++;
         return true;

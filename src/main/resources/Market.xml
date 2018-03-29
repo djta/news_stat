@@ -65,6 +65,6 @@
 
     <select id="getKlineData" resultMap="MarketDomainMap"
             parameterClass="java.lang.String">
-        SELECT * FROM kline_1_min WHERE symbol=#symbol# ORDER BY ts ;
+        SELECT * FROM kline_1_min WHERE symbol=#symbol# ORDER BY ts;
     </select>
 </sqlMap>

@@ -73,7 +73,7 @@ public class CrawlMarketKlineTask implements Callable<String> {
     public static void main(String args[]) throws InterruptedException {
 //        symbolsCache.put("a", "b");
 //        System.out.println(symbolsCache.size());
-        CrawlMarketKlineTask ct = new CrawlMarketKlineTask("1min", 2000, "1min");
+        CrawlMarketKlineTask ct = new CrawlMarketKlineTask("1min", 2000, "kline1min");
         ct.call();
     }
 }

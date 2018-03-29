@@ -18,6 +18,8 @@ public class TendencyContext {
     public static TendencySign maSign(List<MarketDomain> marketDomainList, int shortPeriod, int longPeriod) {
         List<Double> sma = MaUnit.sma(marketDomainList, shortPeriod);
         List<Double> lma = MaUnit.sma(marketDomainList, longPeriod);
+//        System.out.println("sma:" + sma);
+//        System.out.println("lma:" + lma);
         int smaSize = sma.size();
         int lmaSize = lma.size();
         if (smaSize < 2 || lmaSize < 2) {
@@ -83,11 +85,12 @@ public class TendencyContext {
         return TendencySign.WAIT;
 
     }
-      /*
-        http://blog.sina.com.cn/s/blog_9b95805b0102wbeb.html
 
-        http://blog.sina.com.cn/s/blog_9b95805b0102wbwh.html
-       */
+    /*
+      http://blog.sina.com.cn/s/blog_9b95805b0102wbeb.html
+
+      http://blog.sina.com.cn/s/blog_9b95805b0102wbwh.html
+     */
     public static void kamaSign(List<MarketDomain> marketDomainList, int period) {
 
     }
