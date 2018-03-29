@@ -83,6 +83,14 @@ public class TendencyContext {
         return TendencySign.WAIT;
 
     }
+      /*
+        http://blog.sina.com.cn/s/blog_9b95805b0102wbeb.html
+
+        http://blog.sina.com.cn/s/blog_9b95805b0102wbwh.html
+       */
+    public static void kamaSign(List<MarketDomain> marketDomainList, int period) {
+
+    }
 
 
 }

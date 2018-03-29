@@ -28,7 +28,7 @@ public class BidContext {
         amount = fund / close;
         buy++;
         fund = 0;
-        System.out.println("buy success");
+        System.out.println("buy success:" + amount);
         return true;
 
     }
@@ -40,10 +40,9 @@ public class BidContext {
         cost += amount * rate * close;
         amount -= amount * rate;
         fund = close * amount;
-        System.out.println("sell success:"+fund);
+        System.out.println("sell success:" + fund);
         amount = 0;
         sell++;
-        System.out.println("sell success");
         return true;
     }
 

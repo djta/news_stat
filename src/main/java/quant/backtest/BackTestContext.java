@@ -20,20 +20,24 @@ public class BackTestContext {
 //        for (MarketDomain md : marketDomains) {
 //            System.out.println(md);
 //        }
-        BidContext bc = new BidContext(10000);
+        BidContext bc = new BidContext(100000);
         for (int i = 0; i < marketDomains.size() - 50; i++) {
             List<MarketDomain> list = marketDomains.subList(i, i + 50);
             int result = predictTendency(list);
             if (result >= 3) {
-                System.out.println(list.get(list.size() - 1));
-                double colse = list.get(list.size() - 1).getClose();
-                System.out.println("买入：" + colse);
-                bc.buy(colse);
-            } else if (result <= -3) {
+
                 double close = list.get(list.size() - 1).getClose();
-                bc.sell(close);
-                System.out.println(list.get(list.size() - 1));
-                System.out.println("卖出：" + close);
+                boolean flag = bc.buy(close);
+                if (flag) {
+                    System.out.println("buy:" + list.get(list.size() - 1));
+                }
+            } else if (result <= -1) {
+                double close = list.get(list.size() - 1).getClose();
+                boolean flag =bc.sell(close);
+                if (flag) {
+                    System.out.println("sell:" + list.get(list.size() - 1));
+                }
+
             }
         }
         bc.sell(marketDomains.get(marketDomains.size() - 1).getClose());
@@ -62,4 +66,5 @@ public class BackTestContext {
                 + TendencyContext.maSign(marketDomains, 2, 20).value + TendencyContext.trixSign(marketDomains, 2, 20).value;
         return result;
     }
+
 }
