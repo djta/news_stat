@@ -4,6 +4,7 @@ import domain.MarketDomain;
 import jdbc.impl.MarketDaoImpl;
 import quant.constant.TendencySign;
 import quant.tendencyStat.TendencyContext;
+import quant.trade.TradeContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +22,7 @@ public class TendencyParamTrain {
         List<MarketDomain> marketDomains = marketDao.getKlineData("btcusdt");
         List<TrainDomain> trainDomains = train(marketDomains);
         Collections.sort(trainDomains, new ProfitComparator());
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < trainDomains.size(); i++) {
             System.out.println(trainDomains.get(i));
         }
     }
@@ -36,7 +37,7 @@ public class TendencyParamTrain {
                 longPeriod = j;
                 TrainDomain td = new TrainDomain();
                 System.out.println("short:" + i + ",long:" + j);
-                BidContext profit = bidAndAsk(marketDomains, shortPeriod, longPeriod);
+                TradeContext profit = bidAndAsk(marketDomains, shortPeriod, longPeriod);
                 if (profit.getBuy() == 0 || profit.getSell() == 0) {
                     continue;
                 }
@@ -53,8 +54,8 @@ public class TendencyParamTrain {
 
     }
 
-    public static BidContext bidAndAsk(List<MarketDomain> marketDomains, int shortPeriod, int longPeriod) {
-        BidContext bc = new BidContext(100000);
+    public static TradeContext bidAndAsk(List<MarketDomain> marketDomains, int shortPeriod, int longPeriod) {
+        TradeContext bc = new TradeContext(100000);
         for (int i = 0; i < marketDomains.size() - 500; i++) {
             List<MarketDomain> list = marketDomains.subList(i, i + 500);
             TendencySign sign = TendencyContext.trixSign(list, shortPeriod, longPeriod);

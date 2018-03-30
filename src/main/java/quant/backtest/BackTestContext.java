@@ -4,6 +4,7 @@ import domain.MarketDomain;
 import jdbc.impl.MarketDaoImpl;
 import quant.constant.TendencySign;
 import quant.tendencyStat.TendencyContext;
+import quant.trade.TradeContext;
 
 import java.util.List;
 
@@ -20,9 +21,9 @@ public class BackTestContext {
 //        for (MarketDomain md : marketDomains) {
 //            System.out.println(md);
 //        }
-        BidContext bc = new BidContext(100000);
-        for (int i = 0; i < marketDomains.size() - 50; i++) {
-            List<MarketDomain> list = marketDomains.subList(i, i + 50);
+        TradeContext bc = new TradeContext(100000);
+        for (int i = 0; i < marketDomains.size() - 250; i++) {
+            List<MarketDomain> list = marketDomains.subList(i, i + 250);
             int result = predictTendency(list);
             if (result >= 2) {
                 double close = list.get(list.size() - 1).getClose();
@@ -30,9 +31,9 @@ public class BackTestContext {
                 if (flag) {
                     System.out.println("buy:" + list.get(list.size() - 1));
                 }
-            } else if (result <= -3) {
+            } else if (result <= -1) {
                 double close = list.get(list.size() - 1).getClose();
-                boolean flag =bc.sell(close);
+                boolean flag = bc.sell(close);
                 if (flag) {
                     System.out.println("sell:" + list.get(list.size() - 1));
                 }
@@ -63,7 +64,8 @@ public class BackTestContext {
     public static int predictTendency(List<MarketDomain> marketDomains) {
         int result = TendencyContext.dmaSign(marketDomains, 2, 20, 5).value
                 + TendencyContext.macdSign(marketDomains, 12, 35, 15).value
-                + TendencyContext.maSign(marketDomains, 8, 66).value + TendencyContext.trixSign(marketDomains, 24, 166).value;
+                + TendencyContext.maSign(marketDomains, 8, 66).value
+                + TendencyContext.trixSign(marketDomains, 24, 166).value;
         return result;
     }
 

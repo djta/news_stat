@@ -4,6 +4,7 @@ import domain.MarketDomain;
 import jdbc.impl.MarketDaoImpl;
 import quant.constant.TendencySign;
 import quant.tendencyStat.TendencyContext;
+import quant.trade.TradeContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +38,7 @@ public class TendencyParamTrain2 {
                     mid = k;
                     TrainDomain td = new TrainDomain();
                     System.out.println("short:" + i + ",long:" + j);
-                    BidContext profit = bidAndAsk(marketDomains, shortPeriod, longPeriod, mid);
+                    TradeContext profit = bidAndAsk(marketDomains, shortPeriod, longPeriod, mid);
                     if (profit.getBuy() == 0 || profit.getSell() == 0) {
                         continue;
                     }
@@ -58,8 +59,8 @@ public class TendencyParamTrain2 {
 
     }
 
-    public static BidContext bidAndAsk(List<MarketDomain> marketDomains, int shortPeriod, int longPeriod, int mid) {
-        BidContext bc = new BidContext(100000);
+    public static TradeContext bidAndAsk(List<MarketDomain> marketDomains, int shortPeriod, int longPeriod, int mid) {
+        TradeContext bc = new TradeContext(100000);
         for (int i = 0; i < marketDomains.size() - 500; i++) {
             List<MarketDomain> list = marketDomains.subList(i, i + 500);
             TendencySign sign = TendencyContext.macdSign(list, shortPeriod, longPeriod, mid);
