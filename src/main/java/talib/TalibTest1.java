@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by hzyuyongmao on 2018/3/26.
+ * http://mrjbq7.github.io/ta-lib/doc_index.html
  *
  * @Description
  */
@@ -26,6 +27,7 @@ public class TalibTest1 {
         for (int i = 0; i < array.length; i++) {
             System.out.print(output[i] + "\t");
         }
+
     }
 
 

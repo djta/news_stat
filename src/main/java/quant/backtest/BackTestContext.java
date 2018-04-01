@@ -25,7 +25,7 @@ public class BackTestContext {
         for (int i = 0; i < marketDomains.size() - 250; i++) {
             List<MarketDomain> list = marketDomains.subList(i, i + 250);
             int result = predictTendency(list);
-            if (result >= 2) {
+            if (result >= 3) {
                 double close = list.get(list.size() - 1).getClose();
                 boolean flag = bc.buy(close);
                 if (flag) {
@@ -40,7 +40,7 @@ public class BackTestContext {
 
             }
         }
-        bc.sell(marketDomains.get(marketDomains.size() - 1).getClose());
+        bc.sell(bc.getBuyPrice());
         System.out.println(marketDomains.get(marketDomains.size() - 1));
         System.out.println("result:" + bc);
 
@@ -62,10 +62,10 @@ public class BackTestContext {
     }
 
     public static int predictTendency(List<MarketDomain> marketDomains) {
-        int result = TendencyContext.dmaSign(marketDomains, 2, 20, 5).value
-                + TendencyContext.macdSign(marketDomains, 12, 35, 15).value
-                + TendencyContext.maSign(marketDomains, 8, 66).value
-                + TendencyContext.trixSign(marketDomains, 24, 166).value;
+        int result = TendencyContext.dmaSign(marketDomains, 3, 20, 5).value
+                + TendencyContext.macdSign(marketDomains, 3, 10, 7).value
+                + TendencyContext.maSign(marketDomains, 3, 10).value
+                + TendencyContext.trixSign(marketDomains, 3, 10).value;
         return result;
     }
 
