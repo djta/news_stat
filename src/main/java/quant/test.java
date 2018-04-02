@@ -21,6 +21,6 @@ public class test {
         System.out.println(SelectSignConstant.HIT);
         SelectSymbolUnit ssu = new OpenJumpUnit();
         Map<String, Map<Long, MarketDomain>> map = new HashMap<String, Map<Long, MarketDomain>>();
-
+        System.out.println(5==5.0);
     }
 }

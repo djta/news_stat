@@ -4,6 +4,7 @@ import com.tictactec.ta.lib.Core;
 import com.tictactec.ta.lib.MInteger;
 import domain.MarketDomain;
 import domain.talib.MacdDomain;
+import quant.constant.TendencySign;
 import talib.DataFormatTransformUtil;
 
 import javax.crypto.Mac;
@@ -16,11 +17,16 @@ import java.util.List;
  *
  * @Description
  */
-public class MacdUnit {
-    private static Core core = new Core();
-    private int lookback = 0;
-    private static MInteger begin = new MInteger();
-    private static MInteger length = new MInteger();
+public class MacdUnit extends TendencyUnit{
+   private int shortPeriod;
+   private int longPeriod;
+   private int midPeriod;
+
+    public MacdUnit(int shortPeriod, int longPeriod, int midPeriod) {
+        this.shortPeriod = shortPeriod;
+        this.longPeriod = longPeriod;
+        this.midPeriod = midPeriod;
+    }
 
     public static void main(String args[]) {
         double[] array = {207.650, 205.160, 210.870, 209.350, 207.250, 209.960, 207.650, 205.160, 188.170, 186.020};
@@ -111,5 +117,22 @@ public class MacdUnit {
         return macd(input, shortPeriod, longPeriod, midPeriod);
     }
 
+
+    public  TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+        List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
+        int size = macdDomainList.size();
+        if (size < 2) {
+            return TendencySign.WAIT;
+        }
+        MacdDomain macd1 = macdDomainList.get(size - 1);
+        MacdDomain macd2 = macdDomainList.get(size - 2);
+        if (macd1.getDif() > macd2.getDif() && macd1.getDif() > macd1.getDea() && macd2.getDif() < macd2.getDea() && macd1.getDif() > 0) {
+            return TendencySign.BULL;
+        }
+        if (macd1.getDif() < macd2.getDif() && macd1.getDif() < macd1.getDea() && macd2.getDif() > macd2.getDea() && macd1.getDif() < 0) {
+            return TendencySign.BEAR;
+        }
+        return TendencySign.WAIT;
+    }
 
 }

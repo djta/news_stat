@@ -3,6 +3,7 @@ package quant.tendencyStat;
 import com.tictactec.ta.lib.Core;
 import com.tictactec.ta.lib.MInteger;
 import domain.MarketDomain;
+import quant.constant.TendencySign;
 import talib.DataFormatTransformUtil;
 
 import java.util.ArrayList;
@@ -13,12 +14,19 @@ import java.util.List;
  *
  * @Description
  */
-public class MaUnit {
+public class MaUnit extends TendencyUnit {
 
-    private static Core core = new Core();
-    private int lookback = 0;
-    private static MInteger begin = new MInteger();
-    private static MInteger length = new MInteger();
+    private int shortPeriod;
+    private int longPeriod;
+
+    public MaUnit(int shortPeriod, int longPeriod) {
+        this.shortPeriod = shortPeriod;
+        this.longPeriod = longPeriod;
+    }
+
+    public MaUnit() {
+
+    }
 
     public static List sma(double[] inputData, int period) {
         int inputLength = inputData.length;
@@ -41,6 +49,24 @@ public class MaUnit {
         core.sma(0, inputLength - 1, rawArray, period, begin, length, outputData);
         List list = DataFormatTransformUtil.maResult2List(outputData, period);
         return list;
+    }
+
+
+    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+        List<Double> sma = MaUnit.sma(marketDomainList, shortPeriod);
+        List<Double> lma = MaUnit.sma(marketDomainList, longPeriod);
+        int smaSize = sma.size();
+        int lmaSize = lma.size();
+        if (smaSize < 2 || lmaSize < 2) {
+            return TendencySign.WAIT;
+        }
+        if (sma.get(smaSize - 1) > sma.get(smaSize - 2) && sma.get(smaSize - 1) > lma.get(lmaSize - 1) && sma.get(smaSize - 2) < lma.get(lmaSize - 2)) {
+            return TendencySign.BULL;
+        }
+        if (lma.get(lmaSize - 1) < lma.get(lmaSize - 2) && sma.get(smaSize - 1) < lma.get(lmaSize - 1) && sma.get(smaSize - 2) > lma.get(lmaSize - 2)) {
+            return TendencySign.BEAR;
+        }
+        return TendencySign.WAIT;
     }
 
     public static void main(String args[]) {

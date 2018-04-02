@@ -4,6 +4,7 @@ import domain.MarketDomain;
 import domain.talib.DMADomain;
 import domain.talib.MacdDomain;
 import quant.constant.TendencySign;
+import quant.constant.TradeSign;
 
 import java.util.List;
 
@@ -11,6 +12,17 @@ import java.util.List;
  * Created by 范志伟 on 2018-03-26.
  */
 public class TendencyContext {
+
+    private double bearRange;
+    private double bullRange;
+    private List<TendencyUnit> tendencyUnits;
+
+    public TendencyContext(double bearRange, double bullRange, List<TendencyUnit> tendencyUnits) {
+        this.bearRange = bearRange;
+        this.bullRange = bullRange;
+        this.tendencyUnits = tendencyUnits;
+    }
+
     public static void main(String args[]) {
 
     }
@@ -97,40 +109,53 @@ public class TendencyContext {
         if (size < 4) {
             return TendencySign.WAIT;
         }
-        if (outputList.get(size - 1) > outputList.get(size - 2)&&outputList.get(size - 2)>outputList.get(size - 3)) {
-                return TendencySign.BULL;
+        if (outputList.get(size - 1) > outputList.get(size - 2) && outputList.get(size - 2) > outputList.get(size - 3)) {
+            return TendencySign.BULL;
         }
-        if(outputList.get(size - 1) < outputList.get(size - 2)&&outputList.get(size - 2) < outputList.get(size - 3)){
+        if (outputList.get(size - 1) < outputList.get(size - 2) && outputList.get(size - 2) < outputList.get(size - 3)) {
             return TendencySign.BEAR;
         }
         return TendencySign.WAIT;
     }
 
-    public static TendencySign kamaSign(List<MarketDomain> marketDomainList, int amaPeriod,int shortPeriod,int longPeriod) {
+    public static TendencySign kamaSign(List<MarketDomain> marketDomainList, int amaPeriod, int shortPeriod, int longPeriod) {
         List<Double> outputList = KAMAUnit.kama(marketDomainList, amaPeriod);
-         List<Double> shortMaList=   MaUnit.sma(marketDomainList,shortPeriod);
-        List<Double> longMaList=   MaUnit.sma(marketDomainList,longPeriod);
+        List<Double> shortMaList = MaUnit.sma(marketDomainList, shortPeriod);
+        List<Double> longMaList = MaUnit.sma(marketDomainList, longPeriod);
         int size = outputList.size();
         if (size < 4) {
             return TendencySign.WAIT;
         }
         if (outputList.get(size - 1) > outputList.get(size - 2)
-                &&shortMaList.get(size-1)>outputList.get(size - 1)
-                &&longMaList.get(size-1)>outputList.get(size-1)
-                &&outputList.get(size-2)>shortMaList.get(size-2)
-                &&longMaList.get(size-2)>outputList.get(size-2)) {
+                && shortMaList.get(size - 1) > outputList.get(size - 1)
+                && longMaList.get(size - 1) > outputList.get(size - 1)
+                && outputList.get(size - 2) > shortMaList.get(size - 2)
+                && longMaList.get(size - 2) > outputList.get(size - 2)) {
             return TendencySign.BULL;
         }
-        if(outputList.get(size - 1) < outputList.get(size - 2)
-                &&shortMaList.get(size-1)<outputList.get(size - 1)
-                &&shortMaList.get(size-2)<outputList.get(size - 2)
-                &&longMaList.get(size-1)<outputList.get(size-1)
-                &&longMaList.get(size-2)<outputList.get(size-2)){
+        if (outputList.get(size - 1) < outputList.get(size - 2)
+                && shortMaList.get(size - 1) < outputList.get(size - 1)
+                && shortMaList.get(size - 2) < outputList.get(size - 2)
+                && longMaList.get(size - 1) < outputList.get(size - 1)) {
             return TendencySign.BEAR;
         }
         return TendencySign.WAIT;
     }
 
+    public TradeSign getTradeSign(List<MarketDomain> marketDomains) {
+        int count = 0;
+        for (TendencyUnit tu : tendencyUnits) {
+            count += tu.getTendencySign(marketDomains).value;
+        }
+        int size = tendencyUnits.size();
+        if (count >= size * bullRange) {
+            return TradeSign.OPEN;
+        } else if (count <= -size * bearRange) {
+            return TradeSign.CLOSE;
+        } else {
+            return TradeSign.WAIT;
+        }
 
+    }
 
 }
