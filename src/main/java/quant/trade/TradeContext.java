@@ -10,8 +10,9 @@ public class TradeContext {
     private double cost = 0;//手续费
     private int buy = 0;//买次数；
     private int sell = 0;//卖次数；
-    private double buyPrice;//当前价格
+    private double buyPrice;//买入价格
     private double sellPrice;//
+    private double currentPrice;
 
     public double getAmount() {
         return amount;
@@ -81,6 +82,14 @@ public class TradeContext {
         this.sellPrice = sellPrice;
     }
 
+    public double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
     public static void main(String args[]) {
 
     }
@@ -89,7 +98,7 @@ public class TradeContext {
         if (fund <= 0) {
             return false;
         }
-        buyPrice=close;
+        buyPrice = close;
         cost += fund * rate;
         fund -= fund * rate;
         amount = fund / close;
@@ -104,7 +113,7 @@ public class TradeContext {
         if (amount <= 0) {
             return false;
         }
-        sellPrice=close;
+        sellPrice = close;
         cost += amount * rate * close;
         amount -= amount * rate;
         fund = close * amount;
@@ -118,10 +127,23 @@ public class TradeContext {
         return fund;
     }
 
-    public  void stoplossUnit(double close,double stopLossPoint){
-       if(amount>0&&close<buyPrice*stopLossPoint){
-             sell(close);
-       }
+
+    public void stoplossUnit(double close, double stopLossPoint) {
+        if (amount > 0 && close < buyPrice * stopLossPoint) {
+            sell(close);
+        }
+    }
+
+     /*
+       跟踪止损
+     */
+
+    public void stopProfit(double close) {
+
+        if(currentPrice*0.95<close){
+            sell(close);
+        }
+        currentPrice = close;
     }
 
     @Override

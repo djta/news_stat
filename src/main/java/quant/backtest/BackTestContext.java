@@ -89,6 +89,8 @@ public class BackTestContext {
         if (tradeSign.equals(TradeSign.OPEN)) {
             tradeContext.buy(close);
         }
+        //跟踪止损
+        tradeContext.stopProfit(close);
         if (tradeSign.equals(TradeSign.CLOSE)) {
             tradeContext.sell(close);
         }
