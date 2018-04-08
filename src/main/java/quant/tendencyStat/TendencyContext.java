@@ -147,6 +147,7 @@ public class TendencyContext {
         for (TendencyUnit tu : tendencyUnits) {
             count += tu.getTendencySign(marketDomains).value;
         }
+//        System.out.println("TendencySize:" + count);
         int size = tendencyUnits.size();
         if (count >= size * bullRange) {
             return TradeSign.OPEN;

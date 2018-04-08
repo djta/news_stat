@@ -1,18 +1,30 @@
 package quant.trade;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by 范志伟 on 2018-03-29.
  */
 public class TradeContext {
+    private static final Logger logger = LoggerFactory.getLogger(TradeContext.class);
     private double amount;//拥有币量
     private double fund;//初始化资金
-    private double rate = 0.002;//费率；
+    private double rate = 0.0002;//费率；
     private double cost = 0;//手续费
     private int buy = 0;//买次数；
     private int sell = 0;//卖次数；
     private double buyPrice;//买入价格
     private double sellPrice;//
     private double currentPrice;
+    private double winsRate;//获胜率
+    private int winCount;
+    private int failCount;
+    private List<TradeDomain> tradeDomains = new ArrayList<TradeDomain>();
+    private TradeDomain tradeDomain;
 
     public double getAmount() {
         return amount;
@@ -90,6 +102,46 @@ public class TradeContext {
         this.currentPrice = currentPrice;
     }
 
+    public List<TradeDomain> getTradeDomains() {
+        return tradeDomains;
+    }
+
+    public void setTradeDomains(List<TradeDomain> tradeDomains) {
+        this.tradeDomains = tradeDomains;
+    }
+
+    public double getWinsRate() {
+        return winsRate;
+    }
+
+    public void setWinsRate(double winsRate) {
+        this.winsRate = winsRate;
+    }
+
+    public int getWinCount() {
+        return winCount;
+    }
+
+    public void setWinCount(int winCount) {
+        this.winCount = winCount;
+    }
+
+    public int getFailCount() {
+        return failCount;
+    }
+
+    public void setFailCount(int failCount) {
+        this.failCount = failCount;
+    }
+
+    public TradeDomain getTradeDomain() {
+        return tradeDomain;
+    }
+
+    public void setTradeDomain(TradeDomain tradeDomain) {
+        this.tradeDomain = tradeDomain;
+    }
+
     public static void main(String args[]) {
 
     }
@@ -140,7 +192,7 @@ public class TradeContext {
 
     public void stopProfit(double close) {
 
-        if(currentPrice*0.95<close){
+        if (currentPrice * 0.97 < close) {
             sell(close);
         }
         currentPrice = close;
@@ -157,6 +209,51 @@ public class TradeContext {
                 ", sell=" + sell +
                 ", buyPrice=" + buyPrice +
                 ", sellPrice=" + sellPrice +
+                ", currentPrice=" + currentPrice +
+                ", winsRate=" + winsRate +
+                ", winCount=" + winCount +
+                ", failCount=" + failCount +
+                ", tradeDomains=" + tradeDomains +
+                ", tradeDomain=" + tradeDomain +
                 '}';
     }
+
+
+    public void bull(double close) {
+        double cost = this.fund * rate;
+        double fund = this.fund - cost;
+        tradeDomain = new TradeDomain(fund);
+        tradeDomain.setBuyPrice(close);
+        tradeDomain.setCost(cost * 2);
+        tradeDomain.setAmount(fund / close);
+    }
+
+    public void bear(double close) {
+        if (tradeDomain == null) {
+            return;
+        }
+        double amount = tradeDomain.getAmount();
+        amount -= amount * rate;
+        double fund = amount * close;
+        this.fund = fund;
+        tradeDomain.setSellPrice(close);
+        tradeDomain.setFund(fund);
+        tradeDomains.add(tradeDomain);
+        tradeDomain = null;
+    }
+
+    public void resultStat() {
+        int tradeCount = tradeDomains.size();
+        for (TradeDomain tradeDomain : tradeDomains) {
+            if (tradeDomain.getBuyPrice() <= tradeDomain.getSellPrice()) {
+                winCount++;
+            } else {
+                failCount++;
+            }
+            this.cost += tradeDomain.getCost();
+        }
+        winsRate = (double) winCount / tradeCount;
+    }
+
+
 }

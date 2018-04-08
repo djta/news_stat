@@ -26,10 +26,10 @@ public class BackTestContext {
         //Units
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
         tendencyUnits.add(new TrixUnit(3, 10));
-        tendencyUnits.add(new MaUnit(3, 10));
-        tendencyUnits.add(new MacdUnit(3, 10, 7));
-        tendencyUnits.add(new DMAUnit(3, 20, 5));
-        TendencyContext tc = new TendencyContext(0.2, 0.7, tendencyUnits);
+        tendencyUnits.add(new MaUnit(10, 20));
+        tendencyUnits.add(new MacdUnit(10, 20, 8));
+        tendencyUnits.add(new DMAUnit(10, 20, 8));
+        TendencyContext tc = new TendencyContext(0.2, 0.5, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);
 
@@ -54,8 +54,10 @@ public class BackTestContext {
 
             backTest(list, tc, bc);
         }
-        bc.sell(bc.getBuyPrice());
+//        bc.sell(bc.getBuyPrice());
+
 //        System.out.println(marketDomains.get(marketDomains.size() - 1));
+        bc.resultStat();
         System.out.println("result:" + bc);
 
 
@@ -87,12 +89,14 @@ public class BackTestContext {
         TradeSign tradeSign = tendencyContext.getTradeSign(marketDomains);
         double close = marketDomains.get(marketDomains.size() - 1).getClose();
         if (tradeSign.equals(TradeSign.OPEN)) {
-            tradeContext.buy(close);
+//            tradeContext.buy(close);
+            tradeContext.bull(close);
         }
         //跟踪止损
-        tradeContext.stopProfit(close);
+//        tradeContext.stopProfit(close);
         if (tradeSign.equals(TradeSign.CLOSE)) {
-            tradeContext.sell(close);
+//            tradeContext.sell(close);
+            tradeContext.bear(close);
         }
     }
 
