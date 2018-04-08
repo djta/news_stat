@@ -13,7 +13,7 @@ public class TradeContext {
     private static final Logger logger = LoggerFactory.getLogger(TradeContext.class);
     private double amount;//拥有币量
     private double fund;//初始化资金
-    private double rate = 0.0002;//费率；
+    private double rate = 0.002;//费率；
     private double cost = 0;//手续费
     private int buy = 0;//买次数；
     private int sell = 0;//卖次数；
@@ -25,6 +25,7 @@ public class TradeContext {
     private int failCount;
     private List<TradeDomain> tradeDomains = new ArrayList<TradeDomain>();
     private TradeDomain tradeDomain;
+    private double winToLossRate;//赢亏比
 
     public double getAmount() {
         return amount;
@@ -215,6 +216,7 @@ public class TradeContext {
                 ", failCount=" + failCount +
                 ", tradeDomains=" + tradeDomains +
                 ", tradeDomain=" + tradeDomain +
+                ", winToLossRate=" + winToLossRate +
                 '}';
     }
 
@@ -244,15 +246,20 @@ public class TradeContext {
 
     public void resultStat() {
         int tradeCount = tradeDomains.size();
+        double win = 0;
+        double loss = 0;
         for (TradeDomain tradeDomain : tradeDomains) {
             if (tradeDomain.getBuyPrice() <= tradeDomain.getSellPrice()) {
+                win += tradeDomain.getSellPrice() - tradeDomain.getBuyPrice();
                 winCount++;
             } else {
+                loss += tradeDomain.getBuyPrice() - tradeDomain.getSellPrice();
                 failCount++;
             }
             this.cost += tradeDomain.getCost();
         }
         winsRate = (double) winCount / tradeCount;
+        winToLossRate = (win / winCount) / (loss / failCount);
     }
 
 

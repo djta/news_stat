@@ -29,7 +29,7 @@ public class BackTestContext {
         tendencyUnits.add(new MaUnit(10, 20));
         tendencyUnits.add(new MacdUnit(10, 20, 8));
         tendencyUnits.add(new DMAUnit(10, 20, 8));
-        TendencyContext tc = new TendencyContext(0.2, 0.5, tendencyUnits);
+        TendencyContext tc = new TendencyContext(0.2, 0.6, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);
 
