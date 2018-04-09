@@ -13,10 +13,10 @@ import java.util.List;
 /**
  * Created by 范志伟 on 2018-03-26.
  */
-public class DMAUnit extends  TendencyUnit {
-  private int shortPeriod;
-  private int longPeriod;
-  private int midPeriod;
+public class DMAUnit extends TendencyUnit {
+    private int shortPeriod;
+    private int longPeriod;
+    private int midPeriod;
 
     public DMAUnit(int shortPeriod, int longPeriod, int midPeriod) {
         this.shortPeriod = shortPeriod;
@@ -26,7 +26,7 @@ public class DMAUnit extends  TendencyUnit {
 
     public static void main(String args[]) {
         double[] array = {207.650, 205.160, 210.870, 209.350, 207.250, 209.960, 207.650, 205.160, 188.170, 186.020};
-        List<DMADomain> dmaDomainList = dma(array, 2, 3, 5);
+        List<DMADomain> dmaDomainList = dma(array, 2, 3, 2);
         System.out.println(dmaDomainList);
         System.out.println(dmaDomainList.get(0));
     }
@@ -47,13 +47,13 @@ public class DMAUnit extends  TendencyUnit {
         }
         double[] ama = new double[inputLength];
         core.sma(0, inputLength - 1, dma, midPeriod, begin, length, ama);
-        List dmaList = DataFormatTransformUtil.result2List(dma);
-        List amaList = DataFormatTransformUtil.result2List(ama);
+        List<Double> dmaList = DataFormatTransformUtil.result2List(dma);
+        List<Double> amaList = DataFormatTransformUtil.result2List(ama);
         List<DMADomain> dmaDomainList = new ArrayList<DMADomain>();
         for (int i = 0; i < dmaList.size(); i++) {
             DMADomain dd = new DMADomain();
-            dd.setAma(ama[i]);
-            dd.setDma(dma[i]);
+            dd.setAma(amaList.get(i));
+            dd.setDma(dmaList.get(i));
             dmaDomainList.add(dd);
         }
         return dmaDomainList;
@@ -65,7 +65,7 @@ public class DMAUnit extends  TendencyUnit {
     }
 
 
-    public  TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         List<DMADomain> dmaDomainList = DMAUnit.dma(marketDomainList, shortPeriod, longPeriod, midPeriod);
         int size = dmaDomainList.size();
         if (size < 2) {
@@ -73,14 +73,28 @@ public class DMAUnit extends  TendencyUnit {
         }
         DMADomain dd1 = dmaDomainList.get(size - 1);
         DMADomain dd2 = dmaDomainList.get(size - 2);
-        if (dd1.getDma() > dd2.getAma() && dd1.getDma() > dd1.getAma() && dd2.getDma() < dd2.getAma()) {
+//        if (dd1.getDma() > dd2.getAma() && dd1.getDma() > dd1.getAma() && dd2.getDma() < dd2.getAma()) {
+//            return TendencySign.BULL;
+//        }
+//        if (dd1.getDma() < dd2.getAma() && dd1.getDma() < dd1.getAma() && dd2.getDma() > dd2.getAma()) {
+//            return TendencySign.BEAR;
+//        }
+        if (dd1.getAma() > 0 && dd1.getDma() > 0 && dd1.getDma() > dd2.getDma() && dd1.getAma() > dd2.getAma()) {
             return TendencySign.BULL;
         }
-        if (dd1.getDma() < dd2.getAma() && dd1.getDma() < dd1.getAma() && dd2.getDma() > dd2.getAma()) {
+        if (dd1.getAma() < 0 && dd1.getDma() < 0 && dd1.getDma() < dd2.getDma() && dd1.getAma() < dd2.getAma()) {
             return TendencySign.BEAR;
         }
+
+
         return TendencySign.WAIT;
     }
 
+    public static void printArray(double[] input) {
+        for (double value : input) {
+            System.out.print(value + "\t");
+        }
+        System.out.println();
+    }
 
 }

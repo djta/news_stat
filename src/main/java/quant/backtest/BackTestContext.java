@@ -25,10 +25,18 @@ public class BackTestContext {
 //        }
         //Units
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
-        tendencyUnits.add(new TrixUnit(3, 10));
-        tendencyUnits.add(new MaUnit(10, 20));
-        tendencyUnits.add(new MacdUnit(10, 20, 8));
-        tendencyUnits.add(new DMAUnit(10, 20, 8));
+        /*
+           all:winsRate=0.375 winToLossRate=4.522
+           trix:winsRate=0.32 winToLossRate=1.08135
+           MA:winsRate=0.1724 winToLossRate=0.976
+           MACD:winsRate=0.111 winToLossRate=0.111
+           DMA:winsRate=0.625 winToLossRate=0.3806
+         */
+
+//        tendencyUnits.add(new TrixUnit(12, 20));
+//        tendencyUnits.add(new MaUnit(10, 20));
+//        tendencyUnits.add(new MacdUnit(10, 20, 8));
+        tendencyUnits.add(new DMAUnit(10, 50, 10));//中长期
         TendencyContext tc = new TendencyContext(0.2, 0.6, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);
