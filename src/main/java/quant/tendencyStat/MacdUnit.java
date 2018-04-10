@@ -96,7 +96,9 @@ public class MacdUnit extends TendencyUnit{
 
     public static List<MacdDomain> macd(double[] input, int shortPeriod, int longPeriod, int midPeriod) {
         int arraylength = input.length;
+        //DIF
         double[] outputMACD = new double[arraylength];
+        //DEA
         double[] outputSignl = new double[arraylength];
         double[] outputHist = new double[arraylength];
         core.macd(0, arraylength - 1, input, shortPeriod, longPeriod, midPeriod, begin, length, outputMACD, outputSignl, outputHist);

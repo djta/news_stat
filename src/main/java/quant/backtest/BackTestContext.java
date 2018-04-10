@@ -35,35 +35,16 @@ public class BackTestContext {
 
 //        tendencyUnits.add(new TrixUnit(12, 20));
 //        tendencyUnits.add(new MaUnit(10, 20));
-//        tendencyUnits.add(new MacdUnit(10, 20, 8));
-        tendencyUnits.add(new DMAUnit(10, 50, 10));//中长期
-        TendencyContext tc = new TendencyContext(0.2, 0.6, tendencyUnits);
+        tendencyUnits.add(new MacdUnit(10, 20, 8));
+//        tendencyUnits.add(new DMAUnit(10, 50, 10));//中长期
+        TendencyContext tc = new TendencyContext(0.2, 0.5, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);
-
         for (int i = 0; i < marketDomains.size() - 250; i++) {
-
             List<MarketDomain> list = marketDomains.subList(i, i + 250);
-//            int result = predictTendency(list);
-//            if (result >= 3) {
-//                double close = list.get(list.size() - 1).getClose();
-//                boolean flag = bc.buy(close);
-//                if (flag) {
-//                    System.out.println("buy:" + list.get(list.size() - 1));
-//                }
-//            } else if (result <= -1) {
-//                double close = list.get(list.size() - 1).getClose();
-//                boolean flag = bc.sell(close);
-//                if (flag) {
-//                    System.out.println("sell:" + list.get(list.size() - 1));
-//                }
-//
-//            }
-
             backTest(list, tc, bc);
         }
 //        bc.sell(bc.getBuyPrice());
-
 //        System.out.println(marketDomains.get(marketDomains.size() - 1));
         bc.resultStat();
         System.out.println("result:" + bc);
