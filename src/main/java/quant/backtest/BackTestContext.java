@@ -19,7 +19,7 @@ public class BackTestContext {
     public static void main(String args[]) {
         System.out.println("ok");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        List<MarketDomain> marketDomains = marketDao.getKlineData("btcusdt");
+        List<MarketDomain> marketDomains = marketDao.getKlineData("zilusdt");
 //        for (MarketDomain md : marketDomains) {
 //            System.out.println(md);
 //        }
@@ -31,13 +31,15 @@ public class BackTestContext {
            MA:winsRate=0.1724 winToLossRate=0.976
            MACD:winsRate=0.111 winToLossRate=0.111
            DMA:winsRate=0.625 winToLossRate=0.3806
+           Bolling winsRate=0.9622 winToLossRate=22.327 //反趋势（最好与KDJ结合）
          */
 
 //        tendencyUnits.add(new TrixUnit(12, 20));
 //        tendencyUnits.add(new MaUnit(10, 20));
-        tendencyUnits.add(new MacdUnit(10, 20, 8));
+//        tendencyUnits.add(new MacdUnit(10, 20, 8));
 //        tendencyUnits.add(new DMAUnit(10, 50, 10));//中长期
-        TendencyContext tc = new TendencyContext(0.2, 0.5, tendencyUnits);
+        tendencyUnits.add(new BollingerBandUnit(10));//反趋势
+        TendencyContext tc = new TendencyContext(0.2, 0.6, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);
         for (int i = 0; i < marketDomains.size() - 250; i++) {
