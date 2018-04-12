@@ -26,22 +26,24 @@ public class Accounts {
         Date date = new Date();
         String dateStr = df.format(date);
         System.out.println(dateStr);
-        String rawUrl = "GET\\n" + "api.huobipro.com\\n" + "/v1/account/accounts\\n";
+        String rawUrl = "GET\n" + "api.huobipro.com\n" + "/v1/account/accounts\n";
 
-        String rawParams = "?AccessKeyId=" + Constants.ACCESSKEY_ID
-                + "&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=" + dateStr;
+        String rawParams = "AccessKeyId=" + Constants.ACCESSKEY_ID
+                + "&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=";
 
-        String rawUrlUrl = URLEncoder.encode(rawParams, "utf-8");
-        System.out.println(rawUrlUrl);
-        String signature = HmacSHA256.encodeHmacSHA256(Constants.ACCESSKEY.getBytes(), rawUrl + rawUrlUrl);
+        String dateStrUri = URLEncoder.encode(dateStr, "utf-8");
+        String hmacParams = rawUrl + rawParams + dateStrUri;
+        System.out.println(hmacParams);
+        String signature = HmacSHA256.encodeHmacSHA256(Constants.ACCESSKEY.getBytes(), hmacParams);
+        System.out.println(signature);
         String signatureUri = "";
         try {
-            signatureUri = java.net.URLEncoder.encode(signature, "utf-8");
+            signatureUri = URLEncoder.encode(signature, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         System.out.println(signatureUri);
-        String url = Constants.URL_ACCOUNT_ACCOUNTS + "?" + rawUrlUrl + "&Signature=" + signatureUri;
+        String url = Constants.URL_ACCOUNT_ACCOUNTS + "?" + rawParams + dateStr + "&Signature=" + signatureUri;
         System.out.println("url:" + url);
         String result = HttpUtil.doGetData(url);
         System.out.println(result);
