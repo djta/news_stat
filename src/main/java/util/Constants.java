@@ -10,76 +10,30 @@ import java.util.HashSet;
  * @Description
  */
 public class Constants {
-    //usdt主区
-    public static final HashSet<String> USDT_MAIN = Sets.newHashSet("btc", "bch", "eth", "etc", "ltc", "eos", "xrp", "omg", "dash", "zec");
-    //usdt 创新区
-    public static final HashSet<String> USDT_CX = Sets.newHashSet("itc", "nas", "ruff", "zil", "dta", "let", "ht", "theta", "hsr", "qtum", "snt", "iost",
-            "neo", "storj", "gnt", "cvc", "smt", "ven", "elf", "xem");
-    //BTC 主区
-    public static final HashSet<String> BTC_MAIN = Sets.newHashSet("bch", "eth", "ltc", "etc", "eos", "omg", "dash", "xrp", "zec");
-    //BTC 创新区
-    public static final HashSet<String> BTC_CX = Sets.newHashSet("eng", "wpr", "mtx", "mtn", "snc", "lsk", "stk", "ht", "ela", "srn", "zla", "trx",
-            "ocn", "lun", "iost", "hsr", "smt", "let", "swftc", "wax", "elf", "mds", "tnb", "nas", "btm", "itc", "theta", "wicc", "gnx", "ven", "dta",
-            "mana", "qash", "propy", "snt", "qun", "qtum", "dat", "tnt", "cmt", "yee", "gas", "aidoc", "storj", "xem", "pay", "neo", "cvc", "qsp", "topc", "rcn", "ast", "bat",
-            "dbc", "rpx", "act", "icx", "knc", "mco", "zrx", "mtl", "gnt", "req", "rdn", "salt", "mee", "zil", "chat", "powr", "dgd", "appc", "ost", "soc", "eko", "link", "utk", "evx",
-            "adx", "ruff");
-    //BTC 分叉区
-    public static final HashSet<String> BTC_FC = Sets.newHashSet("bcd", "bcx", "bifi", "sbtc", "btg");
-    //ETH 主区
-    public static final HashSet<String> ETH_MAIN = Sets.newHashSet("eos", "omg");
-    //ETH 创新
-    public static final HashSet<String> ETH_CX = Sets.newHashSet("eng", "wpr", "mtx", "mtn", "snc", "lsk", "stk", "ht", "ela", "srn", "zla", "trx",
-            "ocn", "lun", "smt", "iost", "nas", "hsr", "mds", "wax", "elf", "itc", "tnb", "swftc", "btm", "dta",
-            "wicc", "let", "qash", "gnx", "ven", "theta", "propy", "mana", "aidoc", "yee", "qtum", "gas", "zil", "cmt", "pay", "tnt", "qun", "mee", "rcn", "cvc", "icx", "topc",
-            "qsp", "act", "bat", "rdn", "dat", "gnt", "dbc", "chat", "appc", "mco", "soc", "req", "salt", "powr", "eko", "dgd", "ost", "link", "utk", "evx", "adx", "ruff");
 
-    /*
-    周期
-     */
-    public static enum Period {
-        //1min, 5min, 15min, 30min, 60min, 1day, 1mon, 1week, 1year
-        min_1("1min"),
-
-        min_5("5min"),
-
-        min_15("15min"),
-
-        min_30("30min"),
-
-        min_60("60min"),
-
-        day("1day"),
-
-        mon("1mon"),
-
-        week("1week"),
-
-        year("1year");
-
-        String period;
-
-        private Period(String period) {
-            this.period = period;
-        }
-    }
+    public static String ACCESSKEY_ID = "";
+    public static String ACCESSKEY = "";
+    //    private static final String SERVICE="https://api.huobi.pro";
+    private static final String SERVICE = "https://api.huobipro.com";
     //
-//    private static final String SERVICE="https://api.huobi.pro";
-    private static final String SERVICE="https://api.huobipro.com";
-    //
-    public static final String URL_MARKET_KLINE=SERVICE+"/market/history/kline?";
+    public static final String URL_MARKET_KLINE = SERVICE + "/market/history/kline?";
 
     //market depth
-    public static final String URL_MARKET_DEPTH = SERVICE+"/market/depth?";
+    public static final String URL_MARKET_DEPTH = SERVICE + "/market/depth?";
 
     //trade
-    public static final String URL_TRADE = SERVICE+"/market/trade?";
+    public static final String URL_TRADE = SERVICE + "/market/trade?";
     //trade history
-    public static final String URL_TRADE_HISTORY = SERVICE+"/market/history/trade?";
+    public static final String URL_TRADE_HISTORY = SERVICE + "/market/history/trade?";
     /*
        common api
      */
     //currencys
-    public static final String URL_CURRENCYS = SERVICE+"/v1/common/currencys";
-    public static final String URL_SYMBOLS = SERVICE+"/v1/common/symbols";
-
+    public static final String URL_CURRENCYS = SERVICE + "/v1/common/currencys";
+    public static final String URL_SYMBOLS = SERVICE + "/v1/common/symbols";
+    public static final String URL_COMMON_TS = SERVICE + "/v1/common/timestamp";
+    /*
+         Accounts API
+     */
+    public static final String URL_ACCOUNT_ACCOUNTS = SERVICE + "/v1/account/accounts";
 }

@@ -15,16 +15,8 @@ import java.util.HashSet;
 public class MarketHistory {
 
     public static void main(String args[]) {
-        HashSet<String> usdtMain = Constants.USDT_MAIN;
-        HashSet<String> usdtCx = Constants.USDT_CX;
-        HashSet<String> btcCx = Constants.BTC_CX;
-        HashSet<String> btcFx = Constants.BTC_FC;
-        HashSet<String> btcMain = Constants.BTC_MAIN;
-        HashSet<String> ethMain = Constants.ETH_MAIN;
-        HashSet<String> ethCx = Constants.ETH_CX;
-        Constants.Period[] periods = Constants.Period.values();
-        //
-        int size = 1;
+
+
 //      for(String set:usdtMain){
 //          String symbol=set+"usdt";
 //          String result = HttpUtil.doGetMarket(symbol, "1min", size);

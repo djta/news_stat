@@ -16,6 +16,10 @@ public class TradeDomain {
     private double cost;//手续费
     private double buyPrice;//买入价格
     private double sellPrice;//
+    private boolean isWin;//多空单
+    private double diff;//卖买差
+    private double netincome;//净利润
+    private boolean isIncomeWin;//净值
 
     public double getAmount() {
         return amount;
@@ -69,6 +73,38 @@ public class TradeDomain {
         this.fund = fund;
     }
 
+    public boolean isWin() {
+        return isWin;
+    }
+
+    public void setWin(boolean win) {
+        isWin = win;
+    }
+
+    public double getDiff() {
+        return diff;
+    }
+
+    public void setDiff(double diff) {
+        this.diff = diff;
+    }
+
+    public double getNetincome() {
+        return netincome;
+    }
+
+    public void setNetincome(double netincome) {
+        this.netincome = netincome;
+    }
+
+    public boolean isIncomeWin() {
+        return isIncomeWin;
+    }
+
+    public void setIncomeWin(boolean incomeWin) {
+        isIncomeWin = incomeWin;
+    }
+
     @Override
     public String toString() {
         return "TradeDomain{" +
@@ -78,6 +114,10 @@ public class TradeDomain {
                 ", cost=" + cost +
                 ", buyPrice=" + buyPrice +
                 ", sellPrice=" + sellPrice +
+                ", isWin=" + isWin +
+                ", diff=" + diff +
+                ", netincome=" + netincome +
+                ", isIncomeWin=" + isIncomeWin +
                 '}';
     }
 }

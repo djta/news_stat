@@ -26,6 +26,9 @@ public class TradeContext {
     private List<TradeDomain> tradeDomains = new ArrayList<TradeDomain>();
     private TradeDomain tradeDomain;
     private double winToLossRate;//赢亏比
+    private double earningRate;//获利率
+    private int earingCount;//获利数
+    private int lossCount;//亏损数
 
     public double getAmount() {
         return amount;
@@ -143,60 +146,24 @@ public class TradeContext {
         this.tradeDomain = tradeDomain;
     }
 
+    public double getWinToLossRate() {
+        return winToLossRate;
+    }
+
+    public void setWinToLossRate(double winToLossRate) {
+        this.winToLossRate = winToLossRate;
+    }
+
+    public double getEarningRate() {
+        return earningRate;
+    }
+
+    public void setEarningRate(double earningRate) {
+        this.earningRate = earningRate;
+    }
+
     public static void main(String args[]) {
 
-    }
-
-    synchronized public boolean buy(double close) {
-        if (fund <= 0) {
-            return false;
-        }
-        buyPrice = close;
-        cost += fund * rate;
-        fund -= fund * rate;
-        amount = fund / close;
-        buy++;
-        fund = 0;
-//        System.out.println("buy success:" + amount);
-        return true;
-
-    }
-
-    synchronized public boolean sell(double close) {
-        if (amount <= 0) {
-            return false;
-        }
-        sellPrice = close;
-        cost += amount * rate * close;
-        amount -= amount * rate;
-        fund = close * amount;
-//        System.out.println("sell success:" + fund);
-        amount = 0;
-        sell++;
-        return true;
-    }
-
-    public double profit() {
-        return fund;
-    }
-
-
-    public void stoplossUnit(double close, double stopLossPoint) {
-        if (amount > 0 && close < buyPrice * stopLossPoint) {
-            sell(close);
-        }
-    }
-
-     /*
-       跟踪止损
-     */
-
-    public void stopProfit(double close) {
-
-        if (currentPrice * 0.97 < close) {
-            sell(close);
-        }
-        currentPrice = close;
     }
 
     @Override
@@ -217,6 +184,7 @@ public class TradeContext {
                 ", tradeDomains=" + tradeDomains +
                 ", tradeDomain=" + tradeDomain +
                 ", winToLossRate=" + winToLossRate +
+                ", earningRate=" + earningRate +
                 '}';
     }
 
@@ -252,14 +220,29 @@ public class TradeContext {
             if (tradeDomain.getBuyPrice() <= tradeDomain.getSellPrice()) {
                 win += tradeDomain.getSellPrice() - tradeDomain.getBuyPrice();
                 winCount++;
+                tradeDomain.setWin(true);
+                double diff = tradeDomain.getSellPrice() - tradeDomain.getBuyPrice();
+                tradeDomain.setDiff(diff);
+                if (diff * tradeDomain.getAmount() - tradeDomain.getCost() > 0) {
+                    tradeDomain.setIncomeWin(true);
+                    earingCount++;
+                } else {
+                    lossCount++;
+                    tradeDomain.setIncomeWin(false);
+                }
             } else {
                 loss += tradeDomain.getBuyPrice() - tradeDomain.getSellPrice();
                 failCount++;
+                lossCount++;
+                tradeDomain.setWin(false);
+                tradeDomain.setIncomeWin(false);
+                tradeDomain.setDiff(tradeDomain.getSellPrice() - tradeDomain.getBuyPrice());
             }
             this.cost += tradeDomain.getCost();
         }
         winsRate = (double) winCount / tradeCount;
         winToLossRate = (win / winCount) / (loss / failCount);
+        earningRate = (double) earingCount / tradeCount;
     }
 
 

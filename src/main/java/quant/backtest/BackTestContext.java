@@ -19,7 +19,7 @@ public class BackTestContext {
     public static void main(String args[]) {
         System.out.println("ok");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        List<MarketDomain> marketDomains = marketDao.getKlineData("zilusdt");
+        List<MarketDomain> marketDomains = marketDao.getKlineData("btcusdt");
 //        for (MarketDomain md : marketDomains) {
 //            System.out.println(md);
 //        }
@@ -38,7 +38,7 @@ public class BackTestContext {
 //        tendencyUnits.add(new MaUnit(10, 20));
 //        tendencyUnits.add(new MacdUnit(10, 20, 8));
 //        tendencyUnits.add(new DMAUnit(10, 50, 10));//中长期
-        tendencyUnits.add(new BollingerBandUnit(10));//反趋势
+        tendencyUnits.add(new BollingerBandUnit(12));//反趋势
         TendencyContext tc = new TendencyContext(0.2, 0.6, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);
@@ -80,13 +80,11 @@ public class BackTestContext {
         TradeSign tradeSign = tendencyContext.getTradeSign(marketDomains);
         double close = marketDomains.get(marketDomains.size() - 1).getClose();
         if (tradeSign.equals(TradeSign.OPEN)) {
-//            tradeContext.buy(close);
             tradeContext.bull(close);
         }
         //跟踪止损
 //        tradeContext.stopProfit(close);
         if (tradeSign.equals(TradeSign.CLOSE)) {
-//            tradeContext.sell(close);
             tradeContext.bear(close);
         }
     }
