@@ -38,7 +38,7 @@ public class BackTestContext {
 //        tendencyUnits.add(new MaUnit(10, 20));
 //        tendencyUnits.add(new MacdUnit(10, 20, 8));
 //        tendencyUnits.add(new DMAUnit(10, 50, 10));//中长期
-        tendencyUnits.add(new BollingerBandUnit(12));//反趋势
+        tendencyUnits.add(new BollingerBandUnit(22));//反趋势
         TendencyContext tc = new TendencyContext(0.2, 0.6, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);

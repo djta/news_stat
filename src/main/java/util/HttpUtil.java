@@ -26,18 +26,24 @@ import org.apache.http.client.HttpClient;
 
 import org.apache.http.client.methods.HttpGet;
 
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 public class HttpUtil {
     private static final String AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
     private static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
+    private static final String CONTENT_POST_TYPE = "application/json";
     private static final String LANG = "zh-cn";
 
     //   static {
@@ -152,6 +158,43 @@ public class HttpUtil {
 
         return temp;
     }
+
+    public static String doPostData(String url, String jsonStr) {
+//        HttpClient httpClient = new DefaultHttpClient();
+
+        // get method
+        HttpPost httpPost = new HttpPost(url);
+        // set header
+        httpPost.setHeader("User-Agent", AGENT);
+        httpPost.setHeader("Content-Type", CONTENT_POST_TYPE);
+        httpPost.setHeader("Accept-Language", LANG);
+//        httpPost.setHeader("Accept", "application/json");
+        StringEntity stringEntity = null;
+        try {
+            stringEntity = new StringEntity(jsonStr);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        httpPost.setEntity(stringEntity);
+        //response
+        HttpResponse response = null;
+        try {
+            response = httpClient.execute(httpPost);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //get response into String
+        String temp = "";
+        try {
+            HttpEntity entity = response.getEntity();
+            temp = EntityUtils.toString(entity, "UTF-8");
+        } catch (Exception e) {
+        }
+
+        return temp;
+    }
+
 
     public static void main(String args[]) {
 //        String result = doGet();
