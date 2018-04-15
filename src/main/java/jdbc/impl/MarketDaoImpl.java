@@ -46,5 +46,14 @@ public class MarketDaoImpl extends JdbcInital implements MarketDao {
         }
         return list;
     }
+    public List<MarketDomain> getKlineDataOnline(String symbol) {
+        List<MarketDomain> list = null;
+        try {
+            list = sqlMapClient.queryForList("getKlineDataOnline", symbol);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 }

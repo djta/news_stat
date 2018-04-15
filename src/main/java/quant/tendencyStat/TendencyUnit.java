@@ -13,7 +13,7 @@ import java.util.List;
  * @Description
  */
 public abstract class TendencyUnit {
-    static Core core = new Core();
+    public static Core core = new Core();
     int lookback = 0;
     static MInteger begin = new MInteger();
     static MInteger length = new MInteger();

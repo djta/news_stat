@@ -22,12 +22,12 @@ public class Symbols {
 
     public static void main(String args[]) {
         logger.info("sysmbols init start!!!");
-//        String result = HttpUtil.doGetData(Constants.URL_SYMBOLS);
-//        SymbolsMainDomain smd = JSON.parseObject(result, SymbolsMainDomain.class);
-//        CommonDaoImpl cdi = new CommonDaoImpl();
-//        for (SymbolsDomain sd : smd.getData()) {
-//            cdi.insertSymbols(sd);
-//        }
+        String result = HttpUtil.doGetData(Constants.URL_SYMBOLS);
+        SymbolsMainDomain smd = JSON.parseObject(result, SymbolsMainDomain.class);
+        CommonDaoImpl cdi = new CommonDaoImpl();
+        for (SymbolsDomain sd : smd.getData()) {
+            cdi.insertSymbols(sd);
+        }
         logger.info("sysmbols init end!!!");
     }
 }

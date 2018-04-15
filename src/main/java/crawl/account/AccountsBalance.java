@@ -18,11 +18,6 @@ public class AccountsBalance {
 
     public static void main(String args[]) {
 
-//        String signature = getSignature(path);
-//        System.out.println(signature);
-//        String rawStr = "?" + StringUtil.accountparmsAsciiSort() + "&Signature=" + signature;
-//        String url = Constants.URL_ACCOUNT_BALANCE + rawStr;
-//        System.out.println(url);
         System.out.println(getAccountBalanceInfo());
         BalanceSymbolDetail bsd = getSymbolBalanceInfo("zil");
         System.out.println(bsd);

@@ -20,6 +20,9 @@ public class TradeDomain {
     private double diff;//卖买差
     private double netincome;//净利润
     private boolean isIncomeWin;//净值
+    private long buyts;//买入时间
+    private long sellts;//卖出时间
+    private double roa;//单笔收益率
 
     public double getAmount() {
         return amount;
@@ -105,6 +108,30 @@ public class TradeDomain {
         isIncomeWin = incomeWin;
     }
 
+    public long getBuyts() {
+        return buyts;
+    }
+
+    public void setBuyts(long buyts) {
+        this.buyts = buyts;
+    }
+
+    public long getSellts() {
+        return sellts;
+    }
+
+    public void setSellts(long sellts) {
+        this.sellts = sellts;
+    }
+
+    public double getRoa() {
+        return roa;
+    }
+
+    public void setRoa(double roa) {
+        this.roa = roa;
+    }
+
     @Override
     public String toString() {
         return "TradeDomain{" +
@@ -118,6 +145,9 @@ public class TradeDomain {
                 ", diff=" + diff +
                 ", netincome=" + netincome +
                 ", isIncomeWin=" + isIncomeWin +
+                ", buyts=" + buyts +
+                ", sellts=" + sellts +
+                ", roa=" + roa +
                 '}';
     }
 }

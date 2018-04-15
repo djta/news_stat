@@ -11,5 +11,8 @@ import java.util.List;
  */
 public interface MarketDao {
     public void insertMarket(MarketDomain md, String queryId);
+
     public List<MarketDomain> getKlineData(String symbol);
+
+    public List<MarketDomain> getKlineDataOnline(String symbol);
 }

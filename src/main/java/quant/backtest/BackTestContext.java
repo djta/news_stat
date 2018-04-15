@@ -19,7 +19,8 @@ public class BackTestContext {
     public static void main(String args[]) {
         System.out.println("ok");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        List<MarketDomain> marketDomains = marketDao.getKlineData("btcusdt");
+        List<MarketDomain> marketDomains = marketDao.getKlineData("smtusdt");
+        System.out.println(marketDomains.size());
 //        for (MarketDomain md : marketDomains) {
 //            System.out.println(md);
 //        }
@@ -38,8 +39,9 @@ public class BackTestContext {
 //        tendencyUnits.add(new MaUnit(10, 20));
 //        tendencyUnits.add(new MacdUnit(10, 20, 8));
 //        tendencyUnits.add(new DMAUnit(10, 50, 10));//中长期
-        tendencyUnits.add(new BollingerBandUnit(22));//反趋势
-        TendencyContext tc = new TendencyContext(0.2, 0.6, tendencyUnits);
+        tendencyUnits.add(new BollingerBandUnit(100));//反趋势
+//        tendencyUnits.add(new RSIUnit(20));
+        TendencyContext tc = new TendencyContext(0.2, 1, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);
         for (int i = 0; i < marketDomains.size() - 250; i++) {
@@ -49,7 +51,7 @@ public class BackTestContext {
 //        bc.sell(bc.getBuyPrice());
 //        System.out.println(marketDomains.get(marketDomains.size() - 1));
         bc.resultStat();
-        System.out.println("result:" + bc);
+        System.out.println("result:" + bc.toSimpleString());
 
 
     }
@@ -78,14 +80,15 @@ public class BackTestContext {
 
     public static void backTest(List<MarketDomain> marketDomains, TendencyContext tendencyContext, TradeContext tradeContext) {
         TradeSign tradeSign = tendencyContext.getTradeSign(marketDomains);
-        double close = marketDomains.get(marketDomains.size() - 1).getClose();
+//        double close = marketDomains.get(marketDomains.size() - 1).getClose();
+        MarketDomain marketDomain = marketDomains.get(marketDomains.size() - 1);
         if (tradeSign.equals(TradeSign.OPEN)) {
-            tradeContext.bull(close);
+            tradeContext.bull(marketDomain);
         }
         //跟踪止损
 //        tradeContext.stopProfit(close);
         if (tradeSign.equals(TradeSign.CLOSE)) {
-            tradeContext.bear(close);
+            tradeContext.bear(marketDomain);
         }
     }
 
