@@ -19,7 +19,8 @@ public class BackTestContext {
     public static void main(String args[]) {
         System.out.println("ok");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        List<MarketDomain> marketDomains = marketDao.getKlineData("smtusdt");
+        //ht 50%的胜率,dta亏损
+        List<MarketDomain> marketDomains = marketDao.getKlineData("iostusdt");
         System.out.println(marketDomains.size());
 //        for (MarketDomain md : marketDomains) {
 //            System.out.println(md);

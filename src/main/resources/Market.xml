@@ -65,6 +65,12 @@
 
     <select id="getKlineData" resultMap="MarketDomainMap"
             parameterClass="java.lang.String">
-        SELECT * FROM kline_1_min WHERE symbol=#symbol# ORDER BY ts;
+        SELECT * FROM kline_1_min WHERE symbol=#symbol# AND ts>='1523567400' ORDER BY ts;
     </select>
+      <!--模拟现实环境回测-->
+    <select id="getKlineDataOnline" resultMap="MarketDomainMap"
+            parameterClass="java.lang.String">
+        SELECT * FROM online_kline_1_min WHERE symbol=#symbol# ORDER BY ts DESC;
+    </select>
+
 </sqlMap>
