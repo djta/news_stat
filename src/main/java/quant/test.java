@@ -6,10 +6,7 @@ import quant.SelectSymbolUnit.SelectSymbolContext;
 import quant.SelectSymbolUnit.SelectSymbolUnit;
 import quant.constant.SelectSignConstant;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by hzyuyongmao on 2018/3/23.
@@ -22,5 +19,9 @@ public class test {
         SelectSymbolUnit ssu = new OpenJumpUnit();
         Map<String, Map<Long, MarketDomain>> map = new HashMap<String, Map<Long, MarketDomain>>();
         System.out.println(5==5.0);
+        List<Integer> list=new ArrayList<Integer>();
+        list.add(1);
+        System.out.println(list.get(0).equals(1));
+
     }
 }

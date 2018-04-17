@@ -15,10 +15,17 @@ public class PatternRecognitionContext {
 //            List<MarketDomain> list = marketDomains.subList(i, i + 250);
 //
 //        }
-
-        List<Integer> recognitionResults = Test.getPatternRecognition(marketDomains);
-        for (Integer value : recognitionResults) {
-            System.out.print(value);
+          List<MarketDomain> marketDomains1= marketDomains.subList(0,1185);
+        List<Integer> recognitionResults = Test.getPatternRecognition(marketDomains1);
+//        for (Integer value : recognitionResults) {
+//            System.out.println(value);
+//        }
+        for(int i=0;i<recognitionResults.size();i++){
+            if(recognitionResults.get(i)==100){
+                System.out.println(recognitionResults.get(i));
+                System.out.println(i);
+                break;
+            }
         }
 
     }

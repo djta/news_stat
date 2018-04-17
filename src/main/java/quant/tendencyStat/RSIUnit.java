@@ -43,9 +43,9 @@ public class RSIUnit extends TendencyUnit {
         double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
         List<Double> rsiList = getRSIUnit(input, period);
         int size = rsiList.size();
-        if (rsiList.get(size - 1) >= 70) {
+        if (rsiList.get(size - 1) >= 80) {
             return TendencySign.BEAR;
-        } else if (rsiList.get(size - 1) <= 30) {
+        } else if (rsiList.get(size - 1) <= 20) {
             return TendencySign.BULL;
         }
         return TendencySign.WAIT;

@@ -19,22 +19,31 @@ public class AccountsBalance {
     public static void main(String args[]) {
 
         System.out.println(getAccountBalanceInfo());
-        BalanceSymbolDetail bsd = getSymbolBalanceInfo("zil");
-        System.out.println(bsd);
+//        BalanceSymbolDetail bsd = getSymbolBalanceInfo("zil");
+//        System.out.println(bsd);
     }
 
 
     private static String getSignature(String path) {
         String param = StringUtil.accountparmsAsciiSort();
         String rawStr = Constants.URL_HOSTNAME_GET + path + param;
+        System.out.println(rawStr);
+        System.out.println(HmacSHA256.encodeHmacSHA256(Constants.ACCESSKEY.getBytes(), rawStr));
         return StringUtil.getUriString(HmacSHA256.encodeHmacSHA256(Constants.ACCESSKEY.getBytes(), rawStr));
     }
 
     public static AccountsBalanceDomain getAccountBalanceInfo() {
-        String signature = getSignature(path);
-        String rawStr = "?" + StringUtil.accountparmsAsciiSort() + "&Signature=" + signature;
+
+//        String signature = getSignature(path);
+        //
+        String param = StringUtil.accountparmsAsciiSort();
+        String pathStr = Constants.URL_HOSTNAME_GET + path + param;
+        String signature = StringUtil.getUriString(HmacSHA256.encodeHmacSHA256(Constants.ACCESSKEY.getBytes(), pathStr));
+        String rawStr = "?" + param + "&Signature=" + signature;
         String url = Constants.URL_ACCOUNT_BALANCE + rawStr;
+        System.out.println("url:" + url);
         String urlData = HttpUtil.doGetData(url);
+        System.out.println(urlData);
         AccountsBalanceDomain accountsBalanceDomain = JSON.parseObject(urlData, AccountsBalanceDomain.class);
         return accountsBalanceDomain;
     }

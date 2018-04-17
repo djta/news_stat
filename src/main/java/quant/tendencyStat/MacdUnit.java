@@ -120,6 +120,25 @@ public class MacdUnit extends TendencyUnit{
     }
 
 
+//    public  TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+//        List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
+//        int size = macdDomainList.size();
+//        if (size < 2) {
+//            return TendencySign.WAIT;
+//        }
+//        MacdDomain macd1 = macdDomainList.get(size - 1);
+//        MacdDomain macd2 = macdDomainList.get(size - 2);
+//        if (macd1.getDif() > macd2.getDif() && macd1.getDif() > macd1.getDea() && macd2.getDif() < macd2.getDea() && macd1.getDif() > 0) {
+//            return TendencySign.BULL;
+//        }
+//        if (macd1.getDif() < macd2.getDif() && macd1.getDif() < macd1.getDea() && macd2.getDif() > macd2.getDea() && macd1.getDif() < 0) {
+//            return TendencySign.BEAR;
+//        }
+//        return TendencySign.WAIT;
+//    }
+
+
+     //反趋势
     public  TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
         int size = macdDomainList.size();
@@ -129,10 +148,10 @@ public class MacdUnit extends TendencyUnit{
         MacdDomain macd1 = macdDomainList.get(size - 1);
         MacdDomain macd2 = macdDomainList.get(size - 2);
         if (macd1.getDif() > macd2.getDif() && macd1.getDif() > macd1.getDea() && macd2.getDif() < macd2.getDea() && macd1.getDif() > 0) {
-            return TendencySign.BULL;
+            return TendencySign.BEAR;
         }
         if (macd1.getDif() < macd2.getDif() && macd1.getDif() < macd1.getDea() && macd2.getDif() > macd2.getDea() && macd1.getDif() < 0) {
-            return TendencySign.BEAR;
+            return TendencySign.BULL;
         }
         return TendencySign.WAIT;
     }

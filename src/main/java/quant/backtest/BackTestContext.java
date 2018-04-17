@@ -2,6 +2,7 @@ package quant.backtest;
 
 import domain.MarketDomain;
 import jdbc.impl.MarketDaoImpl;
+import quant.PatternRecognition.Test;
 import quant.constant.TendencySign;
 import quant.constant.TradeSign;
 import quant.tendencyStat.*;
@@ -19,8 +20,7 @@ public class BackTestContext {
     public static void main(String args[]) {
         System.out.println("ok");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        //ht 50%的胜率,dta亏损
-        List<MarketDomain> marketDomains = marketDao.getKlineData("iostusdt");
+        List<MarketDomain> marketDomains = marketDao.getKlineData("zilusdt");
         System.out.println(marketDomains.size());
 //        for (MarketDomain md : marketDomains) {
 //            System.out.println(md);
@@ -38,11 +38,14 @@ public class BackTestContext {
 
 //        tendencyUnits.add(new TrixUnit(12, 20));
 //        tendencyUnits.add(new MaUnit(10, 20));
-//        tendencyUnits.add(new MacdUnit(10, 20, 8));
+//        tendencyUnits.add(new MacdUnit(10, 20, 8));//反趋势（效果好）
 //        tendencyUnits.add(new DMAUnit(10, 50, 10));//中长期
-        tendencyUnits.add(new BollingerBandUnit(100));//反趋势
-//        tendencyUnits.add(new RSIUnit(20));
-        TendencyContext tc = new TendencyContext(0.2, 1, tendencyUnits);
+//        tendencyUnits.add(new BollingerBandUnit(100));//反趋势（效果好）
+//        tendencyUnits.add(new Test());
+//        tendencyUnits.add(new RSIUnit(5));
+//        tendencyUnits.add(new VMacd(10, 20, 8));
+        tendencyUnits.add(new VBollingBandUnit(100));
+        TendencyContext tc = new TendencyContext(0.2, 0.5, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);
         for (int i = 0; i < marketDomains.size() - 250; i++) {

@@ -15,8 +15,8 @@ import java.util.List;
 public abstract class TendencyUnit {
     public static Core core = new Core();
     int lookback = 0;
-    static MInteger begin = new MInteger();
-    static MInteger length = new MInteger();
+    public static MInteger begin = new MInteger();
+    public static MInteger length = new MInteger();
 
     public abstract TendencySign getTendencySign(List<MarketDomain> marketDomainList);
 
