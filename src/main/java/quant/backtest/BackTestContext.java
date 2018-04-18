@@ -20,7 +20,7 @@ public class BackTestContext {
     public static void main(String args[]) {
         System.out.println("ok");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        List<MarketDomain> marketDomains = marketDao.getKlineData("zilusdt");
+        List<MarketDomain> marketDomains = marketDao.getKlineData("dtausdt");
         System.out.println(marketDomains.size());
 //        for (MarketDomain md : marketDomains) {
 //            System.out.println(md);

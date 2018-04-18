@@ -22,6 +22,7 @@ public class DateUtil {
         long ts = date.getTime();
         String res = String.valueOf(ts);
         System.out.println(res);
+        System.out.println(getUTCCurrentTime());
 
     }
 

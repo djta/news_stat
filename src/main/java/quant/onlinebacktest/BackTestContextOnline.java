@@ -22,13 +22,13 @@ public class BackTestContextOnline {
     public static void main(String args[]) {
         System.out.println("ok");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        List<MarketDomain> marketDomains = marketDao.getKlineDataOnline("iostusdt");
-        System.out.println(marketDomains);
+        List<MarketDomain> marketDomains = marketDao.getKlineDataOnline("eosusdt");
+//        System.out.println(marketDomains);
         System.out.println("size:" + marketDomains.size());
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
 
-        tendencyUnits.add(new BollingerBandUnitOnline(55));//反趋势
-        tendencyUnits.add(new RSIUnit(25));//反趋势,RSI超买，超卖
+        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
+//        tendencyUnits.add(new RSIUnit(25));//反趋势,RSI超买，超卖
         TendencyContext tc = new TendencyContext(0.2, 1, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);

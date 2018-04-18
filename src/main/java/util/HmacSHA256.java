@@ -56,8 +56,8 @@ public class HmacSHA256 {
     }
 
     public static void main(String args[]) throws Exception {
-        String content = "1460032806000";
-        String key = "XRQgG5QxfQwuXkr9QBT5G1agkljol56t";
+        String content = "GET\n" + "api.huobipro.com\n" + "/v1/account/accounts/1880317/balance\n" + "AccessKeyId=9f4891da-a8639ea6-ff811f7b-c4c3f&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2018-04-16T01%3A29%3A49";
+        String key = "test";
         String result = encodeHmacSHA256(key.getBytes(), content);
         System.out.println(result);
     }
