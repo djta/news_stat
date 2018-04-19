@@ -20,7 +20,7 @@ public class BackTestContext {
     public static void main(String args[]) {
         System.out.println("ok");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        List<MarketDomain> marketDomains = marketDao.getKlineData("dtausdt");
+        List<MarketDomain> marketDomains = marketDao.getKlineData("eosusdt");
         System.out.println(marketDomains.size());
 //        for (MarketDomain md : marketDomains) {
 //            System.out.println(md);
@@ -40,11 +40,11 @@ public class BackTestContext {
 //        tendencyUnits.add(new MaUnit(10, 20));
 //        tendencyUnits.add(new MacdUnit(10, 20, 8));//反趋势（效果好）
 //        tendencyUnits.add(new DMAUnit(10, 50, 10));//中长期
-//        tendencyUnits.add(new BollingerBandUnit(100));//反趋势（效果好）
+        tendencyUnits.add(new BollingerBandUnit(50));//反趋势（效果好）
 //        tendencyUnits.add(new Test());
 //        tendencyUnits.add(new RSIUnit(5));
 //        tendencyUnits.add(new VMacd(10, 20, 8));
-        tendencyUnits.add(new VBollingBandUnit(100));
+//        tendencyUnits.add(new VBollingBandUnit(100));
         TendencyContext tc = new TendencyContext(0.2, 0.5, tendencyUnits);
         //
         TradeContext bc = new TradeContext(100000);

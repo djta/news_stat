@@ -18,7 +18,7 @@ public class TradeContextOnline {
     private String symbol;
     private double amount;//拥有币量
     private double fund;//初始化资金
-    private double rate = 0.0005;//费率；
+    private double rate = 0.002;//费率；
     private double cost = 0;//手续费
     private int buy = 0;//买次数；
     private int sell = 0;//卖次数；

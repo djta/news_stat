@@ -33,6 +33,7 @@ public class BollingerBandUnitOnline extends TendencyUnit {
         double[] upper = new double[input.length];
         double[] mid = new double[input.length];
         double[] lower = new double[input.length];
+        //4,2比较好
         core.bbands(0, input.length - 1, input, period, 4, 2, maType, begin, length, upper, mid, lower);
 
         List<Double> upperList = DataFormatTransformUtil.result2List(upper);
@@ -122,6 +123,28 @@ public class BollingerBandUnitOnline extends TendencyUnit {
 //        }
 //        return TendencySign.WAIT;
 //    }
+      //http://www.360doc.com/content/16/0229/05/748316_538164884.shtml
+    public TendencySign getTendencySign1(List<MarketDomain> marketDomainList) {
+        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
+        List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
+        int bollingSize = bollingerBandDomains.size();
+        int marketSize = marketDomainList.size();
+        double close = marketDomainList.get(marketSize - 1).getClose();
+        double upper = bollingerBandDomains.get(bollingSize - 1).getUpper();
+        double lower = bollingerBandDomains.get(bollingSize - 1).getLower();
+        if (upper - lower <= 0) {
+            return TendencySign.WAIT;
+        }
+        if (marketDomainList.get(marketSize - 2).getClose() >= upper&&close<upper&&bollingerBandDomains.get(bollingSize - 1).getUpper()>bollingerBandDomains.get(bollingSize - 2).getUpper()) {
+//            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+            return TendencySign.BEAR;
+        } else if (marketDomainList.get(marketSize - 2).getClose() <= lower&&close>lower&&bollingerBandDomains.get(bollingSize - 2).getUpper()>bollingerBandDomains.get(bollingSize - 1).getUpper()) {
+//            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+            return TendencySign.BULL;
+        }
+        return TendencySign.WAIT;
+    }
+
 
 
 }

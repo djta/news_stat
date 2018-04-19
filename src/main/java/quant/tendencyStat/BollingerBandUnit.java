@@ -29,12 +29,12 @@ public class BollingerBandUnit extends TendencyUnit {
     public static void main(String args[]) {
         double[] array = {207.650, 205.160, 210.870, 209.350, 207.250, 209.960, 207.650, 205.160, 188.170, 186.020};
         List<BollingerBandDomain> list = bollingerBands(array, 2);
-         List<MarketDomain> marketDomainList=new ArrayList<MarketDomain>();
-        MarketDomain md1=new MarketDomain();
+        List<MarketDomain> marketDomainList = new ArrayList<MarketDomain>();
+        MarketDomain md1 = new MarketDomain();
         md1.setClose(207.650);
-        MarketDomain md2=new MarketDomain();
+        MarketDomain md2 = new MarketDomain();
         md2.setClose(205.160);
-        MarketDomain md3=new MarketDomain();
+        MarketDomain md3 = new MarketDomain();
         md3.setClose(210.870);
         marketDomainList.add(md1);
         marketDomainList.add(md2);
@@ -85,4 +85,26 @@ public class BollingerBandUnit extends TendencyUnit {
 
         return TendencySign.WAIT;
     }
+    /*
+       反趋势
+     */
+//    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+//        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
+//        List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
+//        int bollingSize = bollingerBandDomains.size();
+//        int marketSize = marketDomainList.size();
+//        //突破上轨后回调，卖出
+//        if (marketDomainList.get(marketSize - 2).getClose() > bollingerBandDomains.get(bollingSize - 1).getUpper()
+//                && marketDomainList.get(marketSize - 1).getClose() < marketDomainList.get(marketSize - 2).getClose()) {
+//            return TendencySign.BEAR;
+//        }
+//        //突破下轨后回调买入
+//        else if (marketDomainList.get(marketSize - 2).getClose() <= bollingerBandDomains.get(bollingSize - 1).getLower()
+//                && marketDomainList.get(marketSize - 1).getClose() > marketDomainList.get(marketSize - 2).getClose()) {
+//            return TendencySign.BULL;
+//        }
+//
+//        return TendencySign.WAIT;
+//    }
+
 }
