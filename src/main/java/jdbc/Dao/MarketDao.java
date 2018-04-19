@@ -15,4 +15,6 @@ public interface MarketDao {
     public List<MarketDomain> getKlineData(String symbol);
 
     public List<MarketDomain> getKlineDataOnline(String symbol);
+
+    public List<String> getSymbols();
 }

@@ -46,6 +46,7 @@ public class MarketDaoImpl extends JdbcInital implements MarketDao {
         }
         return list;
     }
+
     public List<MarketDomain> getKlineDataOnline(String symbol) {
         List<MarketDomain> list = null;
         try {
@@ -54,6 +55,16 @@ public class MarketDaoImpl extends JdbcInital implements MarketDao {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public List<String> getSymbols() {
+        List<String> result = null;
+        try {
+            result = sqlMapClient.queryForList("getSymbol");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

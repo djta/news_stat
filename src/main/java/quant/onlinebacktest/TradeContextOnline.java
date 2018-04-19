@@ -1,21 +1,24 @@
-package quant.trade;
+package quant.onlinebacktest;
 
 import domain.MarketDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import quant.trade.TradeDomain;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by 范志伟 on 2018-03-29.
+ * Created by hzyuyongmao on 2018/4/19.
+ *
+ * @Description
  */
-public class TradeContext {
-    private static final Logger logger = LoggerFactory.getLogger(TradeContext.class);
+public class TradeContextOnline {
+    private static final Logger logger = LoggerFactory.getLogger(TradeContextOnline.class);
     private String symbol;
     private double amount;//拥有币量
     private double fund;//初始化资金
-    private double rate = 0.002;//费率；
+    private double rate = 0.0005;//费率；
     private double cost = 0;//手续费
     private int buy = 0;//买次数；
     private int sell = 0;//卖次数；
@@ -96,7 +99,7 @@ public class TradeContext {
         this.sell = sell;
     }
 
-    public TradeContext(double fund) {
+    public TradeContextOnline(double fund) {
         this.fund = fund;
         this.initFund = fund;
     }
@@ -302,7 +305,9 @@ public class TradeContext {
     }
 
     public void bull(MarketDomain marketDomain) {
-
+        if (!buyFlag) {
+            return;
+        }
         double cost = this.fund * rate;
         double fund = this.fund - cost;
         tradeDomain = new TradeDomain(fund);
@@ -310,10 +315,14 @@ public class TradeContext {
         tradeDomain.setCost(cost * 2);
         tradeDomain.setAmount(fund / marketDomain.getClose());
         tradeDomain.setBuyts(marketDomain.getId());
+        buyFlag = false;
+        sellFlag = true;
     }
 
     public void bear(MarketDomain marketDomain) {
-
+        if (!sellFlag) {
+            return;
+        }
 
         if (tradeDomain == null) {
             return;
@@ -327,6 +336,8 @@ public class TradeContext {
         tradeDomain.setSellts(marketDomain.getId());
         tradeDomain.setRoa((tradeDomain.getSellPrice() - tradeDomain.getBuyPrice()) / tradeDomain.getBuyPrice());
         tradeDomains.add(tradeDomain);
+        buyFlag = true;
+        sellFlag = false;
         tradeDomain = null;
     }
 
@@ -375,6 +386,5 @@ public class TradeContext {
         rovFailPerOrder = rovFail / lossCount;
         rovWinPerOrder = rovWin / winCount;
     }
-
 
 }

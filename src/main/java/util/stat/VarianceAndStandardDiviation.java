@@ -7,9 +7,9 @@ public class VarianceAndStandardDiviation {
 
     public static void main(String[] args) {
         List<Double> list = new ArrayList<Double>();
-        list.add(0.2);
-        list.add(0.4);
-        list.add(0.6);
+        list.add(1.0);
+        list.add(2.0);
+        list.add(5.0);
         System.out.println(variance(list));
         double[] x = {0.2, 0.4, 0.6};
         System.out.println(variance(x));
@@ -116,7 +116,7 @@ public class VarianceAndStandardDiviation {
     /**
      * 求给定双精度数组中值的数目
      *
-     * @param input Data 输入数据数组
+     * @param inputData
      * @return 运算结果
      */
     public static int getCount(double[] inputData) {
@@ -204,7 +204,6 @@ public class VarianceAndStandardDiviation {
         variance = sum2 / arr.length - (sum / arr.length) * (sum / arr.length);
         return variance;
     }
-
 
 
 }

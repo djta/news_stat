@@ -10,6 +10,9 @@ public class MeanAndStdUtil {
     public static double getMeanValue(List<Double> list) {
         double sum = 0;
         for (double value : list) {
+            if (Double.isNaN(value)) {
+                value = 0;
+            }
             sum += value;
         }
         return sum / list.size();
@@ -19,6 +22,9 @@ public class MeanAndStdUtil {
         double mean = getMeanValue(list);
         double sum = 0;
         for (double value : list) {
+            if (Double.isNaN(value)) {
+                value = 0;
+            }
             sum += Math.pow((value - mean), 2);
         }
         return sum / list.size();

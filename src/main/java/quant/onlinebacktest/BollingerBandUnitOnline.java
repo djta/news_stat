@@ -33,7 +33,7 @@ public class BollingerBandUnitOnline extends TendencyUnit {
         double[] upper = new double[input.length];
         double[] mid = new double[input.length];
         double[] lower = new double[input.length];
-        core.bbands(0, input.length - 1, input, period, 3.5, 2.5, maType, begin, length, upper, mid, lower);
+        core.bbands(0, input.length - 1, input, period, 4, 2, maType, begin, length, upper, mid, lower);
 
         List<Double> upperList = DataFormatTransformUtil.result2List(upper);
         List<Double> midList = DataFormatTransformUtil.result2List(mid);
@@ -57,29 +57,71 @@ public class BollingerBandUnitOnline extends TendencyUnit {
        考虑结合kdj，胜率高，但行情很微小。
        https://wenku.baidu.com/view/636229a11eb91a37f1115ce8.html
      */
+//    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+//        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
+//        List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
+//        int bollingSize = bollingerBandDomains.size();
+//        int marketSize = marketDomainList.size();
+//        double close = marketDomainList.get(marketSize - 1).getClose();
+//        double upper = bollingerBandDomains.get(bollingSize - 1).getUpper();
+//        double lower = bollingerBandDomains.get(bollingSize - 1).getLower();
+//        if (upper - lower <= 0) {
+//            return TendencySign.WAIT;
+//        }
+//        if (close > upper) {
+////            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+//            return TendencySign.BEAR;
+//        } else if (close <= lower) {
+////            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+//            return TendencySign.BULL;
+//        }
+//        return TendencySign.WAIT;
+//    }
+
+//      //破上轨后移到上中轨，//破下轨后移到下中轨
     public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
         List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
         int bollingSize = bollingerBandDomains.size();
         int marketSize = marketDomainList.size();
-        double close =marketDomainList.get(marketSize - 1).getClose();
+        double close = marketDomainList.get(marketSize - 1).getClose();
         double upper = bollingerBandDomains.get(bollingSize - 1).getUpper();
         double lower = bollingerBandDomains.get(bollingSize - 1).getLower();
         if (upper - lower <= 0) {
             return TendencySign.WAIT;
         }
-
-        if (close > upper) {
-
-            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower)+"\t ts:"+marketDomainList.get(marketSize - 1).getId()+"\tclose:"+close);
-
+        if (marketDomainList.get(marketSize - 2).getClose() >= upper&&close<upper) {
+//            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
             return TendencySign.BEAR;
-        } else if (close <= lower) {
-            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower)+"\t ts:"+marketDomainList.get(marketSize - 1).getId()+"\tclose:"+close);
+        } else if (marketDomainList.get(marketSize - 2).getClose() <= lower&&close>lower) {
+//            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
             return TendencySign.BULL;
         }
         return TendencySign.WAIT;
     }
+
+
+    //破上轨回调，破下轨回调
+//    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+//        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
+//        List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
+//        int bollingSize = bollingerBandDomains.size();
+//        int marketSize = marketDomainList.size();
+//        double close = marketDomainList.get(marketSize - 1).getClose();
+//        double upper = bollingerBandDomains.get(bollingSize - 1).getUpper();
+//        double lower = bollingerBandDomains.get(bollingSize - 1).getLower();
+//        if (upper - lower <= 0) {
+//            return TendencySign.WAIT;
+//        }
+//        if (marketDomainList.get(marketSize - 2).getClose() >= upper && close < marketDomainList.get(marketSize - 2).getClose()) {
+////            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+//            return TendencySign.BEAR;
+//        } else if (marketDomainList.get(marketSize - 2).getClose() <= lower && close > marketDomainList.get(marketSize - 2).getClose()) {
+////            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+//            return TendencySign.BULL;
+//        }
+//        return TendencySign.WAIT;
+//    }
 
 
 }
