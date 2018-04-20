@@ -22,7 +22,7 @@ public class BackTestContextOnline {
     public static void main(String args[]) {
         System.out.println("ok");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        List<MarketDomain> marketDomains = marketDao.getKlineDataOnline("nasusdt");
+        List<MarketDomain> marketDomains = marketDao.getKlineDataOnline("gntusdt");
 //        System.out.println(marketDomains);
         System.out.println("size:" + marketDomains.size());
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
