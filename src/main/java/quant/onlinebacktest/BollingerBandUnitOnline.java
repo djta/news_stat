@@ -57,29 +57,32 @@ public class BollingerBandUnitOnline extends TendencyUnit {
        中上轨和中下轨则反转。
        考虑结合kdj，胜率高，但行情很微小。
        https://wenku.baidu.com/view/636229a11eb91a37f1115ce8.html
-     */
-//    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
-//        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
-//        List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
-//        int bollingSize = bollingerBandDomains.size();
-//        int marketSize = marketDomainList.size();
-//        double close = marketDomainList.get(marketSize - 1).getClose();
-//        double upper = bollingerBandDomains.get(bollingSize - 1).getUpper();
-//        double lower = bollingerBandDomains.get(bollingSize - 1).getLower();
-//        if (upper - lower <= 0) {
-//            return TendencySign.WAIT;
-//        }
-//        if (close > upper) {
-////            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
-//            return TendencySign.BEAR;
-//        } else if (close <= lower) {
-////            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
-//            return TendencySign.BULL;
-//        }
-//        return TendencySign.WAIT;
-//    }
 
-//      //破上轨后移到上中轨，//破下轨后移到下中轨
+       效果没有（//破上轨后移到上中轨，//破下轨后移到下中轨） 好
+
+     */
+    public TendencySign getTendencySignTest(List<MarketDomain> marketDomainList) {
+        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
+        List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
+        int bollingSize = bollingerBandDomains.size();
+        int marketSize = marketDomainList.size();
+        double close = marketDomainList.get(marketSize - 1).getClose();
+        double upper = bollingerBandDomains.get(bollingSize - 1).getUpper();
+        double lower = bollingerBandDomains.get(bollingSize - 1).getLower();
+        if (upper - lower <= 0) {
+            return TendencySign.WAIT;
+        }
+        if (close > upper) {
+//            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+            return TendencySign.BEAR;
+        } else if (close <= lower) {
+//            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+            return TendencySign.BULL;
+        }
+        return TendencySign.WAIT;
+    }
+
+    //      //破上轨后移到上中轨，//破下轨后移到下中轨
     public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
         List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
@@ -91,11 +94,11 @@ public class BollingerBandUnitOnline extends TendencyUnit {
         if (upper - lower <= 0) {
             return TendencySign.WAIT;
         }
-        if (marketDomainList.get(marketSize - 2).getClose() >= upper&&close<upper) {
-            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+        if (marketDomainList.get(marketSize - 2).getClose() >= upper && close < upper) {
+//            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
             return TendencySign.BEAR;
-        } else if (marketDomainList.get(marketSize - 2).getClose() <= lower&&close>lower) {
-            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
+        } else if (marketDomainList.get(marketSize - 2).getClose() <= lower && close > lower) {
+//            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
             return TendencySign.BULL;
         }
         return TendencySign.WAIT;
@@ -123,7 +126,7 @@ public class BollingerBandUnitOnline extends TendencyUnit {
 //        }
 //        return TendencySign.WAIT;
 //    }
-      //http://www.360doc.com/content/16/0229/05/748316_538164884.shtml
+    //http://www.360doc.com/content/16/0229/05/748316_538164884.shtml
     public TendencySign getTendencySign1(List<MarketDomain> marketDomainList) {
         double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
         List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
@@ -135,16 +138,15 @@ public class BollingerBandUnitOnline extends TendencyUnit {
         if (upper - lower <= 0) {
             return TendencySign.WAIT;
         }
-        if (marketDomainList.get(marketSize - 2).getClose() >= upper&&close<upper&&bollingerBandDomains.get(bollingSize - 1).getUpper()>bollingerBandDomains.get(bollingSize - 2).getUpper()) {
+        if (marketDomainList.get(marketSize - 2).getClose() >= upper && close < upper && bollingerBandDomains.get(bollingSize - 1).getUpper() > bollingerBandDomains.get(bollingSize - 2).getUpper()) {
 //            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
             return TendencySign.BEAR;
-        } else if (marketDomainList.get(marketSize - 2).getClose() <= lower&&close>lower&&bollingerBandDomains.get(bollingSize - 2).getUpper()>bollingerBandDomains.get(bollingSize - 1).getUpper()) {
+        } else if (marketDomainList.get(marketSize - 2).getClose() <= lower && close > lower && bollingerBandDomains.get(bollingSize - 2).getUpper() > bollingerBandDomains.get(bollingSize - 1).getUpper()) {
 //            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
             return TendencySign.BULL;
         }
         return TendencySign.WAIT;
     }
-
 
 
 }

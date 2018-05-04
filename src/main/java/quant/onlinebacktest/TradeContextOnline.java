@@ -4,6 +4,7 @@ import domain.MarketDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quant.trade.TradeDomain;
+import util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -312,11 +313,24 @@ public class TradeContextOnline {
         double fund = this.fund - cost;
         tradeDomain = new TradeDomain(fund);
         tradeDomain.setBuyPrice(marketDomain.getClose());
+        tradeDomain.setCurrentPrice(marketDomain.getClose());
         tradeDomain.setCost(cost * 2);
         tradeDomain.setAmount(fund / marketDomain.getClose());
         tradeDomain.setBuyts(marketDomain.getId());
+        tradeDomain.setBuyDate(DateUtil.ts2DateStr(String.valueOf(marketDomain.getId())));
         buyFlag = false;
         sellFlag = true;
+    }
+
+    //移动线还未确定
+    public void trailingStop(MarketDomain marketDomain, float rate) {
+        if (tradeDomain == null) {
+            return;
+        }
+        double result = (tradeDomain.getBuyPrice() - marketDomain.getClose()) / tradeDomain.getBuyPrice();
+        if (result >= rate) {
+            bear(marketDomain);
+        }
     }
 
     public void bear(MarketDomain marketDomain) {
@@ -334,6 +348,7 @@ public class TradeContextOnline {
         tradeDomain.setSellPrice(marketDomain.getClose());
         tradeDomain.setFund(fund);
         tradeDomain.setSellts(marketDomain.getId());
+        tradeDomain.setSellDate(DateUtil.ts2DateStr(String.valueOf(marketDomain.getId())));
         tradeDomain.setRoa((tradeDomain.getSellPrice() - tradeDomain.getBuyPrice()) / tradeDomain.getBuyPrice());
         tradeDomains.add(tradeDomain);
         buyFlag = true;

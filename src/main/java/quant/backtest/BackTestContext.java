@@ -60,27 +60,6 @@ public class BackTestContext {
 
     }
 
-    public static void predict(List<MarketDomain> marketDomains) {
-        TendencySign ts = TendencyContext.dmaSign(marketDomains, 2, 20, 5);
-        TendencySign ts1 = TendencyContext.macdSign(marketDomains, 12, 35, 15);
-        TendencySign ts2 = TendencyContext.maSign(marketDomains, 8, 66);
-        TendencySign ts3 = TendencyContext.trixSign(marketDomains, 24, 166);
-        if (ts.value + ts1.value + ts2.value + ts3.value >= 3) {
-            System.out.println("bull");
-        } else if (ts.value + ts1.value + ts2.value + ts3.value <= -3) {
-            System.out.println("Bear");
-        } else {
-            System.out.println("Hold");
-        }
-    }
-
-    public static int predictTendency(List<MarketDomain> marketDomains) {
-        int result = TendencyContext.dmaSign(marketDomains, 3, 20, 5).value
-                + TendencyContext.macdSign(marketDomains, 3, 10, 7).value
-                + TendencyContext.maSign(marketDomains, 3, 10).value
-                + TendencyContext.trixSign(marketDomains, 3, 10).value;
-        return result;
-    }
 
     public static void backTest(List<MarketDomain> marketDomains, TendencyContext tendencyContext, TradeContext tradeContext) {
         TradeSign tradeSign = tendencyContext.getTradeSign(marketDomains);

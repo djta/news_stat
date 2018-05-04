@@ -43,4 +43,14 @@ public class DateUtil {
         return dateStr;
     }
 
+    public static String ts2DateStr(String ts) {
+        String res;
+        if(ts.length()==10){
+            ts=ts+"000";
+        }
+        Date date = new Date(Long.parseLong(ts));
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
 }

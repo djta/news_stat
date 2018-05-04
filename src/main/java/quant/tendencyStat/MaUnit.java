@@ -51,8 +51,10 @@ public class MaUnit extends TendencyUnit {
         return list;
     }
 
-
-    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+    /*
+       判断金叉和死叉
+     */
+    public TendencySign getTendencySignTest(List<MarketDomain> marketDomainList) {
         List<Double> sma = MaUnit.sma(marketDomainList, shortPeriod);
         List<Double> lma = MaUnit.sma(marketDomainList, longPeriod);
         int smaSize = sma.size();
@@ -68,6 +70,29 @@ public class MaUnit extends TendencyUnit {
         }
         return TendencySign.WAIT;
     }
+
+    /*
+        只判断长短均值线上下位置。
+     */
+    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+        List<Double> sma = MaUnit.sma(marketDomainList, shortPeriod);
+        List<Double> lma = MaUnit.sma(marketDomainList, longPeriod);
+        int smaSize = sma.size();
+        int lmaSize = lma.size();
+        if (smaSize < 2 || lmaSize < 2) {
+            return TendencySign.WAIT;
+        }
+        if (sma.get(smaSize - 1) > lma.get(lmaSize - 1)) {
+            return TendencySign.BULL;
+        }
+        if (sma.get(smaSize - 1) < lma.get(lmaSize - 1)) {
+            return TendencySign.BEAR;
+        }
+        return TendencySign.WAIT;
+
+
+    }
+
 
     public static void main(String args[]) {
         double[] array = {207.650, 205.160, 210.870, 209.350, 207.250, 209.960, 207.650, 205.160, 188.170, 186.020};

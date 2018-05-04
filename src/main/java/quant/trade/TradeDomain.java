@@ -15,6 +15,7 @@ public class TradeDomain {
     private double rate = 0.002;//费率；
     private double cost;//手续费
     private double buyPrice;//买入价格
+    private double currentPrice;//当前价格
     private double sellPrice;//
     private boolean isWin;//多空单
     private double diff;//卖买差
@@ -23,6 +24,8 @@ public class TradeDomain {
     private long buyts;//买入时间
     private long sellts;//卖出时间
     private double roa;//单笔收益率
+    private String buyDate;
+    private String sellDate;
 
     public double getAmount() {
         return amount;
@@ -132,6 +135,34 @@ public class TradeDomain {
         this.roa = roa;
     }
 
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public String getBuyDate() {
+        return buyDate;
+    }
+
+    public void setBuyDate(String buyDate) {
+        this.buyDate = buyDate;
+    }
+
+    public String getSellDate() {
+        return sellDate;
+    }
+
+    public void setSellDate(String sellDate) {
+        this.sellDate = sellDate;
+    }
+
+    public double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
     @Override
     public String toString() {
         return "TradeDomain{" +
@@ -140,6 +171,7 @@ public class TradeDomain {
                 ", rate=" + rate +
                 ", cost=" + cost +
                 ", buyPrice=" + buyPrice +
+                ", currentPrice=" + currentPrice +
                 ", sellPrice=" + sellPrice +
                 ", isWin=" + isWin +
                 ", diff=" + diff +
@@ -148,6 +180,8 @@ public class TradeDomain {
                 ", buyts=" + buyts +
                 ", sellts=" + sellts +
                 ", roa=" + roa +
+                ", buyDate='" + buyDate + '\'' +
+                ", sellDate='" + sellDate + '\'' +
                 '}';
     }
 }

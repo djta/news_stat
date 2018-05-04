@@ -22,12 +22,15 @@ public class BackTestAllSymbol {
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
         tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
 //        tendencyUnits.add(new MacdUnit(10, 20, 8));//反趋势
-//        tendencyUnits.add(new MaUnit(10, 20));
-        TendencyContext tc = new TendencyContext(0.2, 1, tendencyUnits);
+        tendencyUnits.add(new MaUnit(20, 55));
+        TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);
         MarketDaoImpl marketDao = new MarketDaoImpl();
         List<String> symobls = marketDao.getSymbols();
         List<TradeContextOnline> tradeContexts = new ArrayList<TradeContextOnline>();
         for (String symbol : symobls) {
+            if (!symbol.equals("letusdt")) {
+                continue;
+            }
             List<MarketDomain> marketDomains = marketDao.getKlineDataOnline(symbol);
             System.out.println("size:" + marketDomains.size());
             TradeContextOnline bc = new TradeContextOnline(100000);
