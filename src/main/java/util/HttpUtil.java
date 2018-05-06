@@ -199,14 +199,14 @@ public class HttpUtil {
     public static void main(String args[]) {
 //        String result = doGet();
         long ts = System.currentTimeMillis();
-        String result = doGetData("https://api.huobipro.com/market/history/kline?period=1min&size=2000&symbol=btcusdt");
+        String result = doGetData("https://api.huobipro.com/market/history/kline?period=1min&size=1000&symbol=btcusdt");
         System.out.println(result);
-        MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
-        MarketDaoImpl mdi = new MarketDaoImpl();
-        for (MarketDomain md : mmd.getData()) {
-            md.setSymbol("btcusdt");
-            mdi.insertMarket(md, "kline1min");
-        }
+//        MarketMainDomain mmd = JSON.parseObject(result, MarketMainDomain.class);
+//        MarketDaoImpl mdi = new MarketDaoImpl();
+//        for (MarketDomain md : mmd.getData()) {
+//            md.setSymbol("btcusdt");
+//            mdi.insertMarket(md, "kline1min");
+//        }
 
     }
 }

@@ -53,4 +53,15 @@ public class MarketMainDomain {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
+
+    @Override
+    public String toString() {
+        return "MarketMainDomain{" +
+                "status='" + status + '\'' +
+                ", ch='" + ch + '\'' +
+                ", data=" + data +
+                ", ts=" + ts +
+                ", symbol='" + symbol + '\'' +
+                '}';
+    }
 }

@@ -1,11 +1,9 @@
 package quant.onlinebacktest;
 
+import com.alibaba.fastjson.JSON;
 import domain.MarketDomain;
 import jdbc.impl.MarketDaoImpl;
-import quant.tendencyStat.MaUnit;
-import quant.tendencyStat.MacdUnit;
-import quant.tendencyStat.TendencyContext;
-import quant.tendencyStat.TendencyUnit;
+import quant.tendencyStat.*;
 import quant.trade.TradeContext;
 import util.stat.MeanAndStdUtil;
 
@@ -20,17 +18,20 @@ import java.util.List;
 public class BackTestAllSymbol {
     public static void main(String args[]) {
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
-        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
+//        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
 //        tendencyUnits.add(new MacdUnit(10, 20, 8));//反趋势
-        tendencyUnits.add(new MaUnit(20, 55));
+//        tendencyUnits.add(new MaUnit(9, 20));
+//        tendencyUnits.add(new MixTendencyUnit(10, 9, 20));
+//        tendencyUnits.add(new StochUnit(9,3,3));
+        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
         TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);
         MarketDaoImpl marketDao = new MarketDaoImpl();
         List<String> symobls = marketDao.getSymbols();
         List<TradeContextOnline> tradeContexts = new ArrayList<TradeContextOnline>();
         for (String symbol : symobls) {
-            if (!symbol.equals("letusdt")) {
-                continue;
-            }
+//            if (!symbol.equals("btmusdt")) {
+//                continue;
+//            }
             List<MarketDomain> marketDomains = marketDao.getKlineDataOnline(symbol);
             System.out.println("size:" + marketDomains.size());
             TradeContextOnline bc = new TradeContextOnline(100000);
@@ -40,7 +41,8 @@ public class BackTestAllSymbol {
                 BackTestContextOnline.backTest(listReverse, tc, bc);
             }
             bc.resultStat();
-            System.out.println("symbol:" + symbol + "\tresult:" + bc.toSimpleString());
+            System.out.println("symbol:" + symbol + "\tresult:" + bc);
+            System.out.println(JSON.toJSONString(bc));
             tradeContexts.add(bc);
         }
         TradeContextStat tradeContext = new TradeContextStat();

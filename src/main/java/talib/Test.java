@@ -12,7 +12,9 @@ public class Test {
     int lookback = 0;
     static MInteger begin = new MInteger();
     static MInteger length = new MInteger();
-    public static  void main(String args[]){
+
+    public static void main(String args[]) {
+
 
     }
 

@@ -72,7 +72,7 @@ public class MaUnit extends TendencyUnit {
     }
 
     /*
-        只判断长短均值线上下位置。
+
      */
     public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         List<Double> sma = MaUnit.sma(marketDomainList, shortPeriod);
@@ -82,10 +82,10 @@ public class MaUnit extends TendencyUnit {
         if (smaSize < 2 || lmaSize < 2) {
             return TendencySign.WAIT;
         }
-        if (sma.get(smaSize - 1) > lma.get(lmaSize - 1)) {
+        if (sma.get(smaSize - 1) > sma.get(smaSize - 2) && sma.get(smaSize - 1) > lma.get(lmaSize - 1) && sma.get(smaSize - 2) < lma.get(lmaSize - 2)) {
             return TendencySign.BULL;
         }
-        if (sma.get(smaSize - 1) < lma.get(lmaSize - 1)) {
+        if (sma.get(smaSize - 1) < lma.get(lmaSize - 1) && sma.get(smaSize - 2) > lma.get(lmaSize - 2)) {
             return TendencySign.BEAR;
         }
         return TendencySign.WAIT;

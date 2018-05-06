@@ -7,6 +7,7 @@ import domain.talib.BollingerBandDomain;
 import quant.constant.TendencySign;
 import quant.tendencyStat.TendencyUnit;
 import talib.DataFormatTransformUtil;
+import util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +35,7 @@ public class BollingerBandUnitOnline extends TendencyUnit {
         double[] mid = new double[input.length];
         double[] lower = new double[input.length];
         //4,2比较好
-        core.bbands(0, input.length - 1, input, period, 4, 2, maType, begin, length, upper, mid, lower);
+        core.bbands(0, input.length - 1, input, period, 2, 2, maType, begin, length, upper, mid, lower);
 
         List<Double> upperList = DataFormatTransformUtil.result2List(upper);
         List<Double> midList = DataFormatTransformUtil.result2List(mid);
@@ -92,6 +93,7 @@ public class BollingerBandUnitOnline extends TendencyUnit {
         double upper = bollingerBandDomains.get(bollingSize - 1).getUpper();
         double lower = bollingerBandDomains.get(bollingSize - 1).getLower();
         if (upper - lower <= 0) {
+//            System.out.println("upper - lower <= 0:" + DateUtil.ts2DateStr(String.valueOf(marketDomainList.get(0).getId())) + "\t" + marketDomainList.get(0) + "\t" + upper + "\t" + lower);
             return TendencySign.WAIT;
         }
         if (marketDomainList.get(marketSize - 2).getClose() >= upper && close < upper) {
