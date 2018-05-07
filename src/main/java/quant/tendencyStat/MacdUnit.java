@@ -20,6 +20,10 @@ import java.util.List;
  * 预测XX中短期趋势的主要的XX技术分析指标。其中，DIF是核心，DEA是辅助。
  * DIF是快速平滑移动平均线（EMA1）和慢速平滑移动平均线（EMA2）的差。
  * BAR柱状图在股市技术软件上是用红柱和绿柱的收缩来研判行情。
+ * <p>
+ * MACD详解
+ * https://www.zhihu.com/question/29595812
+ * 《以交易为生》
  */
 public class MacdUnit extends TendencyUnit {
     private int shortPeriod;
@@ -108,12 +112,15 @@ public class MacdUnit extends TendencyUnit {
         core.macd(0, arraylength - 1, input, shortPeriod, longPeriod, midPeriod, begin, length, outputMACD, outputSignl, outputHist);
         List<Double> difList = DataFormatTransformUtil.result2List(outputMACD);
         List<Double> deaList = DataFormatTransformUtil.result2List(outputSignl);
+        List<Double> histList = DataFormatTransformUtil.result2List(outputHist);
         List<MacdDomain> resultDomainList = new ArrayList<MacdDomain>();
         for (int i = 0; i < difList.size(); i++) {
             MacdDomain md = new MacdDomain();
             md.setDea(deaList.get(i));
             md.setDif(difList.get(i));
+            md.setHist(histList.get(i));
             resultDomainList.add(md);
+//            System.out.println(md);
         }
         return resultDomainList;
     }
@@ -125,10 +132,7 @@ public class MacdUnit extends TendencyUnit {
 
 
     /**
-     *
      * MACD 指标主要是通过EMA、DIF和DEA（或叫MACD、DEM）这三值之间关系的研判
-     *
-     *
      */
     public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
@@ -151,15 +155,20 @@ public class MacdUnit extends TendencyUnit {
 //            return TendencySign.BEAR;
 //        }
 
-        if(macd1.getDea()>0&&macd1.getDif()>0&&macd2.getDif()<macd2.getDea()&&macd1.getDif()>macd1.getDea()){
+        if (macd1.getDea() > 0 && macd1.getDif() > 0 && macd2.getDif() < macd2.getDea() && macd1.getDif() > macd1.getDea()) {
             return TendencySign.BULL;
-        }else if(macd1.getDea()<0&&macd1.getDif()<0&&macd2.getDif()<macd2.getDea()&&macd1.getDif()>macd1.getDea()){
-            return TendencySign.BULL;
-        }else if(macd1.getDea()>0&&macd1.getDif()>0&&macd2.getDif()>macd2.getDea()&&macd1.getDif()<macd1.getDea()){
-            return TendencySign.BEAR;
-        }else if(macd1.getDea()<0&&macd1.getDif()<0&&macd2.getDif()>macd2.getDea()&&macd1.getDif()<macd1.getDea()){
+        }
+
+        //0以上为强势，0以下为弱势
+//        else if (macd1.getDea() < 0 && macd1.getDif() < 0 && macd2.getDif() < macd2.getDea() && macd1.getDif() > macd1.getDea()) {
+//            return TendencySign.BULL;
+//        }
+        else if (macd1.getDea() > 0 && macd1.getDif() > 0 && macd2.getDif() > macd2.getDea() && macd1.getDif() < macd1.getDea()) {
             return TendencySign.BEAR;
         }
+//        else if (macd1.getDea() < 0 && macd1.getDif() < 0 && macd2.getDif() > macd2.getDea() && macd1.getDif() < macd1.getDea()) {
+//            return TendencySign.BEAR;
+//        }
 
 
         return TendencySign.WAIT;

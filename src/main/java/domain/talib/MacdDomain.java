@@ -6,6 +6,7 @@ package domain.talib;
 public class MacdDomain {
     private double dif;
     private double dea;
+    private double hist;
 
     public double getDif() {
         return dif;
@@ -23,11 +24,20 @@ public class MacdDomain {
         this.dea = dea;
     }
 
+    public double getHist() {
+        return hist;
+    }
+
+    public void setHist(double hist) {
+        this.hist = hist;
+    }
+
     @Override
     public String toString() {
         return "MacdDomain{" +
                 "dif=" + dif +
                 ", dea=" + dea +
+                ", hist=" + hist +
                 '}';
     }
 }
