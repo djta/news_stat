@@ -99,10 +99,10 @@ public class StochUnit extends TendencyUnit {
             return TendencySign.WAIT;
         }
         StochDomain stochDomain = stochDomains.get(stochDomains.size() - 1);
-        if (stochDomain.getSlowD() > 90 && stochDomain.getSlowK() > 90) {
+        if (stochDomain.getSlowD() > 75 && stochDomain.getSlowK() > 75) {
             return TendencySign.BEAR;
         }
-        if (stochDomain.getSlowD() < 10 && stochDomain.getSlowK() < 10) {
+        if (stochDomain.getSlowD() < 25 && stochDomain.getSlowK() < 25) {
             return TendencySign.BULL;
         }
         return TendencySign.WAIT;

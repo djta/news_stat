@@ -15,12 +15,16 @@ import java.util.List;
 /**
  * Created by hzyuyongmao on 2018/3/26.
  *
- * @Description
+ * @Description MACD 指标主要是通过EMA、DIF和DEA（或叫MACD、DEM）这三值之间关系的研判，
+ * DIF和DEA连接起来的移动平均线的研判以及DIF减去DEM值而绘制成的柱状图（BAR）的研判等来分析判断行情，
+ * 预测XX中短期趋势的主要的XX技术分析指标。其中，DIF是核心，DEA是辅助。
+ * DIF是快速平滑移动平均线（EMA1）和慢速平滑移动平均线（EMA2）的差。
+ * BAR柱状图在股市技术软件上是用红柱和绿柱的收缩来研判行情。
  */
-public class MacdUnit extends TendencyUnit{
-   private int shortPeriod;
-   private int longPeriod;
-   private int midPeriod;
+public class MacdUnit extends TendencyUnit {
+    private int shortPeriod;
+    private int longPeriod;
+    private int midPeriod;
 
     public MacdUnit(int shortPeriod, int longPeriod, int midPeriod) {
         this.shortPeriod = shortPeriod;
@@ -58,41 +62,41 @@ public class MacdUnit extends TendencyUnit{
         System.out.println(list);
     }
 
-    public static List dif(double[] input, int shortPeriod, int longPeriod) {
-        double[] shortOutput = new double[input.length];
-        core.ema(0, input.length - 1, input, shortPeriod, begin, length, shortOutput);
-        double[] longOutput = new double[input.length];
-        core.ema(0, input.length - 1, input, longPeriod, begin, length, longOutput);
-        List<Double> diffList = new ArrayList();
-        List<Double> shortList = DataFormatTransformUtil.result2List(shortOutput);
-        List<Double> longList = DataFormatTransformUtil.result2List(longOutput);
-        int size = shortList.size();
-        for (int i = 0; i < size; i++) {
-            if (shortList.get(i) == 0.0 || longList.get(i) == 0.0) {
-                diffList.add(0.0);
-            } else {
-                diffList.add(shortList.get(i) - longList.get(i));
-            }
-
-        }
-        return diffList;
-    }
-
-    public static List dea(double[] input, int shortPeriod, int longPeriod, int midPeriod) {
-        List difList = dif(input, shortPeriod, longPeriod);
-//        System.out.println("difList:" + difList);
-        int index = difList.lastIndexOf(0.0);
-        double[] difArray = DataFormatTransformUtil.list2Array(difList.subList(index, difList.size()));
-//        System.out.println("difArray:" + difArray.length);
-//        System.out.println("difArray:" + index);
-        double[] deaArray = new double[difArray.length];
-        core.ema(0, difArray.length - 1, difArray, midPeriod, begin, length, deaArray);
-        List rawList = DataFormatTransformUtil.result2List(deaArray);
-        for (int i = 0; i < index; i++) {
-            rawList.add(i, 0.0);
-        }
-        return rawList;
-    }
+//    public static List dif(double[] input, int shortPeriod, int longPeriod) {
+//        double[] shortOutput = new double[input.length];
+//        core.ema(0, input.length - 1, input, shortPeriod, begin, length, shortOutput);
+//        double[] longOutput = new double[input.length];
+//        core.ema(0, input.length - 1, input, longPeriod, begin, length, longOutput);
+//        List<Double> diffList = new ArrayList();
+//        List<Double> shortList = DataFormatTransformUtil.result2List(shortOutput);
+//        List<Double> longList = DataFormatTransformUtil.result2List(longOutput);
+//        int size = shortList.size();
+//        for (int i = 0; i < size; i++) {
+//            if (shortList.get(i) == 0.0 || longList.get(i) == 0.0) {
+//                diffList.add(0.0);
+//            } else {
+//                diffList.add(shortList.get(i) - longList.get(i));
+//            }
+//
+//        }
+//        return diffList;
+//    }
+//
+//    public static List dea(double[] input, int shortPeriod, int longPeriod, int midPeriod) {
+//        List difList = dif(input, shortPeriod, longPeriod);
+////        System.out.println("difList:" + difList);
+//        int index = difList.lastIndexOf(0.0);
+//        double[] difArray = DataFormatTransformUtil.list2Array(difList.subList(index, difList.size()));
+////        System.out.println("difArray:" + difArray.length);
+////        System.out.println("difArray:" + index);
+//        double[] deaArray = new double[difArray.length];
+//        core.ema(0, difArray.length - 1, difArray, midPeriod, begin, length, deaArray);
+//        List rawList = DataFormatTransformUtil.result2List(deaArray);
+//        for (int i = 0; i < index; i++) {
+//            rawList.add(i, 0.0);
+//        }
+//        return rawList;
+//    }
 
     public static List<MacdDomain> macd(double[] input, int shortPeriod, int longPeriod, int midPeriod) {
         int arraylength = input.length;
@@ -120,6 +124,49 @@ public class MacdUnit extends TendencyUnit{
     }
 
 
+    /**
+     *
+     * MACD 指标主要是通过EMA、DIF和DEA（或叫MACD、DEM）这三值之间关系的研判
+     *
+     *
+     */
+    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+        List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
+        int size = macdDomainList.size();
+        if (size < 2) {
+            return TendencySign.WAIT;
+        }
+        MacdDomain macd1 = macdDomainList.get(size - 1);
+        MacdDomain macd2 = macdDomainList.get(size - 2);
+//        if (macd1.getDif() > macd2.getDif() && macd1.getDif() > macd1.getDea() && macd2.getDif() < macd2.getDea() && macd1.getDif() > 0) {
+//            return TendencySign.BULL;
+//        }
+//        if (macd1.getDif() < macd2.getDif() && macd1.getDif() < macd1.getDea() && macd2.getDif() > macd2.getDea() && macd1.getDif() < 0) {
+//            return TendencySign.BEAR;
+//        }
+
+//        if(macd1.getDea()>0&&macd1.getDif()>0&&macd1.getDif()>macd2.getDif()&&macd1.getDea()>macd2.getDea()){
+//            return TendencySign.BULL;
+//        }else if(macd1.getDea()<0&&macd1.getDif()<0&&macd1.getDif()<macd2.getDif()&&macd1.getDea()<macd2.getDea()){
+//            return TendencySign.BEAR;
+//        }
+
+        if(macd1.getDea()>0&&macd1.getDif()>0&&macd2.getDif()<macd2.getDea()&&macd1.getDif()>macd1.getDea()){
+            return TendencySign.BULL;
+        }else if(macd1.getDea()<0&&macd1.getDif()<0&&macd2.getDif()<macd2.getDea()&&macd1.getDif()>macd1.getDea()){
+            return TendencySign.BULL;
+        }else if(macd1.getDea()>0&&macd1.getDif()>0&&macd2.getDif()>macd2.getDea()&&macd1.getDif()<macd1.getDea()){
+            return TendencySign.BEAR;
+        }else if(macd1.getDea()<0&&macd1.getDif()<0&&macd2.getDif()>macd2.getDea()&&macd1.getDif()<macd1.getDea()){
+            return TendencySign.BEAR;
+        }
+
+
+        return TendencySign.WAIT;
+    }
+
+
+    //反趋势
 //    public  TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
 //        List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
 //        int size = macdDomainList.size();
@@ -129,31 +176,12 @@ public class MacdUnit extends TendencyUnit{
 //        MacdDomain macd1 = macdDomainList.get(size - 1);
 //        MacdDomain macd2 = macdDomainList.get(size - 2);
 //        if (macd1.getDif() > macd2.getDif() && macd1.getDif() > macd1.getDea() && macd2.getDif() < macd2.getDea() && macd1.getDif() > 0) {
-//            return TendencySign.BULL;
+//            return TendencySign.BEAR;
 //        }
 //        if (macd1.getDif() < macd2.getDif() && macd1.getDif() < macd1.getDea() && macd2.getDif() > macd2.getDea() && macd1.getDif() < 0) {
-//            return TendencySign.BEAR;
+//            return TendencySign.BULL;
 //        }
 //        return TendencySign.WAIT;
 //    }
-
-
-     //反趋势
-    public  TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
-        List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
-        int size = macdDomainList.size();
-        if (size < 2) {
-            return TendencySign.WAIT;
-        }
-        MacdDomain macd1 = macdDomainList.get(size - 1);
-        MacdDomain macd2 = macdDomainList.get(size - 2);
-        if (macd1.getDif() > macd2.getDif() && macd1.getDif() > macd1.getDea() && macd2.getDif() < macd2.getDea() && macd1.getDif() > 0) {
-            return TendencySign.BEAR;
-        }
-        if (macd1.getDif() < macd2.getDif() && macd1.getDif() < macd1.getDea() && macd2.getDif() > macd2.getDea() && macd1.getDif() < 0) {
-            return TendencySign.BULL;
-        }
-        return TendencySign.WAIT;
-    }
 
 }

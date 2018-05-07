@@ -35,7 +35,30 @@ public class BollingerBandUnitOnline extends TendencyUnit {
         double[] mid = new double[input.length];
         double[] lower = new double[input.length];
         //4,2比较好
-        core.bbands(0, input.length - 1, input, period, 2, 2, maType, begin, length, upper, mid, lower);
+        core.bbands(0, input.length - 1, input, period, 4, 2, maType, begin, length, upper, mid, lower);
+
+        List<Double> upperList = DataFormatTransformUtil.result2List(upper);
+        List<Double> midList = DataFormatTransformUtil.result2List(mid);
+        List<Double> lowerList = DataFormatTransformUtil.result2List(lower);
+        List<BollingerBandDomain> bollingBandList = new ArrayList<BollingerBandDomain>();
+        for (int i = 0; i < upperList.size(); i++) {
+            BollingerBandDomain bbd = new BollingerBandDomain();
+            bbd.setUpper(upperList.get(i));
+            bbd.setMid(midList.get(i));
+            bbd.setLower(lowerList.get(i));
+            bollingBandList.add(bbd);
+
+        }
+        return bollingBandList;
+    }
+
+
+    public static List<BollingerBandDomain> bollingerBands(double[] input, int period, int devUp, int devDn) {
+        double[] upper = new double[input.length];
+        double[] mid = new double[input.length];
+        double[] lower = new double[input.length];
+        //4,2比较好
+        core.bbands(0, input.length - 1, input, period, devUp, devDn, maType, begin, length, upper, mid, lower);
 
         List<Double> upperList = DataFormatTransformUtil.result2List(upper);
         List<Double> midList = DataFormatTransformUtil.result2List(mid);

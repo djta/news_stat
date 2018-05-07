@@ -19,15 +19,16 @@ public class BackTestAllSymbol {
     public static void main(String args[]) {
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
 //        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
-//        tendencyUnits.add(new MacdUnit(10, 20, 8));//反趋势
+        tendencyUnits.add(new MacdUnit(12, 26, 9));//反趋势
 //        tendencyUnits.add(new MaUnit(9, 20));
 //        tendencyUnits.add(new MixTendencyUnit(10, 9, 20));
-//        tendencyUnits.add(new StochUnit(9,3,3));
-        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
+//        tendencyUnits.add(new StochUnit(9, 3, 3));
+//        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
         TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);
         MarketDaoImpl marketDao = new MarketDaoImpl();
         List<String> symobls = marketDao.getSymbols();
         List<TradeContextOnline> tradeContexts = new ArrayList<TradeContextOnline>();
+
         for (String symbol : symobls) {
 //            if (!symbol.equals("btmusdt")) {
 //                continue;
@@ -42,7 +43,7 @@ public class BackTestAllSymbol {
             }
             bc.resultStat();
             System.out.println("symbol:" + symbol + "\tresult:" + bc);
-            System.out.println(JSON.toJSONString(bc));
+//            System.out.println(JSON.toJSONString(bc));
             tradeContexts.add(bc);
         }
         TradeContextStat tradeContext = new TradeContextStat();
