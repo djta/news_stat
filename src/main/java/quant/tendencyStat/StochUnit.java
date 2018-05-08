@@ -13,6 +13,9 @@ import java.util.List;
 
 /**
  * Created by 范志伟 on 2018-04-01.
+ *
+ * https://wenku.baidu.com/view/41d5a561bd64783e09122bba.html
+ *
  */
 public class StochUnit extends TendencyUnit {
     private static Core core = new Core();
