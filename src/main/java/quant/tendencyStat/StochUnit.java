@@ -98,13 +98,29 @@ public class StochUnit extends TendencyUnit {
         if (stochDomains.size() == 0) {
             return TendencySign.WAIT;
         }
-        StochDomain stochDomain = stochDomains.get(stochDomains.size() - 1);
-        if (stochDomain.getSlowD() > 75 && stochDomain.getSlowK() > 75) {
+        StochDomain stochDomain1 = stochDomains.get(stochDomains.size() - 1);
+        StochDomain stochDomain2 = stochDomains.get(stochDomains.size() - 2);
+        if (stochDomain1.getSlowD() >= 90 && stochDomain1.getSlowK() >= 90
+                && stochDomain2.getSlowK() < stochDomain2.getSlowD()
+                && stochDomain1.getSlowK() > stochDomain1.getSlowD()) {
             return TendencySign.BEAR;
         }
-        if (stochDomain.getSlowD() < 25 && stochDomain.getSlowK() < 25) {
+        if (stochDomain1.getSlowD() < 20 && stochDomain1.getSlowK() < 20) {
             return TendencySign.BULL;
         }
+
+//        if (stochDomain1.getSlowD() > 80 && stochDomain1.getSlowK() > 80
+////                && stochDomain2.getSlowK() > stochDomain2.getSlowD()
+////                && stochDomain1.getSlowK() < stochDomain1.getSlowD()
+//                ) {
+//            return TendencySign.BEAR;
+//        }
+//        if (stochDomain1.getSlowD() < 20 && stochDomain1.getSlowK() < 20
+//                && stochDomain2.getSlowK() < stochDomain2.getSlowD()
+//                && stochDomain1.getSlowK() > stochDomain1.getSlowD()) {
+//            return TendencySign.BULL;
+//        }
+
         return TendencySign.WAIT;
     }
 }

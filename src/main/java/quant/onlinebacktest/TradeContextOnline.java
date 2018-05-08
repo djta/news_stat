@@ -241,6 +241,7 @@ public class TradeContextOnline {
         this.rovFailPerOrder = rovFailPerOrder;
     }
 
+
     public static void main(String args[]) {
 
     }
@@ -327,8 +328,12 @@ public class TradeContextOnline {
         if (tradeDomain == null) {
             return;
         }
-        double result = (tradeDomain.getBuyPrice() - marketDomain.getClose()) / tradeDomain.getBuyPrice();
-        if (result >= rate) {
+        if (marketDomain.getClose() > tradeDomain.getMaxPrice()) {
+            tradeDomain.setMaxPrice(marketDomain.getClose());
+        }
+        double maxPriceRate = (tradeDomain.getMaxPrice() - marketDomain.getClose()) / tradeDomain.getMaxPrice();
+        double currentPriceRate=(tradeDomain.getBuyPrice()-marketDomain.getClose())/tradeDomain.getBuyPrice();
+        if (maxPriceRate >= rate||currentPriceRate>rate) {
             bear(marketDomain);
         }
     }

@@ -16,6 +16,7 @@ public class TradeDomain {
     private double cost;//手续费
     private double buyPrice;//买入价格
     private double currentPrice;//当前价格
+    private double maxPrice;//历史最高价格
     private double sellPrice;//
     private boolean isWin;//多空单
     private double diff;//卖买差
@@ -163,6 +164,14 @@ public class TradeDomain {
         this.currentPrice = currentPrice;
     }
 
+    public double getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
     @Override
     public String toString() {
         return "TradeDomain{" +
@@ -172,6 +181,7 @@ public class TradeDomain {
                 ", cost=" + cost +
                 ", buyPrice=" + buyPrice +
                 ", currentPrice=" + currentPrice +
+                ", maxPrice=" + maxPrice +
                 ", sellPrice=" + sellPrice +
                 ", isWin=" + isWin +
                 ", diff=" + diff +
