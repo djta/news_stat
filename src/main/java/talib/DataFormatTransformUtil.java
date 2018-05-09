@@ -43,6 +43,7 @@ public class DataFormatTransformUtil {
     }
 
 
+
     public static double[] marketDomainlist2ArrayAmount(List<MarketDomain> list) {
         double[] rawData = new double[list.size()];
         for (int i = 0; i < list.size(); i++) {
@@ -50,7 +51,6 @@ public class DataFormatTransformUtil {
         }
         return rawData;
     }
-
 
 
     public static List maResult2List(double[] input, int period) {

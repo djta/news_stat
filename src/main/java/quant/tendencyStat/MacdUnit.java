@@ -24,6 +24,11 @@ import java.util.List;
  * MACD详解
  * https://www.zhihu.com/question/29595812
  * 《以交易为生》
+ * <p>
+ * 震荡市中，赚钱的核心策略在于“高抛低吸
+ * <p>
+ * 底背离
+ * https://zhuanlan.zhihu.com/p/25967856
  */
 public class MacdUnit extends TendencyUnit {
     private int shortPeriod;
@@ -134,7 +139,7 @@ public class MacdUnit extends TendencyUnit {
     /**
      * MACD 指标主要是通过EMA、DIF和DEA（或叫MACD、DEM）这三值之间关系的研判
      */
-    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+    public TendencySign getTendencySignTest1(List<MarketDomain> marketDomainList) {
         List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
         int size = macdDomainList.size();
         if (size < 2) {
@@ -163,7 +168,7 @@ public class MacdUnit extends TendencyUnit {
 //        else if (macd1.getDea() < 0 && macd1.getDif() < 0 && macd2.getDif() < macd2.getDea() && macd1.getDif() > macd1.getDea()) {
 //            return TendencySign.BULL;
 //        }
-        else if (macd1.getDea() > 0 && macd1.getDif() > 0 && macd2.getDif() > macd2.getDea() && macd1.getDif() < macd1.getDea()) {
+        else if (macd1.getDea() < 0 && macd1.getDif() < 0 && macd2.getDif() > macd2.getDea() && macd1.getDif() < macd1.getDea()) {
             return TendencySign.BEAR;
         }
 //        else if (macd1.getDea() < 0 && macd1.getDif() < 0 && macd2.getDif() > macd2.getDea() && macd1.getDif() < macd1.getDea()) {
@@ -192,5 +197,63 @@ public class MacdUnit extends TendencyUnit {
 //        }
 //        return TendencySign.WAIT;
 //    }
+
+    //试试用5,15分钟线确认趋势。
+    public TendencySign getTendencySignTest(List<MarketDomain> marketDomainList) {
+        List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
+        int size = macdDomainList.size();
+        if (size < 2) {
+            return TendencySign.WAIT;
+        }
+        MacdDomain macd1 = macdDomainList.get(size - 1);
+        MacdDomain macd2 = macdDomainList.get(size - 2);
+        //没啥用
+        if (macd1.getDif() > 0 && macd2.getDif() < 0) {
+            return TendencySign.BULL;
+        }
+        if (macd1.getDif() < 0 && macd2.getDif() > 0) {
+            return TendencySign.BEAR;
+        }
+
+
+        return TendencySign.WAIT;
+    }
+
+
+    /*
+  （1）顶背离
+当股价K线图上的股票走势一峰比一峰高，股价一直在向上涨，而MACD指标图形上的由红柱构成的图形的走势是一峰比一峰低，
+即当股价的高点比前一次的高点高、而MACD指标的高点比指标的前一次高点低，这叫顶背离现象。
+顶背离现象一般是股价在高位即将反转转势的信号，表明股价短期内即将下跌，是卖出股票的信号。
+（2）底背离
+底背离一般出现在股价的低位区。当股价K线图上的股票走势，股价还在下跌，
+而MACD指标图形上的由绿柱构成的图形的走势是一底比一底高，即当股价的低点比前一次低点底，
+而指标的低点却比前一次的低点高，这叫底背离现象。底背离现象一般是预示股价在低位可能反转向上的信号，
+表明股价短期内可能反弹向上，是短期买入股票的信号。
+
+     */
+    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+        List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
+        int size = macdDomainList.size();
+        if (size < 2) {
+            return TendencySign.WAIT;
+        }
+        MacdDomain macd1 = macdDomainList.get(size - 1);
+        MacdDomain macd2 = macdDomainList.get(size - 2);
+        int marketDomainSize = marketDomainList.size();
+        MarketDomain marketDomain1 = marketDomainList.get(marketDomainSize - 1);
+        MarketDomain marketDomain2 = marketDomainList.get(marketDomainSize - 2);
+        //底背离
+        if (macd1.getHist() > macd2.getHist() && marketDomain1.getClose() < marketDomain2.getClose()) {
+            return TendencySign.BULL;
+        }
+        //顶背离
+        if (macd1.getHist() < macd2.getHist() && marketDomain1.getClose() > marketDomain2.getClose()) {
+            return TendencySign.BEAR;
+        }
+
+
+        return TendencySign.WAIT;
+    }
 
 }

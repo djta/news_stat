@@ -18,13 +18,13 @@ import java.util.List;
 public class BackTestAllSymbol {
     public static void main(String args[]) {
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
-//        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
+        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
 //        tendencyUnits.add(new MacdUnit(12, 26, 9));//反趋势
 //        tendencyUnits.add(new MaUnit(9, 20));
-//        tendencyUnits.add(new MixTendencyUnit(10, 9, 20));
-        tendencyUnits.add(new StochUnit(9, 3, 3));
+        tendencyUnits.add(new MixTendencyUnit(10, 9, 20));
+//        tendencyUnits.add(new StochUnit(9, 3, 3));
 //        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
-        TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);
+        TendencyContext tc = new TendencyContext(0.5, 0.5, tendencyUnits);
         MarketDaoImpl marketDao = new MarketDaoImpl();
         List<String> symobls = marketDao.getSymbols();
         List<TradeContextOnline> tradeContexts = new ArrayList<TradeContextOnline>();

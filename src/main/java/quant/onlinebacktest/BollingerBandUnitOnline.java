@@ -107,6 +107,7 @@ public class BollingerBandUnitOnline extends TendencyUnit {
     }
 
     //      //破上轨后移到上中轨，//破下轨后移到下中轨
+    //大周期的视角中，震荡比趋势多，所以反趋势指标看上去比较合适
     public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
         List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
