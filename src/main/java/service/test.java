@@ -15,7 +15,7 @@ public class test {
 
     public static void main(String args[]) {
         MultiThreadService mt = new MultiThreadService();
-        mt.getMarketKlineInfo("5min", 1000, "kline5min");
+        mt.getMarketKlineInfo("15min", 1000, "kline15min");
     }
 
 }
