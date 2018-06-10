@@ -9,14 +9,18 @@ import java.util.List;
 /**
  * Created by 范志伟 on 2018-04-11.
  * 横盘状态下，RSI会变得无用（可以算一下波动率或方差之类的，筛选出高波动性的币）
+ * <p>
+ * http://baijiahao.baidu.com/s?id=1571691914816607&wfr=spider&for=pc
  */
 public class RSIUnit extends TendencyUnit {
 
 
-    private int period;
+    private int fPeriod;
+    private int sPeriod;
 
-    public RSIUnit(int period) {
-        this.period = period;
+    public RSIUnit(int fPeriod, int sPeriod) {
+        this.fPeriod = fPeriod;
+        this.sPeriod = sPeriod;
     }
 
 
@@ -41,13 +45,21 @@ public class RSIUnit extends TendencyUnit {
 
     public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
-        List<Double> rsiList = getRSIUnit(input, period);
-        int size = rsiList.size();
-        if (rsiList.get(size - 1) >= 80) {
+        List<Double> fastPeriod = getRSIUnit(input, fPeriod);
+        List<Double> slowPeriod = getRSIUnit(input, sPeriod);
+        int size1 = fastPeriod.size() - 1;
+        int size2 = fastPeriod.size() - 2;
+        //大于70，超买区，快线下穿慢线，卖出
+        if (fastPeriod.get(size1) > 70 && slowPeriod.get(size1) > 70
+                && fastPeriod.get(size2) > slowPeriod.get(size2) && fastPeriod.get(size1) < slowPeriod.get(size1)) {
             return TendencySign.BEAR;
-        } else if (rsiList.get(size - 1) <= 20) {
+        }
+        //小于30，超卖区，
+        if (fastPeriod.get(size1) < 20 && slowPeriod.get(size1) < 20
+                && fastPeriod.get(size2) < slowPeriod.get(size2) && fastPeriod.get(size1) > slowPeriod.get(size1)) {
             return TendencySign.BULL;
         }
+
         return TendencySign.WAIT;
     }
 

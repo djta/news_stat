@@ -18,19 +18,22 @@ import java.util.List;
 public class BackTestAllSymbol {
     public static void main(String args[]) {
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
-        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
+//        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
 //        tendencyUnits.add(new MacdUnit(12, 26, 9));//反趋势
 //        tendencyUnits.add(new MaUnit(9, 20));
 //        tendencyUnits.add(new MixTendencyUnit(10, 9, 20));
+        //5,15,25
 //        tendencyUnits.add(new StochUnit(9, 3, 3));
 //        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
+//        tendencyUnits.add(new StochRsiUnit(9, 3, 3));
+        tendencyUnits.add(new RSIUnit(6, 12));
         TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);
         MarketDaoImpl marketDao = new MarketDaoImpl();
         List<String> symobls = marketDao.getSymbols();
         List<TradeContextOnline> tradeContexts = new ArrayList<TradeContextOnline>();
 
         for (String symbol : symobls) {
-//            if (!symbol.equals("btmusdt")) {
+//            if (!symbol.equals("eosusdt")) {
 //                continue;
 //            }
             List<MarketDomain> marketDomains = marketDao.getKlineDataOnline(symbol);

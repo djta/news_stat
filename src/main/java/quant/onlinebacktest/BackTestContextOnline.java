@@ -52,7 +52,7 @@ public class BackTestContextOnline {
 //            System.out.println("open:" + marketDomain);
         }
         //跟踪止损
-////        tradeContext.stopProfit(close);
+//        tradeContext.stopProfit(close);
 //        tradeContext.trailingStop(marketDomain,0.05F);
         if (tradeSign.equals(TradeSign.CLOSE)) {
             tradeContext.bear(marketDomain);

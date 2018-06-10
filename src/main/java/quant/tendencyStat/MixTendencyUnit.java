@@ -42,6 +42,7 @@ public class MixTendencyUnit extends TendencyUnit {
 
         if (close > upper && sma.get(smaSize - 1) < lma.get(lmaSize - 1) && sma.get(smaSize - 2) > lma.get(lmaSize - 2)) {//bear
             return TendencySign.BEAR;
+
         }
         if (close < lower && sma.get(smaSize - 1) > sma.get(smaSize - 2) && sma.get(smaSize - 1) > lma.get(lmaSize - 1) && sma.get(smaSize - 2) < lma.get(lmaSize - 2)) {
             return TendencySign.BULL;
