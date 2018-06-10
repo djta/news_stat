@@ -31,7 +31,7 @@ public class BackTestAllSymbol {
         MarketDaoImpl marketDao = new MarketDaoImpl();
         List<String> symobls = marketDao.getSymbols();
         List<TradeContextOnline> tradeContexts = new ArrayList<TradeContextOnline>();
-
+//
         for (String symbol : symobls) {
 //            if (!symbol.equals("eosusdt")) {
 //                continue;
