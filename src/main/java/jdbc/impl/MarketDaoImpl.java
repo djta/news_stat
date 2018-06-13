@@ -67,4 +67,14 @@ public class MarketDaoImpl extends JdbcInital implements MarketDao {
         return result;
     }
 
+    public List<MarketDomain> getMultiPeriodKlineData(String symbol,String sqlId) {
+        List<MarketDomain> list = null;
+        try {
+            list = sqlMapClient.queryForList(sqlId, symbol);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }
