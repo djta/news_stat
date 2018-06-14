@@ -109,6 +109,9 @@ public class BollingerBandUnitOnline extends TendencyUnit {
     //      //破上轨后移到上中轨，//破下轨后移到下中轨
     //大周期的视角中，震荡比趋势多，所以反趋势指标看上去比较合适
     public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+        if (marketDomainList != null && marketDomainList.size() > 1 && marketDomainList.get(0).getSymbol().endsWith("btc")) {
+            marketDomainList = DataFormatTransformUtil.amplifyPrice(marketDomainList, 1000000);
+        }
         double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
         List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, period);
         int bollingSize = bollingerBandDomains.size();
@@ -116,6 +119,7 @@ public class BollingerBandUnitOnline extends TendencyUnit {
         double close = marketDomainList.get(marketSize - 1).getClose();
         double upper = bollingerBandDomains.get(bollingSize - 1).getUpper();
         double lower = bollingerBandDomains.get(bollingSize - 1).getLower();
+//        System.out.println("upper:" + upper + "\tmid:" + bollingerBandDomains.get(bollingSize - 1).getMid() + "\tlower:" + lower + "\tclose:" + close);
         if (upper - lower <= 0) {
 //            System.out.println("upper - lower <= 0:" + DateUtil.ts2DateStr(String.valueOf(marketDomainList.get(0).getId())) + "\t" + marketDomainList.get(0) + "\t" + upper + "\t" + lower);
             return TendencySign.WAIT;

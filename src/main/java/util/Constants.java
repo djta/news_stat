@@ -14,8 +14,10 @@ public class Constants {
     public static String ACCESSKEY_ID = "9f4891da-a8639ea6-ff811f7b-c4c3f";
     public static String ACCESSKEY = "3719bf6c-b19716fa-7882d06f-b0b10";
     //    private static final String SERVICE="https://api.huobi.pro";
-    private static final String SERVICE = "https://api.huobipro.com";
+//    private static final String SERVICE = "https://api.huobipro.com";
+    private static final String SERVICE = "https://api.huobi.br.com";
     //
+
     public static final String URL_MARKET_KLINE = SERVICE + "/market/history/kline?";
 
     //market depth

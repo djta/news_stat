@@ -319,6 +319,7 @@ public class TradeContextOnline {
         tradeDomain.setAmount(fund / marketDomain.getClose());
         tradeDomain.setBuyts(marketDomain.getId());
         tradeDomain.setBuyDate(DateUtil.ts2DateStr(String.valueOf(marketDomain.getId())));
+        setSymbol(marketDomain.getSymbol());
         buyFlag = false;
         sellFlag = true;
     }
@@ -332,8 +333,8 @@ public class TradeContextOnline {
             tradeDomain.setMaxPrice(marketDomain.getClose());
         }
         double maxPriceRate = (tradeDomain.getMaxPrice() - marketDomain.getClose()) / tradeDomain.getMaxPrice();
-        double currentPriceRate=(tradeDomain.getBuyPrice()-marketDomain.getClose())/tradeDomain.getBuyPrice();
-        if (maxPriceRate >= rate||currentPriceRate>rate) {
+        double currentPriceRate = (tradeDomain.getBuyPrice() - marketDomain.getClose()) / tradeDomain.getBuyPrice();
+        if (maxPriceRate >= rate || currentPriceRate > rate) {
             bear(marketDomain);
         }
     }

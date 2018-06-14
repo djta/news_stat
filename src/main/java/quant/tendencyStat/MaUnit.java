@@ -126,6 +126,24 @@ public class MaUnit extends TendencyUnit {
     }
 
 
+    public TendencySign getTendencySignMultiPeriod(List<MarketDomain> marketDomainList) {
+        double[] rawArray = DataFormatTransformUtil.marketDomainlist2ArrayAmount(marketDomainList);
+        int inputLength = rawArray.length;
+        double[] outputShortData = new double[inputLength];
+        core.sma(0, inputLength - 1, rawArray, shortPeriod, begin, length, outputShortData);
+        List<Double> sma = DataFormatTransformUtil.result2List(outputShortData);
+        double[] outputLongData = new double[inputLength];
+        core.sma(0, inputLength - 1, rawArray, longPeriod, begin, length, outputLongData);
+        List<Double> lma = DataFormatTransformUtil.result2List(outputLongData);
+        if (sma.get(sma.size() - 1) > lma.get(lma.size() - 1)) {
+            return TendencySign.BULL;
+        } else if (sma.get(sma.size() - 1) < lma.get(lma.size() - 1)) {
+            return TendencySign.BEAR;
+        }
+        return TendencySign.WAIT;
+    }
+
+
     public static void main(String args[]) {
         double[] array = {207.650, 205.160, 210.870, 209.350, 207.250, 209.960, 207.650, 205.160, 188.170, 186.020};
         List list = sma(array, 2);

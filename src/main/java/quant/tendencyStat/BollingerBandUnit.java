@@ -27,21 +27,23 @@ public class BollingerBandUnit extends TendencyUnit {
     }
 
     public static void main(String args[]) {
-        double[] array = {207.650, 205.160, 210.870, 209.350, 207.250, 209.960, 207.650, 205.160, 188.170, 186.020};
+//        double[] array = {207.650, 205.160, 210.870, 209.350, 207.250, 209.960, 207.650, 205.160, 188.170, 186.020};
+        double[] array = {0.000002451, 0.000002452, 0.000002452, 0.000002455, 0.000002451, 0.000002457, 0.00000246, 0.00000247, 0.000002454, 0.000002457};
         List<BollingerBandDomain> list = bollingerBands(array, 2);
-        List<MarketDomain> marketDomainList = new ArrayList<MarketDomain>();
-        MarketDomain md1 = new MarketDomain();
-        md1.setClose(207.650);
-        MarketDomain md2 = new MarketDomain();
-        md2.setClose(205.160);
-        MarketDomain md3 = new MarketDomain();
-        md3.setClose(210.870);
-        marketDomainList.add(md1);
-        marketDomainList.add(md2);
-        marketDomainList.add(md3);
-        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
-        List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, 2);
-        System.out.println(bollingerBandDomains);
+        System.out.println(list);
+//        List<MarketDomain> marketDomainList = new ArrayList<MarketDomain>();
+//        MarketDomain md1 = new MarketDomain();
+//        md1.setClose(207.650);
+//        MarketDomain md2 = new MarketDomain();
+//        md2.setClose(205.160);
+//        MarketDomain md3 = new MarketDomain();
+//        md3.setClose(210.870);
+//        marketDomainList.add(md1);
+//        marketDomainList.add(md2);
+//        marketDomainList.add(md3);
+//        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
+//        List<BollingerBandDomain> bollingerBandDomains = bollingerBands(input, 2);
+//        System.out.println(bollingerBandDomains);
 
     }
 

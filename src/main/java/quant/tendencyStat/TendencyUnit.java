@@ -20,4 +20,8 @@ public abstract class TendencyUnit {
 
     public abstract TendencySign getTendencySign(List<MarketDomain> marketDomainList);
 
+    public TendencySign getTendencySignMultiPeriod(List<MarketDomain> marketDomainList) {
+        return TendencySign.WAIT;
+    }
+
 }

@@ -64,4 +64,26 @@ public class RSIUnit extends TendencyUnit {
     }
 
 
+    public TendencySign getTendencySignMultiPeriod(List<MarketDomain> marketDomainList) {
+        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
+        List<Double> fastPeriod = getRSIUnit(input, fPeriod);
+        List<Double> slowPeriod = getRSIUnit(input, sPeriod);
+        int size1 = fastPeriod.size() - 1;
+        //大于70，超买区，快线在慢线下方
+        if (fastPeriod.get(size1) > 70 && slowPeriod.get(size1) > 70
+                && fastPeriod.get(size1) < slowPeriod.get(size1)) {
+            return TendencySign.BEAR;
+        }
+        //小于30，超卖区，快线在慢线上方
+        if (fastPeriod.get(size1) < 20 && slowPeriod.get(size1) < 20
+                && fastPeriod.get(size1) > slowPeriod.get(size1)) {
+            return TendencySign.BULL;
+        }
+
+
+        return TendencySign.WAIT;
+
+    }
+
+
 }

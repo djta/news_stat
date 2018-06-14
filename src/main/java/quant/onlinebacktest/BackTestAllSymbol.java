@@ -22,18 +22,16 @@ public class BackTestAllSymbol {
 //        tendencyUnits.add(new MacdUnit(12, 26, 9));//反趋势
 //        tendencyUnits.add(new MaUnit(9, 20));
 //        tendencyUnits.add(new MixTendencyUnit(10, 9, 20));
-        //5,15,25
 //        tendencyUnits.add(new StochUnit(9, 3, 3));
 //        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
-//        tendencyUnits.add(new StochRsiUnit(9, 3, 3));
-        tendencyUnits.add(new RSIUnit(6, 12));
+        tendencyUnits.add(new RSIUnit(9, 3));
         TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);
         MarketDaoImpl marketDao = new MarketDaoImpl();
         List<String> symobls = marketDao.getSymbols();
         List<TradeContextOnline> tradeContexts = new ArrayList<TradeContextOnline>();
-//
+
         for (String symbol : symobls) {
-//            if (!symbol.equals("eosusdt")) {
+//            if (!symbol.equals("btmusdt")) {
 //                continue;
 //            }
             List<MarketDomain> marketDomains = marketDao.getKlineDataOnline(symbol);
@@ -49,6 +47,13 @@ public class BackTestAllSymbol {
 //            System.out.println(JSON.toJSONString(bc));
             tradeContexts.add(bc);
         }
+
+        TradeContextStat tradeContext = backTestAllSymbolsStat(tradeContexts);
+        System.out.println(tradeContext);
+    }
+
+
+    public static TradeContextStat backTestAllSymbolsStat(List<TradeContextOnline> tradeContexts) {
         TradeContextStat tradeContext = new TradeContextStat();
         List<Double> varRovPerOrder = new ArrayList<Double>();
         List<Double> varRovWinPerOrder = new ArrayList<Double>();
@@ -57,7 +62,6 @@ public class BackTestAllSymbol {
         List<Double> varEarningRate = new ArrayList<Double>();
         List<Double> varWinsRate = new ArrayList<Double>();
         List<Double> varFund = new ArrayList<Double>();
-
         for (TradeContextOnline tradeContextOnline : tradeContexts) {
             double fund = tradeContextOnline.getFund() - 100000;
             tradeContext.setFund(fund + tradeContext.getFund());
@@ -88,7 +92,8 @@ public class BackTestAllSymbol {
         tradeContext.setMeanWinPerOrder(MeanAndStdUtil.getMeanValue(varRovWinPerOrder));
         tradeContext.setMeanWinToLossRate(MeanAndStdUtil.getMeanValue(varWinToLossRate));
         tradeContext.setMeanWinsRate(MeanAndStdUtil.getMeanValue(varWinsRate));
-
-        System.out.println(tradeContext);
+        return tradeContext;
     }
+
+
 }

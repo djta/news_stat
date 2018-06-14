@@ -43,7 +43,6 @@ public class DataFormatTransformUtil {
     }
 
 
-
     public static double[] marketDomainlist2ArrayAmount(List<MarketDomain> list) {
         double[] rawData = new double[list.size()];
         for (int i = 0; i < list.size(); i++) {
@@ -81,6 +80,22 @@ public class DataFormatTransformUtil {
             outputList.add(0, 0.0);
         }
         return outputList;
+    }
+
+    /*
+     * amplifier price
+     */
+    public static List<MarketDomain> amplifyPrice(List<MarketDomain> marketDomainList, int times) {
+        List<MarketDomain> resultMarketDomains = new ArrayList<MarketDomain>();
+        for (MarketDomain marketDomain : marketDomainList) {
+            MarketDomain resultMD = new MarketDomain();
+            resultMD.setClose(marketDomain.getClose() * times);
+            resultMD.setLow(marketDomain.getLow() * times);
+            resultMD.setHigh(marketDomain.getHigh() * times);
+            resultMD.setOpen(marketDomain.getOpen() * times);
+            resultMarketDomains.add(resultMD);
+        }
+        return resultMarketDomains;
     }
 
 

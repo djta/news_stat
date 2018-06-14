@@ -8,8 +8,6 @@ import java.util.Queue;
 /**
  * 实现一个固定长度的集合队列
  *
- * @author SHANHY(365384722@QQ.COM)
- * @date   2015年11月9日
  * @param <E>
  */
 public class LimitQueue<E> implements Queue<E> {

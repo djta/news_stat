@@ -44,4 +44,20 @@ public class TendencyContext {
 
     }
 
+    public TradeSign getTradeSignMultiPeriod(List<MarketDomain> marketDomains) {
+        int count = 0;
+        for (TendencyUnit tu : tendencyUnits) {
+            count += tu.getTendencySignMultiPeriod(marketDomains).value;
+        }
+        int size = tendencyUnits.size();
+        if (count >= size * bullRange) {
+            return TradeSign.OPEN;
+        }
+        if (count <= -size * bearRange) {
+            return TradeSign.CLOSE;
+        }
+        return TradeSign.WAIT;
+
+    }
+
 }
