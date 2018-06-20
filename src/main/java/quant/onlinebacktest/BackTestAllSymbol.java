@@ -23,8 +23,8 @@ public class BackTestAllSymbol {
 //        tendencyUnits.add(new MaUnit(9, 20));
 //        tendencyUnits.add(new MixTendencyUnit(10, 9, 20));
 //        tendencyUnits.add(new StochUnit(9, 3, 3));
-//        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
-        tendencyUnits.add(new RSIUnit(9, 3));
+        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
+//        tendencyUnits.add(new RSIUnit(9, 3));
         TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);
         MarketDaoImpl marketDao = new MarketDaoImpl();
         List<String> symobls = marketDao.getSymbols();

@@ -256,4 +256,29 @@ public class MacdUnit extends TendencyUnit {
         return TendencySign.WAIT;
     }
 
+
+    public TendencySign getTendencySignMultiPeriod(List<MarketDomain> marketDomainList) {
+        List<MacdDomain> macdDomainList = MacdUnit.macd(marketDomainList, shortPeriod, longPeriod, midPeriod);
+        int size = macdDomainList.size();
+        if (size < 2) {
+            return TendencySign.WAIT;
+        }
+        MacdDomain macd1 = macdDomainList.get(size - 1);
+        MacdDomain macd2 = macdDomainList.get(size - 2);
+        int marketDomainSize = marketDomainList.size();
+        MarketDomain marketDomain1 = marketDomainList.get(marketDomainSize - 1);
+        MarketDomain marketDomain2 = marketDomainList.get(marketDomainSize - 2);
+        //底背离
+        if (macd1.getHist() > macd2.getHist() && marketDomain1.getClose() < marketDomain2.getClose()) {
+            return TendencySign.BULL;
+        }
+        //顶背离
+        if (macd1.getHist() < macd2.getHist() && marketDomain1.getClose() > marketDomain2.getClose()) {
+            return TendencySign.BEAR;
+        }
+
+
+        return TendencySign.WAIT;
+    }
+
 }

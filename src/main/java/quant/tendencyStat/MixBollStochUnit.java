@@ -73,7 +73,7 @@ public class MixBollStochUnit extends TendencyUnit {
 
     public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
-        List<BollingerBandDomain> bollingerBandDomains = BollingerBandUnitOnline.bollingerBands(input, bollPeriod,2,2);
+        List<BollingerBandDomain> bollingerBandDomains = BollingerBandUnitOnline.bollingerBands(input, bollPeriod, 2, 2);
         int bollingSize = bollingerBandDomains.size();
         int marketSize = marketDomainList.size();
         double close = marketDomainList.get(marketSize - 1).getClose();
@@ -96,7 +96,7 @@ public class MixBollStochUnit extends TendencyUnit {
 //            return TendencySign.BULL;
 //        }
 
-        if ( close> upper && stochDomain.getSlowK() < 25 && stochDomain.getSlowD() < 25) {
+        if (close > upper && stochDomain.getSlowK() < 25 && stochDomain.getSlowD() < 25) {
             return TendencySign.BULL;
         } else if (close < lower && stochDomain.getSlowK() > 75 && stochDomain.getSlowD() > 75) {
             return TendencySign.BEAR;

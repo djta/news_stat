@@ -6,10 +6,7 @@ import quant.constant.TradeSign;
 import quant.onlinebacktest.BackTestAllSymbol;
 import quant.onlinebacktest.BollingerBandUnitOnline;
 import quant.onlinebacktest.TradeContextOnline;
-import quant.tendencyStat.MaUnit;
-import quant.tendencyStat.RSIUnit;
-import quant.tendencyStat.TendencyContext;
-import quant.tendencyStat.TendencyUnit;
+import quant.tendencyStat.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +23,20 @@ public class MultiPeriodMain {
         //bigger
         List<TendencyUnit> biggerTendencyUnits = new ArrayList<TendencyUnit>();
         biggerTendencyUnits.add(new MaUnit(12, 18));
+        biggerTendencyUnits.add(new RSIUnit(9, 3));
         TendencyContext biggerTc = new TendencyContext(1, 1, biggerTendencyUnits);
         //smaller
         List<TendencyUnit> smallerTendencyUnits = new ArrayList<TendencyUnit>();
         smallerTendencyUnits.add(new MaUnit(12, 18));
+        smallerTendencyUnits.add(new RSIUnit(9, 3));
         TendencyContext smallerTc = new TendencyContext(1, 1, smallerTendencyUnits);
 
         List<TradeContextOnline> tradeContexts = new ArrayList<TradeContextOnline>();
         for (String symbol : symobls) {
-            if (!symbol.equals("btmusdt")) {
-                continue;
-            }
-            List<MarketDomain> biggerMarketDomains = marketDao.getMultiPeriodKlineData(symbol, "getKline15MinData");
+//            if (!symbol.equals("btmusdt")) {
+//                continue;
+//            }
+            List<MarketDomain> biggerMarketDomains = marketDao.getMultiPeriodKlineData(symbol, "getKline5MinData");
             List<MarketDomain> smallerMarketDomains = marketDao.getMultiPeriodKlineData(symbol, "getKline1MinData");
 //            System.out.println("bigger size:" + biggerMarketDomains.size() + "\tsmall size:" + smallerMarketDomains.size());
 
@@ -75,7 +74,7 @@ public class MultiPeriodMain {
         if (biggerTradeSign.equals(TradeSign.OPEN) && smallerTradeSign.equals(TradeSign.OPEN)) {
             tradeContext.bull(marketDomain);
         }
-        if (biggerTradeSign.equals(TradeSign.CLOSE) && smallerTradeSign.equals(TradeSign.CLOSE)) {
+        if (biggerTradeSign.equals(TradeSign.CLOSE) || smallerTradeSign.equals(TradeSign.CLOSE)) {
             tradeContext.bear(marketDomain);
         }
     }

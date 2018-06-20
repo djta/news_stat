@@ -28,7 +28,7 @@ public class BackTestContextOnline {
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
 
 //        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
-        tendencyUnits.add(new RSIUnit(9,3));
+        tendencyUnits.add(new RSIUnit(9, 3));
         TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);
         //
 //        TradeContext bc = new TradeContext(100000);
