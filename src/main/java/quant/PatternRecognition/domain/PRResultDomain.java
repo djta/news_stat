@@ -2,6 +2,9 @@ package quant.PatternRecognition.domain;
 
 import quant.PatternRecognition.PRSign;
 
+/*
+https://blog.csdn.net/shuigge/article/details/72825723
+ */
 public class PRResultDomain {
     private String symbol;
     private String dateStr;
