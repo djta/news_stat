@@ -20,10 +20,10 @@ public class BackTestAllSymbol {
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
 //        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
 //        tendencyUnits.add(new MacdUnit(12, 26, 9));//反趋势
-//        tendencyUnits.add(new MaUnit(9, 20));
+        tendencyUnits.add(new MaUnit(5, 10));
 //        tendencyUnits.add(new MixTendencyUnit(10, 9, 20));
 //        tendencyUnits.add(new StochUnit(9, 3, 3));
-        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
+//        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
 //        tendencyUnits.add(new RSIUnit(9, 3));
         TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);
         MarketDaoImpl marketDao = new MarketDaoImpl();
@@ -31,7 +31,7 @@ public class BackTestAllSymbol {
         List<TradeContextOnline> tradeContexts = new ArrayList<TradeContextOnline>();
 
         for (String symbol : symobls) {
-//            if (!symbol.equals("btmusdt")) {
+//            if (!symbol.equals("zecusdt") && !symbol.equals("btcusdt")) {
 //                continue;
 //            }
             List<MarketDomain> marketDomains = marketDao.getKlineDataOnline(symbol);
@@ -45,7 +45,10 @@ public class BackTestAllSymbol {
             bc.resultStat();
             System.out.println("symbol:" + symbol + "\tresult:" + bc);
 //            System.out.println(JSON.toJSONString(bc));
-            tradeContexts.add(bc);
+
+            if (bc.getFund() != 100000) {
+                tradeContexts.add(bc);
+            }
         }
 
         TradeContextStat tradeContext = backTestAllSymbolsStat(tradeContexts);

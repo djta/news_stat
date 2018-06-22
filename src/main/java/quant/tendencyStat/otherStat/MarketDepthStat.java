@@ -3,7 +3,6 @@ package quant.tendencyStat.otherStat;
 import crawl.market.MarketDepth;
 import domain.MarketDepthDomain;
 import domain.MarketDepthMainDomain;
-import domain.stat.TradeDepthStatDomain;
 import domain.stat.otherStat.OtherStatDomain;
 import util.CacheUtil;
 import util.DateUtil;

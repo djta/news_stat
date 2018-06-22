@@ -4,6 +4,7 @@ import com.tictactec.ta.lib.Core;
 import com.tictactec.ta.lib.MInteger;
 import domain.MarketDomain;
 import quant.constant.TendencySign;
+import quant.tendencyStat.otherStat.KlineSlopeStat;
 import talib.DataFormatTransformUtil;
 
 import java.util.ArrayList;
@@ -95,7 +96,8 @@ public class MaUnit extends TendencyUnit {
 
     //成交量线
     //测试：MACD线、成交量线以及均线同时出现金叉的时候才是最好的入手时机？？
-    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+    //old
+    public TendencySign getTendencySignOld(List<MarketDomain> marketDomainList) {
         double[] rawArray = DataFormatTransformUtil.marketDomainlist2ArrayAmount(marketDomainList);
         int inputLength = rawArray.length;
         double[] outputShortData = new double[inputLength];
@@ -118,6 +120,50 @@ public class MaUnit extends TendencyUnit {
             return TendencySign.BULL;
         }
         if (sma.get(smaSize - 1) < lma.get(lmaSize - 1) && sma.get(smaSize - 2) > lma.get(lmaSize - 2)) {
+            return TendencySign.BEAR;
+        }
+        return TendencySign.WAIT;
+
+
+    }
+
+    //根据短线出击策略
+    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+        double[] rawArray = DataFormatTransformUtil.marketDomainlist2ArrayAmount(marketDomainList);
+        int inputLength = rawArray.length;
+        double[] outputShortData = new double[inputLength];
+        double[] outputLongData = new double[inputLength];
+        if (longPeriod > inputLength) {
+            return TendencySign.WAIT;
+        }
+        //ma
+        core.sma(0, inputLength - 1, rawArray, shortPeriod, begin, length, outputShortData);
+        List<Double> sma = DataFormatTransformUtil.result2List(outputShortData);
+        core.sma(0, inputLength - 1, rawArray, longPeriod, begin, length, outputLongData);
+        List<Double> lma = DataFormatTransformUtil.result2List(outputLongData);
+
+        int smaSize = sma.size();
+        int lmaSize = lma.size();
+        if (smaSize < 2 || lmaSize < 2) {
+            return TendencySign.WAIT;
+        }
+        //lineage slope
+        List<Double> shortSlopeList = KlineSlopeStat.getKlineLinearRegSlope(marketDomainList, shortPeriod);
+        List<Double> longSlopeList = KlineSlopeStat.getKlineLinearRegSlope(marketDomainList, longPeriod);
+        //
+//        System.out.println("longSlope:" + longSlopeList.get(lmaSize - 1) +
+//                "\tshortSlope:" + shortSlopeList.get(smaSize - 1));
+        if (longSlopeList.get(lmaSize - 1) > 0.1
+//                && longSlopeList.get(lmaSize - 2) > 0
+                && (shortSlopeList.get(smaSize - 1) - longSlopeList.get(lmaSize - 1)) > 0.2
+                && sma.get(smaSize - 1) > lma.get(lmaSize - 1) && sma.get(smaSize - 2) < lma.get(lmaSize - 2)) {
+            return TendencySign.BULL;
+        }
+        if (
+//                longSlopeList.get(lmaSize - 1) < 0 && longSlopeList.get(lmaSize - 2) < 0
+//                && (shortSlopeList.get(smaSize - 1) - longSlopeList.get(lmaSize - 1)) < -0.02
+//                &&
+                sma.get(smaSize - 1) < lma.get(lmaSize - 1) && sma.get(smaSize - 2) > lma.get(lmaSize - 2)) {
             return TendencySign.BEAR;
         }
         return TendencySign.WAIT;
