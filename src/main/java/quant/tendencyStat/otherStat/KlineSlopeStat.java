@@ -26,7 +26,7 @@ public class KlineSlopeStat {
 
     public static List<Double> getKlineLinearRegSlope(List<MarketDomain> marketDomains, int period) {
 
-        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomains);
+        double[] input = DataFormatTransformUtil.marketDomainlist2ArrayAmount(marketDomains);
         double[] output = new double[input.length];
         //斜率
         core.linearRegSlope(0, input.length - 1, input, period, begin, length, output);
@@ -34,4 +34,5 @@ public class KlineSlopeStat {
         return slopeList;
 
     }
+
 }

@@ -97,7 +97,7 @@ public class MaUnit extends TendencyUnit {
     //成交量线
     //测试：MACD线、成交量线以及均线同时出现金叉的时候才是最好的入手时机？？
     //old
-    public TendencySign getTendencySignOld(List<MarketDomain> marketDomainList) {
+    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
         double[] rawArray = DataFormatTransformUtil.marketDomainlist2ArrayAmount(marketDomainList);
         int inputLength = rawArray.length;
         double[] outputShortData = new double[inputLength];
@@ -128,7 +128,7 @@ public class MaUnit extends TendencyUnit {
     }
 
     //根据短线出击策略
-    public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
+    public TendencySign getTendencySignOld(List<MarketDomain> marketDomainList) {
         double[] rawArray = DataFormatTransformUtil.marketDomainlist2ArrayAmount(marketDomainList);
         int inputLength = rawArray.length;
         double[] outputShortData = new double[inputLength];
@@ -167,7 +167,6 @@ public class MaUnit extends TendencyUnit {
             return TendencySign.BEAR;
         }
         return TendencySign.WAIT;
-
 
     }
 
