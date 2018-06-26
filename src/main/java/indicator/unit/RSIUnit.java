@@ -42,8 +42,8 @@ public class RSIUnit extends IndicatorUnit {
         }
         //相对强度
         double rs = (positiveSum / positiveDays) / (Math.abs(negativeSum) / negativeDays);
-        System.out.println("rsi:" + positiveDays + "," + positiveSum + "," + negativeDays + "," + negativeSum);
-        System.out.println(rs);
+//        System.out.println("rsi:" + positiveDays + "," + positiveSum + "," + negativeDays + "," + negativeSum);
+//        System.out.println(rs);
         double rsi = (100 - 100 / (1 + rs));
         return rsi;
     }
@@ -88,7 +88,7 @@ public class RSIUnit extends IndicatorUnit {
         marketDomainList.add(md7);
         List<Double> result = getDiffValue(marketDomainList);
         System.out.println(result);
-        List<Double> rsiList = getRSIValue(marketDomainList, 2);
+        List<Double> rsiList = getRSIValue(marketDomainList, 3);
         System.out.println(rsiList);
     }
 }

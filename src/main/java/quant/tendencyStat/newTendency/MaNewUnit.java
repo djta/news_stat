@@ -1,7 +1,9 @@
-package quant.tendencyStat;
+package quant.tendencyStat.newTendency;
 
 import domain.MarketDomain;
 import quant.constant.TendencySign;
+import quant.tendencyStat.MaUnit;
+import quant.tendencyStat.TendencyUnit;
 import quant.tendencyStat.otherStat.KlineSlopeStat;
 import util.LimitQueue;
 
@@ -85,16 +87,16 @@ public class MaNewUnit extends TendencyUnit {
                 tendencyList.add(TendencySign.BEAR);
             }
         }
-        if (longSlopeList.get(size - 1) < 0) {
-            if (tendencyList.size() == 3 && tendencyList.get(2).equals(TendencySign.BEAR)) {
-                tendencyList.add(TendencySign.BEAR);
-            }
-        }
-        System.out.println("limitQueue:" + tendencyList.size() + "\tlimitQueue Value:");
+//        if (longSlopeList.get(size - 1) < 0) {
+//            if (tendencyList.size() == 3 && tendencyList.get(2).equals(TendencySign.BEAR)) {
+//                tendencyList.add(TendencySign.BEAR);
+//            }
+//        }
+//        System.out.println("limitQueue:" + tendencyList.size() + "\tlimitQueue Value:");
         if (tendencyList.size() == 4 && tendencyList.get(0).equals(TendencySign.BULL)) {
             tendencyList.clear();
             return TendencySign.BULL;
-        } else if (tendencyList.size() >= 2 && tendencyList.get(0).equals(TendencySign.BEAR)) {
+        } else if (tendencyList.size() >= 1 && tendencyList.get(0).equals(TendencySign.BEAR)) {
             tendencyList.clear();
             return TendencySign.BEAR;
         }
