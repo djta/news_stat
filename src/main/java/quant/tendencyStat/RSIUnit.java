@@ -31,11 +31,19 @@ public class RSIUnit extends TendencyUnit {
 //        for (int i = 0; i < array.length - 1; i++) {
 //            System.out.print(output[i] + "\t");
 //        }
-        System.out.println(getRSIUnit(array, 5));
+        System.out.println(getRSIUnit(array, 3));
 
     }
 
     public static List<Double> getRSIUnit(double[] input, int period) {
+        double[] output = new double[input.length];
+        core.rsi(0, input.length - 1, input, period, begin, length, output);
+        List<Double> list = DataFormatTransformUtil.result2List(output);
+        return list;
+    }
+
+    public static List<Double> getRSIUnit(List<MarketDomain> marketDomainList, int period) {
+        double[] input = DataFormatTransformUtil.marketDomainlist2Array(marketDomainList);
         double[] output = new double[input.length];
         core.rsi(0, input.length - 1, input, period, begin, length, output);
         List<Double> list = DataFormatTransformUtil.result2List(output);

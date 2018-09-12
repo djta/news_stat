@@ -127,6 +127,7 @@ public class BollingerBandUnitOnline extends TendencyUnit {
         if (marketDomainList.get(marketSize - 2).getClose() >= upper && close < upper) {
 //            System.out.println("bear->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
             return TendencySign.BEAR;
+
         } else if (marketDomainList.get(marketSize - 2).getClose() <= lower && close > lower) {
 //            System.out.println("bull->" + "lower:" + lower + "\tupper:" + upper + "\t diff:" + (upper - lower) + "\t ts:" + marketDomainList.get(marketSize - 1).getId() + "\tclose:" + close);
             return TendencySign.BULL;

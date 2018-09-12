@@ -148,8 +148,8 @@ public class MaUnit extends TendencyUnit {
             return TendencySign.WAIT;
         }
         //lineage slope
-        List<Double> shortSlopeList = KlineSlopeStat.getKlineLinearRegSlope(marketDomainList, shortPeriod);
-        List<Double> longSlopeList = KlineSlopeStat.getKlineLinearRegSlope(marketDomainList, longPeriod);
+        List<Double> shortSlopeList = KlineSlopeStat.getKlineAmountLinearRegSlope(marketDomainList, shortPeriod);
+        List<Double> longSlopeList = KlineSlopeStat.getKlineAmountLinearRegSlope(marketDomainList, longPeriod);
         //
 //        System.out.println("longSlope:" + longSlopeList.get(lmaSize - 1) +
 //                "\tshortSlope:" + shortSlopeList.get(smaSize - 1));

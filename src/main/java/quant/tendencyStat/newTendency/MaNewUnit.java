@@ -33,9 +33,9 @@ public class MaNewUnit extends TendencyUnit {
         List<Double> middleList = MaUnit.sma(marketDomainList, middlePeriod);
         List<Double> longList = MaUnit.sma(marketDomainList, longPeriod);
         //lineage slope
-        List<Double> shortSlopeList = KlineSlopeStat.getKlineLinearRegSlope(marketDomainList, shortPeriod);
-        List<Double> middleSlopeList = KlineSlopeStat.getKlineLinearRegSlope(marketDomainList, middlePeriod);
-        List<Double> longSlopeList = KlineSlopeStat.getKlineLinearRegSlope(marketDomainList, longPeriod);
+        List<Double> shortSlopeList = KlineSlopeStat.getKlineAmountLinearRegSlope(marketDomainList, shortPeriod);
+        List<Double> middleSlopeList = KlineSlopeStat.getKlineAmountLinearRegSlope(marketDomainList, middlePeriod);
+        List<Double> longSlopeList = KlineSlopeStat.getKlineAmountLinearRegSlope(marketDomainList, longPeriod);
         int size = shortList.size();
         if (shortList.get(size - 1) > middleList.get(size - 1)
                 && shortList.get(size - 2) <= middleList.get(size - 2)

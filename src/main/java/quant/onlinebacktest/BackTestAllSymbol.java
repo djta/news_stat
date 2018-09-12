@@ -3,6 +3,7 @@ package quant.onlinebacktest;
 import domain.MarketDomain;
 import jdbc.impl.MarketDaoImpl;
 import quant.tendencyStat.*;
+import quant.tendencyStat.newTendency.BollNewUnit;
 import quant.tendencyStat.newTendency.MaNewUnit;
 import quant.tendencyStat.newTendency.RSINewUnit;
 import util.stat.MeanAndStdUtil;
@@ -19,12 +20,13 @@ public class BackTestAllSymbol {
     public static void main(String args[]) {
         List<TendencyUnit> tendencyUnits = new ArrayList<TendencyUnit>();
 //        tendencyUnits.add(new BollingerBandUnitOnline(50));//反趋势
+        tendencyUnits.add(new BollNewUnit(50));//
 //        tendencyUnits.add(new MacdUnit(12, 26, 9));//反趋势
 //        tendencyUnits.add(new MaUnit(5, 10));
 //        tendencyUnits.add(new MaNewUnit(5, 10, 30));
-        tendencyUnits.add(new RSINewUnit(6, 12));
+//        tendencyUnits.add(new RSINewUnit(6, 12));
 //        tendencyUnits.add(new MixTendencyUnit(10, 9, 20));
-//        tendencyUnits.add(new StochUnit(9, 3, 3));
+//        tendencyUnits.add(new StochUreturn TendencySign.BULL;nit(9, 3, 3));
 //        tendencyUnits.add(new MixBollStochUnit(20, 9, 3, 3));
 //        tendencyUnits.add(new RSIUnit(9, 3));
         TendencyContext tc = new TendencyContext(1, 1, tendencyUnits);

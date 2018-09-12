@@ -1,8 +1,8 @@
 package quant.tendencyStat.newTendency;
 
 import domain.MarketDomain;
-import indicator.unit.RSIUnit;
 import quant.constant.TendencySign;
+import quant.tendencyStat.RSIUnit;
 import quant.tendencyStat.TendencyUnit;
 
 import java.util.List;
@@ -23,8 +23,8 @@ public class RSINewUnit extends TendencyUnit {
 
     public TendencySign getTendencySign(List<MarketDomain> marketDomainList) {
 
-        List<Double> shortList = RSIUnit.getRSIValue(marketDomainList, shortPeriod);
-        List<Double> longList = RSIUnit.getRSIValue(marketDomainList, longPeriod);
+        List<Double> shortList = RSIUnit.getRSIUnit(marketDomainList, shortPeriod);
+        List<Double> longList = RSIUnit.getRSIUnit(marketDomainList, longPeriod);
         int size = shortList.size();
         if (shortList.get(size - 1) <= 20 && longList.get(size - 1) <= 20
                 && shortList.get(size - 1) > longList.get(size - 1)

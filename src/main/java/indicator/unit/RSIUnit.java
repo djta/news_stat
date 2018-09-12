@@ -22,6 +22,7 @@ public class RSIUnit extends IndicatorUnit {
             diffList.add(marketDomainList.get(i).getClose() - close);
             close = marketDomainList.get(i).getClose();
         }
+        System.out.println(diffList.size());
         return diffList;
     }
 
@@ -42,9 +43,13 @@ public class RSIUnit extends IndicatorUnit {
         }
         //相对强度
         double rs = (positiveSum / positiveDays) / (Math.abs(negativeSum) / negativeDays);
-//        System.out.println("rsi:" + positiveDays + "," + positiveSum + "," + negativeDays + "," + negativeSum);
-//        System.out.println(rs);
+        System.out.println("rsi:" + positiveDays + "," + positiveSum + "," + negativeDays + "," + negativeSum);
+
         double rsi = (100 - 100 / (1 + rs));
+        if (rsi == 0.0) {
+            return 0.0;
+        }
+//        System.out.println(rsi);
         return rsi;
     }
 
@@ -86,8 +91,8 @@ public class RSIUnit extends IndicatorUnit {
         marketDomainList.add(md5);
         marketDomainList.add(md6);
         marketDomainList.add(md7);
-        List<Double> result = getDiffValue(marketDomainList);
-        System.out.println(result);
+//        List<Double> result = getDiffValue(marketDomainList);
+//        System.out.println(result);
         List<Double> rsiList = getRSIValue(marketDomainList, 3);
         System.out.println(rsiList);
     }
