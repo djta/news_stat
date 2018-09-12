@@ -16,14 +16,15 @@ public class Part {
         List<MarketDomain> containsDomains = handleContain(marketDomains);
         System.out.println("marketDomains.size():" + marketDomains.size());
         System.out.println("containsDomains.size():" + containsDomains.size());
-//        for(MarketDomain marketDomain:containsDomains){
-//            marketDao.insertMarket(marketDomain,"wrapKline1min");
+//        for (MarketDomain marketDomain : containsDomains) {
+//            marketDao.insertMarket(marketDomain, "wrapKline1min");
 //        }
 
         List<PartDomain> partDomainList = getPart(containsDomains);
         System.out.println("partDomainList:" + partDomainList.size());
         for (PartDomain partDomain : partDomainList) {
             System.out.println(partDomain);
+//            marketDao.insertPartMarket(partDomain, "partKline1min");
         }
     }
 
@@ -42,12 +43,10 @@ public class Part {
                     && middleDomain.getLow() >= rightDomain.getLow()) {
 //                System.out.println("top:" + middleDomain);
                 partEnum = PartEnum.TOP;
-            }
-            //bottom
-            if (middleDomain.getHigh() <= leftDomain.getHigh()
+            } else if (middleDomain.getHigh() <= leftDomain.getHigh()
                     && middleDomain.getHigh() <= rightDomain.getHigh()
                     && middleDomain.getLow() <= leftDomain.getLow()
-                    && middleDomain.getLow() <= rightDomain.getLow()) {
+                    && middleDomain.getLow() <= rightDomain.getLow()) { //bottom
 //                System.out.println("bottom:" + middleDomain);
                 partEnum = PartEnum.BOTTOM;
             }
@@ -70,55 +69,118 @@ public class Part {
 
     }
 
-    //处理包含关系
+    //    //处理包含关系
+//    public static List<MarketDomain> handleContain(List<MarketDomain> marketDomainList) {
+//        List<MarketDomain> containsDomains = new ArrayList<MarketDomain>();
+//
+//        MarketDomain changeDomain = new MarketDomain();
+//        for (int i = 10; i < marketDomainList.size(); i++) {
+//            double slopeValue = KlineSlopeStat.getKlineLinearRegSlope(marketDomainList.subList(i - 10, i));
+////            System.out.println(slopeValue);
+//            MarketDomain leftDomain = changeDomain;
+//            MarketDomain middleDomain = marketDomainList.get(i);
+//
+//            if (slopeValue > 0) {//up
+//                if (middleDomain.getHigh() >= leftDomain.getHigh()
+//                        && middleDomain.getLow() <= leftDomain.getLow()) {
+//                    middleDomain.setLow(leftDomain.getLow());
+//                    containsDomains.remove(containsDomains.size() - 1);
+//                    containsDomains.add(middleDomain);
+//                    changeDomain = middleDomain;
+//                } else if (leftDomain.getHigh() >= middleDomain.getHigh()
+//                        && leftDomain.getLow() <= middleDomain.getLow()) {
+//                    leftDomain.setLow(middleDomain.getLow());
+//                    containsDomains.remove(containsDomains.size() - 1);
+//                    containsDomains.add(leftDomain);
+//                    changeDomain = leftDomain;
+//                } else {
+//                    containsDomains.add(middleDomain);
+//                    changeDomain = middleDomain;
+//                }
+//            } else if (slopeValue < 0) {//down
+//                if (middleDomain.getHigh() >= leftDomain.getHigh()
+//                        && middleDomain.getLow() <= leftDomain.getLow()) {
+//                    middleDomain.setHigh(leftDomain.getHigh());
+//                    containsDomains.remove(containsDomains.size() - 1);
+//                    containsDomains.add(middleDomain);
+//                    changeDomain = middleDomain;
+//                } else if (leftDomain.getHigh() >= middleDomain.getHigh()
+//                        && leftDomain.getLow() <= middleDomain.getLow()) {
+//                    leftDomain.setHigh(middleDomain.getHigh());
+//                    containsDomains.remove(containsDomains.size() - 1);
+//                    containsDomains.add(leftDomain);
+//                    changeDomain = leftDomain;
+//                } else {
+//                    containsDomains.add(middleDomain);
+//                    changeDomain = middleDomain;
+//                }
+//
+//            }
+//
+//        }
+//        return containsDomains;
+//    }
+//处理包含关系
     public static List<MarketDomain> handleContain(List<MarketDomain> marketDomainList) {
         List<MarketDomain> containsDomains = new ArrayList<MarketDomain>();
 
         MarketDomain changeDomain = new MarketDomain();
         for (int i = 10; i < marketDomainList.size(); i++) {
-            double slopeValue = KlineSlopeStat.getKlineLinearRegSlope(marketDomainList.subList(i - 10, i));
-//            System.out.println(slopeValue);
-            MarketDomain leftDomain = changeDomain;
-            MarketDomain middleDomain = marketDomainList.get(i);
-
-            if (slopeValue > 0) {//up
-                if (middleDomain.getHigh() >= leftDomain.getHigh()
-                        && middleDomain.getLow() <= leftDomain.getLow()) {
+            MarketDomain leftDomain = null;
+            if (containsDomains.size() > 0) {
+                leftDomain = containsDomains.get(containsDomains.size() - 1);
+            } else {
+                leftDomain = new MarketDomain();
+            }
+            MarketDomain middleDomain = changeDomain;
+            MarketDomain rightDomain = marketDomainList.get(i);
+            if (middleDomain.getHigh() >= rightDomain.getHigh()
+                    && middleDomain.getLow() <= rightDomain.getLow()) {//右包含左
+                if (changeDomain.getHigh() < middleDomain.getHigh()) {//判断是否为up
                     middleDomain.setLow(leftDomain.getLow());
                     containsDomains.remove(containsDomains.size() - 1);
                     containsDomains.add(middleDomain);
                     changeDomain = middleDomain;
-                } else if (leftDomain.getHigh() >= middleDomain.getHigh()
-                        && leftDomain.getLow() <= middleDomain.getLow()) {
+                } else if (changeDomain.getLow() > middleDomain.getLow()) {
                     leftDomain.setLow(middleDomain.getLow());
                     containsDomains.remove(containsDomains.size() - 1);
                     containsDomains.add(leftDomain);
                     changeDomain = leftDomain;
-                } else {
-                    containsDomains.add(middleDomain);
-                    changeDomain = middleDomain;
-                }
-            } else if (slopeValue < 0) {//down
-                if (middleDomain.getHigh() >= leftDomain.getHigh()
-                        && middleDomain.getLow() <= leftDomain.getLow()) {
-                    middleDomain.setHigh(leftDomain.getHigh());
-                    containsDomains.remove(containsDomains.size() - 1);
-                    containsDomains.add(middleDomain);
-                    changeDomain = middleDomain;
-                } else if (leftDomain.getHigh() >= middleDomain.getHigh()
-                        && leftDomain.getLow() <= middleDomain.getLow()) {
-                    leftDomain.setHigh(middleDomain.getHigh());
-                    containsDomains.remove(containsDomains.size() - 1);
-                    containsDomains.add(leftDomain);
-                    changeDomain = leftDomain;
-                } else {
-                    containsDomains.add(middleDomain);
-                    changeDomain = middleDomain;
                 }
 
+
+            } else if (leftDomain.getHigh() >= middleDomain.getHigh()
+                    && leftDomain.getLow() <= middleDomain.getLow()) {//左包含右
+
+                leftDomain.setLow(middleDomain.getLow());
+                containsDomains.remove(containsDomains.size() - 1);
+                containsDomains.add(leftDomain);
+                changeDomain = leftDomain;
+            } else {
+                containsDomains.add(middleDomain);
+                changeDomain = middleDomain;
+            }
+
+            if (middleDomain.getHigh() >= leftDomain.getHigh()
+                    && middleDomain.getLow() <= leftDomain.getLow()) {
+                middleDomain.setHigh(leftDomain.getHigh());
+                containsDomains.remove(containsDomains.size() - 1);
+                containsDomains.add(middleDomain);
+                changeDomain = middleDomain;
+            } else if (leftDomain.getHigh() >= middleDomain.getHigh()
+                    && leftDomain.getLow() <= middleDomain.getLow()) {
+                leftDomain.setHigh(middleDomain.getHigh());
+                containsDomains.remove(containsDomains.size() - 1);
+                containsDomains.add(leftDomain);
+                changeDomain = leftDomain;
+            } else {
+                containsDomains.add(middleDomain);
+                changeDomain = middleDomain;
             }
 
         }
-        return containsDomains;
-    }
+
+
+    return containsDomains;
+}
 }
