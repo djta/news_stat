@@ -11,5 +11,11 @@
     values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#high#,#vol#)
     ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,high=high,vol=vol
 </statement>
+    <statement id="penKline1min"
+               parameterClass="PartDomainEntity">
+    insert into pen_kline_1_min (ts,symbol,`count`,amount,`open`,`close`,low,high,vol)
+    values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#high#,#vol#)
+    ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,high=high,vol=vol
+</statement>
 
 </sqlMap>
