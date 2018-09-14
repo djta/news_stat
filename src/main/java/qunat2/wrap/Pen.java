@@ -3,7 +3,9 @@ package qunat2.wrap;
 import qunat2.wrap.domain.PartDomain;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Pen {
     public static void main(String args[]) {
@@ -33,7 +35,7 @@ public class Pen {
                     && Math.abs((bottomCount - topCount)) > 1
                     && (topDomain.getHigh() > bottomDomain.getHigh()
                     && topDomain.getLow() > bottomDomain.getLow())
-                    ) {
+            ) {
                 if ((topCount < bottomCount && penDomains.size() == 0)
                         || (penDomains.size() > 0 && penDomains.get(penDomains.size() - 1).getPartEnum() == PartEnum.BOTTOM
                 )) {//up
@@ -54,56 +56,58 @@ public class Pen {
 
 
     public static List<PartDomain> getPenTest(List<PartDomain> partDomainList) {
-        PartDomain topDomain = null;
-        int topCount = 0;
-        PartDomain bottomDomain = null;
-        int bottomCount = 0;
-        List<PartDomain> penDomains = new ArrayList<PartDomain>();
-        PartEnum handleEnum = null;
-        int count1 = 0;
-        int count2 = 0;
-        PartDomain partDomain1 = null;
-        PartDomain partDomain2 = null;
+
+        List<PartDomain> resultDomains = new ArrayList<PartDomain>();
+        List<PartDomain> handleList = new ArrayList<PartDomain>();
+        List<Integer> handleIndex = new ArrayList<Integer>();
         for (int i = 0; i < partDomainList.size(); i++) {
             PartDomain partDomain = partDomainList.get(i);
-
-            if (partDomain.getPartEnum() != PartEnum.LEVEL) {
-                if (partDomain1 == null) {//start run 1 times
-                    partDomain1 = partDomain;
-                    count1 = i;
-                    continue;
-                }
-
-                if (partDomain1.getPartEnum() != partDomain.getPartEnum()) {//不重复
-                    if (Math.abs(count1 - i) > 1) {//匹配成功
-                        penDomains.add(partDomain1);
-                        partDomain1 = null;
-                    }
-                } else if (partDomain1.getPartEnum() == partDomain.getPartEnum()) {//和原来的重复
-//                    if ((partDomain1.getPartEnum() == PartEnum.BOTTOM &&
-//                            partDomain1.getLow() > partDomain.getLow())
-//                            || (partDomain1.getPartEnum() == PartEnum.TOP &&
-//                            partDomain1.getHigh() < partDomain.getHigh())) {
-                    penDomains.remove(penDomains.size() - 1);
-                    partDomain1 = partDomain;
-                    penDomains.add(partDomain1);
-                }
+            if (partDomain.getPartEnum() == PartEnum.LEVEL) {
                 continue;
             }
-            if (handleEnum != null && handleEnum == partDomain.getPartEnum()) {
+            if (handleList.size() == 0) {//初始状态
+                handleList.add(partDomain);
+                handleIndex.add(i);
+                continue;
+            }
+            int size = handleList.size();
+            PartDomain partDomainLeft = handleList.get(size - 1);
+            int indexLeft = handleIndex.get(size - 1);
+            if (partDomainLeft.getPartEnum() == partDomain.getPartEnum()
+                    && ((partDomainLeft.getPartEnum() == PartEnum.TOP
+                    && partDomainLeft.getHigh() < partDomain.getHigh())
+                    || (partDomainLeft.getPartEnum() == PartEnum.BOTTOM
+                    && partDomainLeft.getLow() > partDomain.getLow()))
+            ) {//同一,只保留最新的。
+                handleList.remove(size - 1);
+                handleList.add(partDomain);
+                handleIndex.remove(size - 1);
+                handleIndex.add(i);
+
+            } else if (partDomainLeft.getPartEnum() != partDomain.getPartEnum()
+                    && Math.abs(indexLeft - i) > 0) {//不相同
+//                if ((partDomainLeft.getPartEnum() == PartEnum.BOTTOM &&
+//                        partDomainLeft.getLow() < partDomain.getLow())
+//                        || (partDomainLeft.getPartEnum() == PartEnum.TOP &&
+//                        partDomainLeft.getHigh() > partDomain.getHigh())) {
+                if ((partDomainLeft.getPartEnum() == PartEnum.BOTTOM &&
+                        partDomainLeft.getHigh() < partDomain.getLow())
+                        || (partDomainLeft.getPartEnum() == PartEnum.TOP &&
+                        partDomainLeft.getLow() > partDomain.getHigh())) {
+                    handleList.add(partDomain);
+                    handleIndex.add(i);
+                }
 
             }
-
-
-            if (partDomain1 != null && Math.abs(count1 - count2) > 1) {//写入
-                penDomains.add(partDomain);
-                handleEnum = partDomain.getPartEnum();
-                partDomain1 = null;
+            //查看handleList
+            if (handleList.size() > 1) {
+                resultDomains.add(handleList.get(0));
+                handleList.remove(0);
+                handleIndex.remove(0);
             }
+
         }
-
-
-        return penDomains;
+        return resultDomains;
     }
 
 }

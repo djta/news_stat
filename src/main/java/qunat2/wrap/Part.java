@@ -28,13 +28,12 @@ public class Part {
 //            }
 
         }
-        List<PartDomain> penDomains = Pen.getPen(partDomainList);
+        List<PartDomain> penDomains = Pen.getPenTest(partDomainList);
         System.out.println("penDomains:" + penDomains.size());
         for (PartDomain penDomain : penDomains) {
-            System.out.println(penDomain);
-//            marketDao.insertPartMarket(penDomain, "penKline1min");
+//            System.out.println(penDomain);
+            marketDao.insertPartMarket(penDomain, "penKline1min");
         }
-
 
 
     }
