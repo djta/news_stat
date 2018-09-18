@@ -25,7 +25,6 @@ public class Part {
             System.out.println(partDomain);
         }
 
-
     }
 
     //http://www.zcaijing.com/chanlunjishutujie/16441.html
