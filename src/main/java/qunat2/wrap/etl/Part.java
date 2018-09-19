@@ -4,6 +4,7 @@ import domain.MarketDomain;
 import jdbc.impl.MarketDaoImpl;
 import qunat2.wrap.PartEnum;
 import qunat2.wrap.domain.PartDomain;
+import qunat2.wrap.domain.PenDomain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,13 @@ public class Part {
 //        }
         List<PartDomain> partDomainList = getPart(containsDomains);
         System.out.println("partDomainList.size():" + partDomainList.size());
-        for (PartDomain partDomain : partDomainList) {
-            System.out.println(partDomain);
+//        for (PartDomain partDomain : partDomainList) {
+//            System.out.println(partDomain);
+//        }
+        List<PenDomain> penDomainList = Pen.getPenInfo(partDomainList);
+        System.out.println("penDomainList.size():" + penDomainList.size());
+        for (PenDomain penDomain : penDomainList) {
+            System.out.println(penDomain);
         }
 
     }

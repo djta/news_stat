@@ -9,6 +9,10 @@ public class PenDomain {
     private double endPen;
     private PartEnum penEnum;
     private String symbol;
+    private boolean isStart;
+    private boolean isEnd;
+    private boolean isFinish;
+
 
     public long getStartId() {
         return startId;
@@ -58,6 +62,30 @@ public class PenDomain {
         this.symbol = symbol;
     }
 
+    public boolean isStart() {
+        return isStart;
+    }
+
+    public void setStart(boolean start) {
+        isStart = start;
+    }
+
+    public boolean isEnd() {
+        return isEnd;
+    }
+
+    public void setEnd(boolean end) {
+        isEnd = end;
+    }
+
+    public boolean isFinish() {
+        return isFinish;
+    }
+
+    public void setFinish(boolean finish) {
+        isFinish = finish;
+    }
+
     @Override
     public String toString() {
         return "PenDomain{" +
@@ -67,6 +95,9 @@ public class PenDomain {
                 ", endPen=" + endPen +
                 ", penEnum=" + penEnum +
                 ", symbol='" + symbol + '\'' +
+                ", isStart=" + isStart +
+                ", isEnd=" + isEnd +
+                ", isFinish=" + isFinish +
                 '}';
     }
 }
