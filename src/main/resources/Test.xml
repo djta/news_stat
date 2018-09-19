@@ -17,5 +17,11 @@
     values (#id#,#symbol#,#count#,#amount#,#open#,#close#,#low#,#high#,#vol#)
     ON DUPLICATE KEY UPDATE `count`=`count`,amount=amount,`open`=`open`,`close`=`close`,low=low,high=high,vol=vol
 </statement>
-
+    <typeAlias alias="PenDomainEntity" type="qunat2.wrap.domain.PenDomain"/>
+    <statement id="penKLine"
+               parameterClass="PartDomainEntity">
+    insert into pen_kline_1_min (ts,symbol,`open`)
+    values (#startId#,#symbol#,#startPen#)
+    ON DUPLICATE KEY UPDATE `open`=#startPen#
+</statement>
 </sqlMap>
