@@ -21,14 +21,15 @@ public class Part {
 //            marketDao.insertMarket(marketDomain, "wrapKline1min");
 //        }
         List<PartDomain> partDomainList = getPart(containsDomains);
-        System.out.println("partDomainList.size():" + partDomainList.size());
+//        System.out.println("partDomainList.size():" + partDomainList.size());
 //        for (PartDomain partDomain : partDomainList) {
 //            System.out.println(partDomain);
 //        }
         List<PenDomain> penDomainList = Pen.getPenInfo(partDomainList);
         System.out.println("penDomainList.size():" + penDomainList.size());
         for (PenDomain penDomain : penDomainList) {
-            System.out.println(penDomain);
+//            System.out.println(penDomain);
+            marketDao.insertPenMarket(penDomain,"penKLine");
         }
 
     }
