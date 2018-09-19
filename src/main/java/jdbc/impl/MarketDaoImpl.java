@@ -6,6 +6,8 @@ import domain.MarketDomain;
 import jdbc.Dao.MarketDao;
 import jdbc.JdbcInital;
 import org.apache.ibatis.io.Resources;
+import qunat2.wrap.domain.PartDomain;
+import qunat2.wrap.domain.PenDomain;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -30,6 +32,21 @@ public class MarketDaoImpl extends JdbcInital implements MarketDao {
     }
 
     public void insertMarket(MarketDomain md, String queryId) {
+        try {
+            sqlMapClient.insert(queryId, md);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertPartMarket(PartDomain md, String queryId) {
+        try {
+            sqlMapClient.insert(queryId, md);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void insertPenMarket(PenDomain md, String queryId) {
         try {
             sqlMapClient.insert(queryId, md);
         } catch (SQLException e) {
