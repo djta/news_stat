@@ -18,19 +18,20 @@ public class Part {
         System.out.println("marketDomains.size():" + marketDomains.size());
         System.out.println("containsDomains.size():" + containsDomains.size());
 //        for (MarketDomain marketDomain : containsDomains) {
-//            marketDao.insertMarket(marketDomain, "wrapKline1min");
+////            marketDao.insertMarket(marketDomain, "wrapKline1min");
+//            System.out.println(marketDomain);
 //        }
         List<PartDomain> partDomainList = getPart(containsDomains);
-//        System.out.println("partDomainList.size():" + partDomainList.size());
-//        for (PartDomain partDomain : partDomainList) {
-//            System.out.println(partDomain);
-//        }
+        System.out.println("partDomainList.size():" + partDomainList.size());
+        for (PartDomain partDomain : partDomainList) {
+            System.out.println(partDomain);
+        }
         List<PenDomain> penDomainList = Pen.getPenInfo(partDomainList);
         System.out.println("penDomainList.size():" + penDomainList.size());
-        for (PenDomain penDomain : penDomainList) {
+//        for (PenDomain penDomain : penDomainList) {
 //            System.out.println(penDomain);
-            marketDao.insertPenMarket(penDomain,"penKLine");
-        }
+////            marketDao.insertPenMarket(penDomain, "penKLine");
+//        }
 
     }
 

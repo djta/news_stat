@@ -143,6 +143,10 @@ public class Pen {
             }
 
         }//--FOR END
+//        for (PartEtlDomain partEtlDomain : partEtlDomains) {
+//            System.out.println(partEtlDomain);
+//        }
+
         return penDomainList;
 
     }
