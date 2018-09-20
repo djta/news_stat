@@ -10,6 +10,7 @@ public class Segment {
     }
 
     public static void getSegment(List<PenDomain> penDomainlist) {
+
         for (int i = 0; i < penDomainlist.size(); i++) {
             PenDomain penDomain = penDomainlist.get(i);
 
@@ -25,19 +26,25 @@ public class Segment {
         PenDomain pen1 = penDomainList.get(0);
         PenDomain pen2 = penDomainList.get(1);
         PenDomain pen3 = penDomainList.get(2);
-        if (pen1.getStartPen() < pen1.getStartPen()) {
+
+        //向上的一笔
+        if (pen1.getEndPen() > pen1.getStartPen() && pen2.getEndPen() <= pen1.getStartPen() && pen3.getEndPen() >= pen1.getStartPen()) {
+            return true;
 
         }
-        return false;
-    }
-
-    //两两是否有重叠
-    public static boolean isContains(PenDomain pen1, PenDomain pen2) {
+        if (pen1.getEndPen() > pen1.getStartPen() && pen2.getEndPen() >= pen1.getStartPen() && pen2.getEndPen() <= pen1.getEndPen()) {
+            return true;
+        }
         //向下的一笔
-        if (pen1.getStartPen() > pen1.getEndPen()) {
+        if (pen1.getStartPen() > pen1.getEndPen() && pen2.getEndPen() >= pen1.getStartPen() && pen3.getEndPen() <= pen1.getStartPen()) {
+            return true;
+        }
+        if (pen1.getStartPen() > pen1.getEndPen() && pen2.getEndPen() <= pen1.getStartPen() && pen2.getEndPen() >= pen1.getEndPen()) {
             return true;
         }
 
         return false;
     }
+
+
 }
