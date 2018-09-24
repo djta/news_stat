@@ -12,6 +12,7 @@ public class PenDomain {
     private boolean isStart;
     private boolean isEnd;
     private boolean isFinish;
+    private int penSeq;//笔序号
 
 
     public long getStartId() {
@@ -86,6 +87,14 @@ public class PenDomain {
         isFinish = finish;
     }
 
+    public int getPenSeq() {
+        return penSeq;
+    }
+
+    public void setPenSeq(int penSeq) {
+        this.penSeq = penSeq;
+    }
+
     @Override
     public String toString() {
         return "PenDomain{" +
@@ -98,6 +107,7 @@ public class PenDomain {
                 ", isStart=" + isStart +
                 ", isEnd=" + isEnd +
                 ", isFinish=" + isFinish +
+                ", penSeq=" + penSeq +
                 '}';
     }
 }
