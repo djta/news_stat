@@ -2,6 +2,7 @@ package qunat2.wrap.etl;
 
 import domain.MarketDomain;
 import qunat2.wrap.PartEnum;
+import qunat2.wrap.domain.FeaturePartDomain;
 import qunat2.wrap.domain.PartDomain;
 import qunat2.wrap.domain.PenDomain;
 import qunat2.wrap.domain.SegmentDomain;
@@ -55,25 +56,9 @@ public class Segment {
 //            for (PenDomain penDomain : stdFeatureList) {
 //                System.out.println(penDomain);
 //            }
-            boolean isPart = isFeaturePart(stdFeatureList);
-//            System.out.println(partIndex);
-            System.out.println("isPart:" + isPart);
-//            System.out.println("startSegIndex:" + startSegIndex);
+
 
             //标准特征序列第一，第二元素无缺口(向上顶分型，向下底分型)
-//            if (!isGap(stdFeatureList) && isFeaturePart(stdFeatureList) && gapIndex == partIndex && gapIndex > startSegIndex) {
-//                PenDomain penStartDomain = penDomainlist.get(startSegIndex);
-//                SegmentDomain segmentDomain = new SegmentDomain();
-//                segmentDomain.setStartId(penStartDomain.getStartId());
-//                segmentDomain.setStartSeg(penStartDomain.getStartPen());
-//                segmentDomain.setSymbol(penStartDomain.getSymbol());
-//                segmentDomain.setSegEnum(penStartDomain.getPenEnum());
-//                PenDomain penEndDomain = penDomainlist.get(gapIndex);
-//                segmentDomain.setEndId(penEndDomain.getEndId());
-//                segmentDomain.setEndSeg(penEndDomain.getEndPen());
-//                segmentDomainList.add(segmentDomain);
-//                startSegIndex = gapIndex;
-//            }
 
 
             //标准特征序列第一，第二有缺口，需要判断是否分型（向上线段，底分型；向下线段，顶分型）
@@ -92,9 +77,9 @@ public class Segment {
         if (penDomainList.size() < 2) {
             return false;
         }
-        PenDomain pen1 = penDomainList.get(0);
-        PenDomain pen2 = penDomainList.get(1);
-        PenDomain pen3 = penDomainList.get(2);
+        PenDomain pen1 = penDomainList.get(penDomainList.size() - 3);
+        PenDomain pen2 = penDomainList.get(penDomainList.size() - 2);
+        PenDomain pen3 = penDomainList.get(penDomainList.size() - 1);
 
         //向上的一笔
         if (pen1.getEndPen() > pen1.getStartPen() && pen2.getEndPen() <= pen1.getStartPen() && pen3.getEndPen() >= pen1.getStartPen()) {
@@ -159,29 +144,66 @@ public class Segment {
 
 
     //标准特征序列判断分型
-    public static boolean isFeaturePart(List<PenDomain> penDomainList) {
+    public static FeaturePartDomain isFeaturePart(List<PenDomain> penDomainList) {
+        FeaturePartDomain featurePartDomain = new FeaturePartDomain();
         if (penDomainList.size() < 3) {
-            return false;
+            featurePartDomain.setPart(false);
+            return featurePartDomain;
         }
+
         PenDomain feature1 = penDomainList.get(penDomainList.size() - 3);
         PenDomain feature2 = penDomainList.get(penDomainList.size() - 2);
         PenDomain feature3 = penDomainList.get(penDomainList.size() - 1);
-        if (feature1.getPenEnum() == PartEnum.BOTTOM) {//向上的线段。只考虑顶分型
-            if (feature2.getStartPen() > feature1.getStartPen() && feature2.getStartPen() > feature3.getStartPen()
-                    && feature2.getEndPen() > feature1.getEndPen() && feature2.getEndPen() > feature3.getEndPen()) {
-                partIndex = feature2.getPenSeq();
-                System.out.println("part up:" + partIndex);
-                return true;
+
+        featurePartDomain.setSymbol(feature1.getSymbol());
+        if (feature1.getPenEnum() == PartEnum.BOTTOM) {//向上的线段。顶分型
+            if (feature2.getStartPen() > feature1.getStartPen()
+                    && feature2.getStartPen() > feature3.getStartPen()
+                    && feature2.getEndPen() > feature1.getEndPen()
+                    && feature2.getEndPen() > feature3.getEndPen()) {
+                featurePartDomain.setSegmentEnum(PartEnum.TOP);
+                featurePartDomain.setPartEnum(PartEnum.TOP);
+                featurePartDomain.setPartIndex(feature2.getPenSeq());
+                featurePartDomain.setGap(isGap(feature1, feature2));
+                featurePartDomain.setPart(true);
+                return featurePartDomain;
+            } else if (feature2.getStartPen() < feature1.getStartPen()
+                    && feature2.getStartPen() < feature3.getStartPen()
+                    && feature2.getEndPen() < feature1.getEndPen()
+                    && feature2.getEndPen() < feature3.getEndPen()) {//向上线段，底分型
+                featurePartDomain.setSegmentEnum(PartEnum.TOP);
+                featurePartDomain.setPartEnum(PartEnum.BOTTOM);
+                featurePartDomain.setPartIndex(feature2.getPenSeq());
+                featurePartDomain.setGap(isGap(feature1, feature2));
+                featurePartDomain.setPart(true);
+                return featurePartDomain;
             }
-        } else if (feature1.getPenEnum() == PartEnum.TOP) {//向下的线段。只考虑底分型
-            if (feature2.getStartPen() < feature1.getStartPen() && feature2.getStartPen() < feature3.getStartPen()
-                    && feature2.getEndPen() < feature1.getEndPen() && feature2.getEndPen() < feature3.getEndPen()) {
-                partIndex = feature2.getPenSeq();
-                System.out.println("part down:" + partIndex);
-                return true;
+        } else if (feature1.getPenEnum() == PartEnum.TOP) {//向下的线段。底分型
+            if (feature2.getStartPen() < feature1.getStartPen()
+                    && feature2.getStartPen() < feature3.getStartPen()
+                    && feature2.getEndPen() < feature1.getEndPen()
+                    && feature2.getEndPen() < feature3.getEndPen()) {
+                featurePartDomain.setSegmentEnum(PartEnum.BOTTOM);
+                featurePartDomain.setPartEnum(PartEnum.BOTTOM);
+                featurePartDomain.setPartIndex(feature2.getPenSeq());
+                featurePartDomain.setGap(isGap(feature1, feature2));
+                featurePartDomain.setPart(true);
+                return featurePartDomain;
+            } else if (feature2.getStartPen() > feature3.getStartPen()
+                    && feature2.getStartPen() > feature1.getStartPen()
+                    && feature2.getEndPen() > feature3.getEndPen()
+                    && feature2.getEndPen() > feature1.getEndPen()) {//向下的线段，顶分型
+                featurePartDomain.setSegmentEnum(PartEnum.BOTTOM);
+                featurePartDomain.setPartEnum(PartEnum.TOP);
+                featurePartDomain.setPartIndex(feature2.getPenSeq());
+                featurePartDomain.setGap(isGap(feature1, feature2));
+                featurePartDomain.setPart(true);
+                return featurePartDomain;
+
             }
         }
-        return false;
+        featurePartDomain.setPart(false);
+        return featurePartDomain;
 
     }
 
