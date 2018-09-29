@@ -5,6 +5,7 @@ import jdbc.impl.MarketDaoImpl;
 import qunat2.wrap.PartEnum;
 import qunat2.wrap.domain.PartDomain;
 import qunat2.wrap.domain.PenDomain;
+import qunat2.wrap.domain.SegmentDomain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,10 @@ public class Part {
 //            System.out.println(penDomain);
 ////            marketDao.insertPenMarket(penDomain, "penKLine");
 
-        Segment.getSegment(penDomainList);
+        List<SegmentDomain> segmentDomainList = Segment.getSegment(penDomainList);
+//        for (SegmentDomain segmentDomain : segmentDomainList) {
+//            marketDao.insertSegmentMarket(segmentDomain,"segmentKline");
+//        }
 
     }
 

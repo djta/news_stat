@@ -2,10 +2,7 @@ package qunat2.wrap.etl;
 
 import domain.MarketDomain;
 import qunat2.wrap.PartEnum;
-import qunat2.wrap.domain.FeaturePartDomain;
-import qunat2.wrap.domain.PartDomain;
-import qunat2.wrap.domain.PenDomain;
-import qunat2.wrap.domain.SegmentDomain;
+import qunat2.wrap.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,26 +15,27 @@ import java.util.List;
 
  */
 public class Segment {
-    private static int gapIndex = 0;
-    private static int partIndex = 0;
 
     public static void main(String args[]) {
 
     }
 
-    public static void getSegment(List<PenDomain> penDomainlist) {
-
+    public static List<SegmentDomain> getSegment(List<PenDomain> penDomainlist) {
+//        penDomainlist = penDomainlist.subList(1, penDomainlist.size());
         for (int i = 0; i < penDomainlist.size(); i++) {
             penDomainlist.get(i).setPenSeq(i);//添加笔序号
         }
         int startSegIndex = 0;
         boolean isContainSeg = false;
-        List<PenDomain> stdFeatureList1 = getStdFeature(penDomainlist);
-        for (PenDomain penDomain : stdFeatureList1) {
-            System.out.println(penDomain);
-        }
 
         List<SegmentDomain> segmentDomainList = new ArrayList<SegmentDomain>();
+
+        List<PenDomain> sdtDomainList = getStdFeature(penDomainlist);
+        for (PenDomain penDomain : sdtDomainList) {
+            System.out.println(penDomain);
+        }
+        System.out.println(sdtDomainList.size());
+
         for (int i = 3; i < penDomainlist.size(); i++) {
 //            System.out.println(penDomainlist.get(i));
             if (!isContainSeg) {//验证是否满足线段条件
@@ -53,22 +51,52 @@ public class Segment {
             }
 
             List<PenDomain> stdFeatureList = getStdFeature(subPenList);
-//            for (PenDomain penDomain : stdFeatureList) {
-//                System.out.println(penDomain);
-//            }
-
 
             //标准特征序列第一，第二元素无缺口(向上顶分型，向下底分型)
+            FeaturePartDomain featurePartDomain = isFeaturePart(stdFeatureList);
+            if (featurePartDomain.isPart() && !featurePartDomain.isGap()) {//有分型，1,2元素无缺口
+                SegmentDomain segmentDomain = new SegmentDomain();
+                PenDomain startPen = penDomainlist.get(startSegIndex);
+                PenDomain endPen = penDomainlist.get(featurePartDomain.getPartIndex());
+                segmentDomain.setSymbol(startPen.getSymbol());
+                segmentDomain.setSegEnum(featurePartDomain.getSegmentEnum());
+                segmentDomain.setStartId(startPen.getStartId());
+                segmentDomain.setStartSeg(startPen.getStartPen());
+                segmentDomain.setEndId(endPen.getEndId());
+                segmentDomain.setEndSeg(endPen.getEndPen());
+                isContainSeg = false;
+                startSegIndex = featurePartDomain.getPartIndex();
+                segmentDomainList.add(segmentDomain);
+                System.out.println("not gap");
 
-
-            //标准特征序列第一，第二有缺口，需要判断是否分型（向上线段，底分型；向下线段，顶分型）
-
-
-            //test
-            for (SegmentDomain segmentDomain : segmentDomainList) {
-                System.out.println(segmentDomain);
+            } else if (featurePartDomain.isPart()&&featurePartDomain.isGap()) {
+                //标准特征序列第一，第二有缺口，需要判断是否分型（向上线段，底分型；向下线段，顶分型）
+                List segment2 = penDomainlist.subList(featurePartDomain.getPartIndex(), featurePartDomain.getPartIndex() + 8);
+                FeaturePartDomain featurePart2 = isFeaturePart(getStdFeature(segment2));
+                if (featurePart2.isPart()) {
+                    SegmentDomain segmentDomain = new SegmentDomain();
+                    PenDomain startPen = penDomainlist.get(startSegIndex);
+                    PenDomain endPen = penDomainlist.get(featurePartDomain.getPartIndex());
+                    segmentDomain.setSymbol(startPen.getSymbol());
+                    segmentDomain.setSegEnum(featurePartDomain.getSegmentEnum());
+                    segmentDomain.setStartId(startPen.getStartId());
+                    segmentDomain.setStartSeg(startPen.getStartPen());
+                    segmentDomain.setEndId(endPen.getEndId());
+                    segmentDomain.setEndSeg(endPen.getEndPen());
+                    startSegIndex = featurePartDomain.getPartIndex();
+                    segmentDomainList.add(segmentDomain);
+                    isContainSeg = false;
+                }
+                System.out.println("gap");
             }
+
+
         }
+        //test
+        for (SegmentDomain segmentDomain : segmentDomainList) {
+            System.out.println(segmentDomain);
+        }
+        return segmentDomainList;
 
     }
 
@@ -100,42 +128,13 @@ public class Segment {
         return false;
     }
 
-    //params：传入标准特征序列
-    //判断是否跳空
-    public static boolean isGap(List<PenDomain> penDomainList, PartEnum partEnum) {
-        if (penDomainList.size() < 2) {
-            return false;
-        }
-        //第一，第二元素
-        for (int i = 1; i < penDomainList.size(); i++) {
-            PenDomain pen1 = penDomainList.get(i - 1);
-            PenDomain pen2 = penDomainList.get(i);
-            if (partEnum == PartEnum.TOP) {//第一笔向上
-                if (pen2.getEndPen() > pen1.getStartPen()) {
-                    gapIndex = pen2.getPenSeq();
-                    System.out.println("gap up:" + gapIndex);
-                    return true;
-                }
-            } else if (pen1.getStartPen() < pen1.getEndPen()) {
-                if (pen2.getStartPen() > pen1.getEndPen()) {
-                    gapIndex = pen2.getPenSeq();
-                    System.out.println("gap down:" + gapIndex);
-                    return true;
-                }
-            }
-        }
-
-
-        return false;
-
-    }
 
     //判断分型的第一，第二元素是否有缺口
     public static boolean isGap(PenDomain feature1, PenDomain feature2) {
         if (feature1.getPenEnum() == PartEnum.BOTTOM &&
                 feature2.getEndPen() > feature1.getStartPen()) {//向上的线段
             return true;
-        } else if (feature2.getEndPen() > feature1.getStartPen()) {//向下的线段
+        } else if (feature1.getPenEnum() == PartEnum.TOP && feature2.getEndPen() > feature1.getStartPen()) {//向下的线段
             return true;
         }
         return false;
@@ -167,17 +166,18 @@ public class Segment {
                 featurePartDomain.setGap(isGap(feature1, feature2));
                 featurePartDomain.setPart(true);
                 return featurePartDomain;
-            } else if (feature2.getStartPen() < feature1.getStartPen()
-                    && feature2.getStartPen() < feature3.getStartPen()
-                    && feature2.getEndPen() < feature1.getEndPen()
-                    && feature2.getEndPen() < feature3.getEndPen()) {//向上线段，底分型
-                featurePartDomain.setSegmentEnum(PartEnum.TOP);
-                featurePartDomain.setPartEnum(PartEnum.BOTTOM);
-                featurePartDomain.setPartIndex(feature2.getPenSeq());
-                featurePartDomain.setGap(isGap(feature1, feature2));
-                featurePartDomain.setPart(true);
-                return featurePartDomain;
             }
+//            else if (feature2.getStartPen() < feature1.getStartPen()
+//                    && feature2.getStartPen() < feature3.getStartPen()
+//                    && feature2.getEndPen() < feature1.getEndPen()
+//                    && feature2.getEndPen() < feature3.getEndPen()) {//向上线段，底分型
+//                featurePartDomain.setSegmentEnum(PartEnum.TOP);
+//                featurePartDomain.setPartEnum(PartEnum.BOTTOM);
+//                featurePartDomain.setPartIndex(feature2.getPenSeq());
+//                featurePartDomain.setGap(isGap(feature1, feature2));
+//                featurePartDomain.setPart(true);
+//                return featurePartDomain;
+//            }
         } else if (feature1.getPenEnum() == PartEnum.TOP) {//向下的线段。底分型
             if (feature2.getStartPen() < feature1.getStartPen()
                     && feature2.getStartPen() < feature3.getStartPen()
@@ -189,20 +189,22 @@ public class Segment {
                 featurePartDomain.setGap(isGap(feature1, feature2));
                 featurePartDomain.setPart(true);
                 return featurePartDomain;
-            } else if (feature2.getStartPen() > feature3.getStartPen()
-                    && feature2.getStartPen() > feature1.getStartPen()
-                    && feature2.getEndPen() > feature3.getEndPen()
-                    && feature2.getEndPen() > feature1.getEndPen()) {//向下的线段，顶分型
-                featurePartDomain.setSegmentEnum(PartEnum.BOTTOM);
-                featurePartDomain.setPartEnum(PartEnum.TOP);
-                featurePartDomain.setPartIndex(feature2.getPenSeq());
-                featurePartDomain.setGap(isGap(feature1, feature2));
-                featurePartDomain.setPart(true);
-                return featurePartDomain;
-
             }
+//            else if (feature2.getStartPen() > feature3.getStartPen()
+//                    && feature2.getStartPen() > feature1.getStartPen()
+//                    && feature2.getEndPen() > feature3.getEndPen()
+//                    && feature2.getEndPen() > feature1.getEndPen()) {//向下的线段，顶分型
+//                featurePartDomain.setSegmentEnum(PartEnum.BOTTOM);
+//                featurePartDomain.setPartEnum(PartEnum.TOP);
+//                featurePartDomain.setPartIndex(feature2.getPenSeq());
+//                featurePartDomain.setGap(isGap(feature1, feature2));
+//                featurePartDomain.setPart(true);
+//                return featurePartDomain;
+//
+//            }
         }
         featurePartDomain.setPart(false);
+        featurePartDomain.setGap(false);
         return featurePartDomain;
 
     }

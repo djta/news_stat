@@ -10,7 +10,7 @@ public class Test {
         strs.add("b");
         strs.add("c");
         strs.add("d");
-        List<String> subStrs = strs.subList(0, 3);
+        List<String> subStrs = strs.subList(1, 4);
         for (String str : subStrs) {
             System.out.println(str);
         }
