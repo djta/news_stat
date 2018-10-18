@@ -29,12 +29,15 @@ public class Segment {
         boolean isContainSeg = false;
 
         List<SegmentDomain> segmentDomainList = new ArrayList<SegmentDomain>();
+        for (PenDomain penDomain : penDomainlist) {
+            System.out.println(penDomain);
+        }
 
         List<PenDomain> sdtDomainList = getStdFeature(penDomainlist);
+        System.out.println("sdtDomainList.size:" + sdtDomainList.size());
         for (PenDomain penDomain : sdtDomainList) {
             System.out.println(penDomain);
         }
-        System.out.println(sdtDomainList.size());
 
         for (int i = 3; i < penDomainlist.size(); i++) {
 //            System.out.println(penDomainlist.get(i));
@@ -49,7 +52,6 @@ public class Segment {
             if (subPenList.size() <= 3) {
                 continue;
             }
-
             List<PenDomain> stdFeatureList = getStdFeature(subPenList);
 
             //标准特征序列第一，第二元素无缺口(向上顶分型，向下底分型)
@@ -69,7 +71,7 @@ public class Segment {
                 segmentDomainList.add(segmentDomain);
                 System.out.println("not gap");
 
-            } else if (featurePartDomain.isPart()&&featurePartDomain.isGap()) {
+            } else if (featurePartDomain.isPart() && featurePartDomain.isGap()) {
                 //标准特征序列第一，第二有缺口，需要判断是否分型（向上线段，底分型；向下线段，顶分型）
                 List segment2 = penDomainlist.subList(featurePartDomain.getPartIndex(), featurePartDomain.getPartIndex() + 8);
                 FeaturePartDomain featurePart2 = isFeaturePart(getStdFeature(segment2));
@@ -134,7 +136,7 @@ public class Segment {
         if (feature1.getPenEnum() == PartEnum.BOTTOM &&
                 feature2.getEndPen() > feature1.getStartPen()) {//向上的线段
             return true;
-        } else if (feature1.getPenEnum() == PartEnum.TOP && feature2.getEndPen() > feature1.getStartPen()) {//向下的线段
+        } else if (feature1.getPenEnum() == PartEnum.TOP && feature2.getEndPen() < feature1.getStartPen()) {//向下的线段
             return true;
         }
         return false;
@@ -223,6 +225,7 @@ public class Segment {
         stdFeatureList.add(featureList.get(0));
         stdFeatureList.add(featureList.get(1));
         PenDomain fistFeature = featureList.get(0);
+        //处理包含关系，可能有出错的地方。分型右边的不需要处理包含关系
         for (int i = 1; i < featureList.size(); i++) {
             PenDomain feature2 = featureList.get(i - 1);
             PenDomain feature3 = featureList.get(i);
