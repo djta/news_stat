@@ -73,8 +73,19 @@ public class Segment {
 
             } else if (featurePartDomain.isPart() && featurePartDomain.isGap()) {
                 //标准特征序列第一，第二有缺口，需要判断是否分型（向上线段，底分型；向下线段，顶分型）
-                List segment2 = penDomainlist.subList(featurePartDomain.getPartIndex(), featurePartDomain.getPartIndex() + 8);
-                FeaturePartDomain featurePart2 = isFeaturePart(getStdFeature(segment2));
+                List<PenDomain> segment2 = penDomainlist.subList(featurePartDomain.getPartIndex(), featurePartDomain.getPartIndex() + 8);
+
+                List<PenDomain> featureList = new ArrayList<PenDomain>();
+                for (int j = 0; j < segment2.size(); j++) {
+                    if (j % 2 == 1) {
+                        featureList.add(segment2.get(j));
+                    }
+                }
+                //不需要特性序列包含
+//                FeaturePartDomain featurePart2 = isFeaturePart(getStdFeature(segment2));
+                FeaturePartDomain featurePart2 = isFeaturePart(featureList.subList(1, featureList.size()));
+
+//                FeaturePartDomain featurePart2 = isFeaturePart(featureList);
                 if (featurePart2.isPart()) {
                     SegmentDomain segmentDomain = new SegmentDomain();
                     PenDomain startPen = penDomainlist.get(startSegIndex);
