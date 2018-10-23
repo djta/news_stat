@@ -21,7 +21,6 @@ public class Segment {
     }
 
     public static List<SegmentDomain> getSegment(List<PenDomain> penDomainlist) {
-//        penDomainlist = penDomainlist.subList(1, penDomainlist.size());
         for (int i = 0; i < penDomainlist.size(); i++) {
             penDomainlist.get(i).setPenSeq(i);//添加笔序号
         }
@@ -29,15 +28,15 @@ public class Segment {
         boolean isContainSeg = false;
 
         List<SegmentDomain> segmentDomainList = new ArrayList<SegmentDomain>();
-        for (PenDomain penDomain : penDomainlist) {
-            System.out.println(penDomain);
-        }
+//        for (PenDomain penDomain : penDomainlist) {
+//            System.out.println(penDomain);
+//        }
 
-        List<PenDomain> sdtDomainList = getStdFeature(penDomainlist);
-        System.out.println("sdtDomainList.size:" + sdtDomainList.size());
-        for (PenDomain penDomain : sdtDomainList) {
-            System.out.println(penDomain);
-        }
+        List<PenDomain> stdDomainList = getStdFeature(penDomainlist);
+        System.out.println("stdDomainList.size:" + stdDomainList.size());
+//        for (PenDomain penDomain : sdtDomainList) {
+//            System.out.println(penDomain);
+//        }
 
         for (int i = 3; i < penDomainlist.size(); i++) {
 //            System.out.println(penDomainlist.get(i));
@@ -73,7 +72,10 @@ public class Segment {
 
             } else if (featurePartDomain.isPart() && featurePartDomain.isGap()) {
                 //标准特征序列第一，第二有缺口，需要判断是否分型（向上线段，底分型；向下线段，顶分型）
-                List<PenDomain> segment2 = penDomainlist.subList(featurePartDomain.getPartIndex(), featurePartDomain.getPartIndex() + 8);
+                if (penDomainlist.size() <= featurePartDomain.getPartIndex() + 6) {
+                    continue;
+                }
+                List<PenDomain> segment2 = penDomainlist.subList(featurePartDomain.getPartIndex(), featurePartDomain.getPartIndex() + 6);
 
                 List<PenDomain> featureList = new ArrayList<PenDomain>();
                 for (int j = 0; j < segment2.size(); j++) {
@@ -83,10 +85,10 @@ public class Segment {
                 }
                 //不需要特性序列包含
 //                FeaturePartDomain featurePart2 = isFeaturePart(getStdFeature(segment2));
-                FeaturePartDomain featurePart2 = isFeaturePart(featureList.subList(1, featureList.size()));
+                FeaturePartDomain featurePart2 = isFeaturePart(featureList.subList(0, featureList.size()));
 
 //                FeaturePartDomain featurePart2 = isFeaturePart(featureList);
-                if (featurePart2.isPart()) {
+                if (featurePart2.isPart()) {//第二特征出现分型的情况
                     SegmentDomain segmentDomain = new SegmentDomain();
                     PenDomain startPen = penDomainlist.get(startSegIndex);
                     PenDomain endPen = penDomainlist.get(featurePartDomain.getPartIndex());
@@ -99,6 +101,54 @@ public class Segment {
                     startSegIndex = featurePartDomain.getPartIndex();
                     segmentDomainList.add(segmentDomain);
                     isContainSeg = false;
+                } else {//不出现分型的情况
+                    //https://www.jianshu.com/p/c9dc97faa426
+                    PenDomain pen1 = segment2.get(0);
+                    PenDomain pen2 = segment2.get(1);
+                    PenDomain pen3 = segment2.get(2);
+                    PenDomain pen4 = segment2.get(3);
+                    //第三笔，升破或跌破前前高点或前前低点
+                    //第一元素
+                    if (featurePartDomain.getPartIndex() < 2) {
+                        continue;
+                    }
+                    PenDomain formerPen = penDomainlist.get(featurePartDomain.getPartIndex() - 2);
+
+                    if (formerPen.getPenEnum() == PartEnum.BOTTOM) {//向上的线段
+                        if (pen3.getEndPen() > formerPen.getStartPen()) {//跌破前前高点
+                            if (pen4.getEndPen() < pen3.getStartPen()) {
+                                SegmentDomain segmentDomain = new SegmentDomain();
+                                PenDomain startPen = penDomainlist.get(startSegIndex);
+                                PenDomain endPen = penDomainlist.get(featurePartDomain.getPartIndex());
+                                segmentDomain.setSymbol(startPen.getSymbol());
+                                segmentDomain.setSegEnum(featurePartDomain.getSegmentEnum());
+                                segmentDomain.setStartId(startPen.getStartId());
+                                segmentDomain.setStartSeg(startPen.getStartPen());
+                                segmentDomain.setEndId(endPen.getEndId());
+                                segmentDomain.setEndSeg(endPen.getEndPen());
+                                startSegIndex = featurePartDomain.getPartIndex();
+                                segmentDomainList.add(segmentDomain);
+                                isContainSeg = false;
+                            }
+                        }
+                    } else if (formerPen.getPenEnum() == PartEnum.TOP) {//向下的线段
+                        if (pen4.getEndPen() > pen3.getStartPen()) {
+                            SegmentDomain segmentDomain = new SegmentDomain();
+                            PenDomain startPen = penDomainlist.get(startSegIndex);
+                            PenDomain endPen = penDomainlist.get(featurePartDomain.getPartIndex());
+                            segmentDomain.setSymbol(startPen.getSymbol());
+                            segmentDomain.setSegEnum(featurePartDomain.getSegmentEnum());
+                            segmentDomain.setStartId(startPen.getStartId());
+                            segmentDomain.setStartSeg(startPen.getStartPen());
+                            segmentDomain.setEndId(endPen.getEndId());
+                            segmentDomain.setEndSeg(endPen.getEndPen());
+                            startSegIndex = featurePartDomain.getPartIndex();
+                            segmentDomainList.add(segmentDomain);
+                            isContainSeg = false;
+                        }
+
+                    }
+
                 }
                 System.out.println("gap");
             }
@@ -231,6 +281,7 @@ public class Segment {
                 featureList.add(penDomainList.get(i));
             }
         }
+//        System.out.println("feature list size:"+featureList.size());
         //feature contains
         List<PenDomain> stdFeatureList = new ArrayList<PenDomain>();
         stdFeatureList.add(featureList.get(0));

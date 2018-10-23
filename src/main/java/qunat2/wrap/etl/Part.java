@@ -24,6 +24,13 @@ public class Part {
 //        }
         List<PartDomain> partDomainList = getPart(containsDomains);
         System.out.println("partDomainList.size():" + partDomainList.size());
+        int partCount = 0;
+        for (PartDomain partDomain : partDomainList) {
+            if (partDomain.getPartEnum() != PartEnum.LEVEL) {
+                partCount++;
+            }
+        }
+        System.out.println("partCount:" + partCount);
 //        for (PartDomain partDomain : partDomainList) {
 //            System.out.println(partDomain);
 //        }
