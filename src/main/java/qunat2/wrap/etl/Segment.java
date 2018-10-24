@@ -12,7 +12,8 @@ import java.util.List;
     1、标准特征分型
     2、底分型和顶分型
     3、区分分型1,2元素是否包含gap
-
+    https://wenku.baidu.com/view/5af679e4102de2bd960588ce.html
+    https://wenku.baidu.com/view/7c7ade28192e45361066f56d.html
  */
 public class Segment {
 
