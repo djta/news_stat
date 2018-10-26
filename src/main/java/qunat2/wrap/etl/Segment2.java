@@ -10,6 +10,8 @@ import java.util.List;
 
 /*
      https://wenku.baidu.com/view/7c7ade28192e45361066f56d.html
+     https://wenku.baidu.com/view/84b6eadbce2f0066f53322bd.html
+     https://wenku.baidu.com/view/38e4bb993c1ec5da51e270bb.html?rec_flag=default
     （1）假设某转折点是两线段的分界点， 
      （2）然后对此用线段划分的两种情况去考察是否满足，
     （3）如果满足其中一种，那么这点就是真正的线段的分界点；     
@@ -79,6 +81,12 @@ public class Segment2 {
 
             }
         }
+
+
+    }
+
+    public static void getSegment1(List<PenDomain> penDomainList) {
+
 
 
     }
