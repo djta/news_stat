@@ -85,9 +85,64 @@ public class Segment2 {
 
     }
 
-    public static void getSegment1(List<PenDomain> penDomainList) {
+    //根据疑似左右分型，进行数据包含处理
+    public static void segmentPart(List<PenDomain> penDomainList) {
+        List<PenDomain> featureList = getFeature(penDomainList);
+        int returnIndex = segmentSelect(featureList);
+        if (returnIndex < 0) {
+            return;
+        }
+        List<PenDomain> leftFeatureList = featureList.subList(0, returnIndex);
+        List<PenDomain> rightFeatureList = featureList.subList(returnIndex, featureList.size());
+        //分型左边数据提取标准化特征
+        List<PenDomain> leftStdFeatureList = getStdFeature(leftFeatureList);
+        //分型右边数据提取标准化特征
+        List<PenDomain> rightStdFeatureList = getStdFeature(rightFeatureList);
+        //
+        int partIndex = leftFeatureList.size();
+        //构造标准特征序列
+        List<PenDomain> stdFeatureList = new ArrayList<PenDomain>();
+        stdFeatureList.addAll(leftFeatureList);
+        stdFeatureList.addAll(rightFeatureList);
+        //根据标准型特征序列，区分第一，第二种情况
+        if (stdFeatureList.size() < 3 && partIndex > 1) {
+            return;
+        }
+        PenDomain firstDomain = stdFeatureList.get(partIndex - 1);
+        PenDomain secondDomain = stdFeatureList.get(partIndex);
+        PenDomain thirdDomain = stdFeatureList.get(partIndex + 1);
+        if (secondDomain.getStartPen() > secondDomain.getEndPen()) {//向上线段
+            if (secondDomain.getStartPen() > firstDomain.getStartPen()
+                    && secondDomain.getStartPen() > thirdDomain.getStartPen()
+                    && secondDomain.getEndPen() < firstDomain.getStartPen()) {//无缺口
+                //TODO
+                // 可能要区分，第一元素完全包含于第二元素
 
+            }
 
+        }
+
+    }
+
+    //疑似顶底分型
+    private static int segmentSelect(List<PenDomain> featureList) {
+        for (int i = 2; i < featureList.size(); i++) {
+            PenDomain leftFeatureDomain = featureList.get(i - 2);
+            PenDomain midFeatureDomain = featureList.get(i - 1);
+            PenDomain rightFeatureDomain = featureList.get(i);
+            if (midFeatureDomain.getStartPen() > midFeatureDomain.getEndPen()) {//向上的线段
+                if (midFeatureDomain.getStartPen() > leftFeatureDomain.getStartPen() &&
+                        midFeatureDomain.getStartPen() > rightFeatureDomain.getStartPen()) {//只考虑顶分型
+                    return i - 1;
+                }
+            } else {//
+                if (midFeatureDomain.getStartPen() < leftFeatureDomain.getStartPen()
+                        && midFeatureDomain.getStartPen() < rightFeatureDomain.getStartPen()) {
+                    return i - 1;
+                }
+            }
+        }
+        return -1;
 
     }
 
@@ -149,12 +204,9 @@ public class Segment2 {
     }
 
     //获取标准特征序列
-    public static List<PenDomain> getStdFeature(List<PenDomain> penDomainList) {
-        List<PenDomain> featureList = new ArrayList<PenDomain>();
-        for (int i = 0; i < penDomainList.size(); i++) {
-            if (i % 2 == 1) {
-                featureList.add(penDomainList.get(i));
-            }
+    public static List<PenDomain> getStdFeature(List<PenDomain> featureList) {
+        if (featureList.size() < 2) {
+            return new ArrayList<PenDomain>();
         }
         PenDomain fistFeature = featureList.get(0);
         List<PenDomain> stdFeatureList = new ArrayList<PenDomain>();
