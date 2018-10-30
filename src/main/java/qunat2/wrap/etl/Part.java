@@ -40,8 +40,12 @@ public class Part {
 //            System.out.println(penDomain);
 ////            marketDao.insertPenMarket(penDomain, "penKLine");
 
-        List<SegmentDomain> segmentDomainList = Segment.getSegment(penDomainList);
+//        List<SegmentDomain> segmentDomainList = Segment.getSegment(penDomainList);
+        List<SegmentDomain> segmentDomainList = Segment2.segmentPart(penDomainList);
         System.out.println("segmentDomainList.size():" + segmentDomainList.size());
+//        for (SegmentDomain segmentDomain : segmentDomainList) {
+//            System.out.println(segmentDomain);
+//        }
 //        for (SegmentDomain segmentDomain : segmentDomainList) {
 //            marketDao.insertSegmentMarket(segmentDomain,"segmentKline");
 //        }
