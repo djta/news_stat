@@ -30,14 +30,17 @@ public class Segment2 {
         int startIndex = 0;//线段索引
         int selectIndex = 0;
         List<SegmentDomain> segmentDomainList = new ArrayList<SegmentDomain>();
+        for (int j = 0; j < penDomainList.size(); j++) {
+            penDomainList.get(j).setPenSeq(j);
+        }
         for (int i = 0; i < penDomainList.size(); i++) {
             List<PenDomain> subList = penDomainList.subList(selectIndex, i);
             if (subList.size() < 3 || Segment.isSegment(subList)) {
                 continue;
             }
-            for (int j = 0; j < subList.size(); j++) {
-                subList.get(j).setPenSeq(j);
-            }
+//            for (int j = 0; j < subList.size(); j++) {
+//                subList.get(j).setPenSeq(j);
+//            }
             List<PenDomain> featureList = getFeature(subList);
             int returnIndex = segmentSelect(featureList);
             if (returnIndex < 0) {
@@ -62,13 +65,13 @@ public class Segment2 {
                 continue;
             }
 
-            System.out.println("subList.size:" + subList.size());
-            System.out.println("partIndex:" + partIndex);
-            System.out.println("leftStdFeatureList:" + leftStdFeatureList.size());
-            System.out.println("selectIndex:" + selectIndex);
-            System.out.println("startIndex:" + startIndex);
-            System.out.println("stdFeatureList.size():" + stdFeatureList.size());
-            System.out.println("rightStdFeatureList.size():" + rightStdFeatureList.size());
+//            System.out.println("subList.size:" + subList.size());
+//            System.out.println("partIndex:" + partIndex);
+//            System.out.println("leftStdFeatureList:" + leftStdFeatureList.size());
+//            System.out.println("selectIndex:" + selectIndex);
+//            System.out.println("startIndex:" + startIndex);
+//            System.out.println("stdFeatureList.size():" + stdFeatureList.size());
+//            System.out.println("rightStdFeatureList.size():" + rightStdFeatureList.size());
             PenDomain firstDomain = stdFeatureList.get(partIndex - 1);
             PenDomain secondDomain = stdFeatureList.get(partIndex);
             PenDomain thirdDomain = stdFeatureList.get(partIndex + 1);
@@ -79,6 +82,7 @@ public class Segment2 {
                         && secondDomain.getEndPen() < firstDomain.getStartPen()) {//无缺口
                     //TODO
                     // 可能要区分，第一元素完全包含于第二元素
+                    System.out.println("non gap up");
                     SegmentDomain segmentDomain = new SegmentDomain();
                     PenDomain startDomain = penDomainList.get(startIndex);
                     segmentDomain.setStartId(startDomain.getStartId());
@@ -86,6 +90,7 @@ public class Segment2 {
                     segmentDomain.setEndId(secondDomain.getStartId());
                     segmentDomain.setEndSeg(secondDomain.getStartPen());
                     segmentDomain.setSegEnum(PartEnum.TOP);
+                    segmentDomain.setSymbol(secondDomain.getSymbol());
                     segmentDomainList.add(segmentDomain);
                     startIndex = secondDomain.getPenSeq();
                     selectIndex = startIndex;
@@ -93,7 +98,8 @@ public class Segment2 {
                         && secondDomain.getStartPen() > thirdDomain.getStartPen()
                         && secondDomain.getEndPen() > firstDomain.getStartPen()) {//有缺口（向上线段考虑底分型）
                     for (int secondIndex = secondDomain.getPenSeq(); secondIndex < penDomainList.size(); secondIndex++) {
-                        List<PenDomain> rightPenDomainList = subList.subList(secondDomain.getPenSeq(), secondIndex);
+
+                        List<PenDomain> rightPenDomainList = penDomainList.subList(secondDomain.getPenSeq(), secondIndex);
                         List<PenDomain> rightPenStdFeatureList = getStdFeature(getFeature(rightPenDomainList));
                         if (rightPenStdFeatureList.size() < 3) {
                             continue;
@@ -110,19 +116,21 @@ public class Segment2 {
                             segmentDomain.setStartSeg(startDomain.getStartPen());
                             segmentDomain.setEndSeg(feature2.getStartPen());
                             segmentDomain.setEndId(feature2.getStartId());
+                            segmentDomain.setSymbol(feature2.getSymbol());
                             segmentDomain.setSegEnum(PartEnum.TOP);
                             segmentDomainList.add(segmentDomain);
                             startIndex = secondDomain.getPenSeq();
                             selectIndex = startIndex;
                         } else {
-                            selectIndex++;
+                            selectIndex += 2;
+                            System.out.println("here1");
                         }
                         break;
                     }
 
                 } else {
-                    System.out.println("here1");
-                    selectIndex++;
+                    System.out.println("here2");
+                    selectIndex += 2;
                 }
 
             } else {//向下的线段
@@ -130,12 +138,14 @@ public class Segment2 {
                 if (secondDomain.getStartPen() < firstDomain.getStartPen()
                         && secondDomain.getStartPen() < thirdDomain.getStartPen()
                         && secondDomain.getEndPen() > firstDomain.getStartPen()) {//无缺口
+                    System.out.println("non gap down");
                     SegmentDomain segmentDomain = new SegmentDomain();
                     PenDomain startDomain = penDomainList.get(startIndex);
                     segmentDomain.setStartId(startDomain.getStartId());
                     segmentDomain.setStartSeg(startDomain.getStartPen());
                     segmentDomain.setEndId(secondDomain.getStartId());
                     segmentDomain.setEndSeg(secondDomain.getStartPen());
+                    segmentDomain.setSymbol(secondDomain.getSymbol());
                     segmentDomain.setSegEnum(PartEnum.BOTTOM);
                     segmentDomainList.add(segmentDomain);
                     startIndex = secondDomain.getPenSeq();
@@ -143,33 +153,39 @@ public class Segment2 {
                 } else if (secondDomain.getStartPen() < firstDomain.getStartPen()
                         && secondDomain.getStartPen() < thirdDomain.getStartPen()
                         && secondDomain.getEndPen() < firstDomain.getStartPen()) {//有缺口（向下线段考虑顶分型）
-                    List<PenDomain> rightPenDomainList = subList.subList(secondDomain.getPenSeq(), subList.size());
-                    List<PenDomain> rightPenStdFeatureList = getStdFeature(getFeature(rightPenDomainList));
-                    if (rightPenStdFeatureList.size() < 3) {
-                        continue;
-                    }
-                    PenDomain feature1 = rightPenStdFeatureList.get(rightPenStdFeatureList.size() - 3);
-                    PenDomain feature2 = rightPenStdFeatureList.get(rightPenStdFeatureList.size() - 2);
-                    PenDomain feature3 = rightPenStdFeatureList.get(rightPenStdFeatureList.size() - 1);
-                    if (feature2.getStartPen() > feature1.getStartPen()
-                            && feature2.getStartPen() > feature3.getStartPen()
-                            && feature2.getEndPen() < feature3.getEndPen()) {
-                        SegmentDomain segmentDomain = new SegmentDomain();
-                        PenDomain startDomain = penDomainList.get(startIndex);
-                        segmentDomain.setStartId(startDomain.getStartId());
-                        segmentDomain.setStartSeg(startDomain.getStartPen());
-                        segmentDomain.setEndSeg(feature2.getStartPen());
-                        segmentDomain.setEndId(feature2.getStartId());
-                        segmentDomain.setSegEnum(PartEnum.BOTTOM);
-                        segmentDomainList.add(segmentDomain);
-                        startIndex = secondDomain.getPenSeq();
-                        selectIndex = startIndex;
-                    } else {
-                        selectIndex++;
+                    for (int secondIndex = secondDomain.getPenSeq(); secondIndex < penDomainList.size(); secondIndex++) {
+
+                        List<PenDomain> rightPenDomainList = penDomainList.subList(secondDomain.getPenSeq(), secondIndex);
+                        List<PenDomain> rightPenStdFeatureList = getStdFeature(getFeature(rightPenDomainList));
+                        if (rightPenStdFeatureList.size() < 3) {
+                            continue;
+                        }
+                        PenDomain feature1 = rightPenStdFeatureList.get(rightPenStdFeatureList.size() - 3);
+                        PenDomain feature2 = rightPenStdFeatureList.get(rightPenStdFeatureList.size() - 2);
+                        PenDomain feature3 = rightPenStdFeatureList.get(rightPenStdFeatureList.size() - 1);
+                        if (feature2.getStartPen() > feature1.getStartPen()
+                                && feature2.getStartPen() > feature3.getStartPen()
+                                && feature2.getEndPen() < feature3.getEndPen()) {
+                            SegmentDomain segmentDomain = new SegmentDomain();
+                            PenDomain startDomain = penDomainList.get(startIndex);
+                            segmentDomain.setStartId(startDomain.getStartId());
+                            segmentDomain.setStartSeg(startDomain.getStartPen());
+                            segmentDomain.setEndSeg(feature2.getStartPen());
+                            segmentDomain.setEndId(feature2.getStartId());
+                            segmentDomain.setSegEnum(PartEnum.BOTTOM);
+                            segmentDomain.setSymbol(feature2.getSymbol());
+                            segmentDomainList.add(segmentDomain);
+                            startIndex = secondDomain.getPenSeq();
+                            selectIndex = startIndex;
+                        } else {
+                            selectIndex += 2;
+                            System.out.println("here3");
+                        }
+                        break;
                     }
                 } else {
-                    System.out.println("here2");
-                    selectIndex++;
+                    System.out.println("here4");
+                    selectIndex += 2;
                 }
             }
         }//For END

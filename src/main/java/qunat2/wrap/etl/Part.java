@@ -14,7 +14,7 @@ public class Part {
     public static void main(String args[]) {
         System.out.println("test");
         MarketDaoImpl marketDao = new MarketDaoImpl();
-        List<MarketDomain> marketDomains = marketDao.getKlineDataOnline("eosusdt");
+        List<MarketDomain> marketDomains = marketDao.getKlineDataOnline("btcusdt");
         List<MarketDomain> containsDomains = contains(marketDomains);
         System.out.println("marketDomains.size():" + marketDomains.size());
         System.out.println("containsDomains.size():" + containsDomains.size());
@@ -43,9 +43,9 @@ public class Part {
 //        List<SegmentDomain> segmentDomainList = Segment.getSegment(penDomainList);
         List<SegmentDomain> segmentDomainList = Segment2.segmentPart(penDomainList);
         System.out.println("segmentDomainList.size():" + segmentDomainList.size());
-//        for (SegmentDomain segmentDomain : segmentDomainList) {
-//            System.out.println(segmentDomain);
-//        }
+        for (SegmentDomain segmentDomain : segmentDomainList) {
+            System.out.println(segmentDomain);
+        }
 //        for (SegmentDomain segmentDomain : segmentDomainList) {
 //            marketDao.insertSegmentMarket(segmentDomain,"segmentKline");
 //        }
