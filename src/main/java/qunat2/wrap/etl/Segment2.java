@@ -195,7 +195,7 @@ public class Segment2 {
 
 
     //疑似顶底分型
-    private static int segmentSelect(List<PenDomain> featureList) {
+    public static int segmentSelect(List<PenDomain> featureList) {
         for (int i = 2; i < featureList.size(); i++) {
             PenDomain leftFeatureDomain = featureList.get(i - 2);
             PenDomain midFeatureDomain = featureList.get(i - 1);
@@ -218,7 +218,7 @@ public class Segment2 {
 
 
     //获取特征序列
-    private static List<PenDomain> getFeature(List<PenDomain> penDomainList) {
+    public static List<PenDomain> getFeature(List<PenDomain> penDomainList) {
         List<PenDomain> featureList = new ArrayList<PenDomain>();
         for (int i = 0; i < penDomainList.size(); i++) {
             if (i % 2 == 1) {
