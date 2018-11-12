@@ -169,7 +169,7 @@ public class Segment3 {
         PenDomain endPenDomain = penDomainList.get(endSegmentIndex);
         segmentDomain.setEndId(endPenDomain.getStartId());
         segmentDomain.setEndSeg(endPenDomain.getStartPen());
-        System.out.println(segmentDomain);
+//        System.out.println(segmentDomain);
         return segmentDomain;
     }
 
