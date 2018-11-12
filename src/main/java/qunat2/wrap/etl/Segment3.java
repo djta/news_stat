@@ -1,6 +1,5 @@
 package qunat2.wrap.etl;
 
-import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 import qunat2.wrap.PartEnum;
 import qunat2.wrap.domain.PenDomain;
 import qunat2.wrap.domain.SegmentDomain;
@@ -13,52 +12,6 @@ public class Segment3 {
 
     }
 
-//    public static void getSegment(List<PenDomain> penDomainList) {
-//        int startIndex = 0;
-//        for (int i = 0; i < penDomainList.size(); i++) {
-//            List<PenDomain> segPenDomains = penDomainList.subList(0, startIndex);
-//            //获取特征序列
-//            List<PenDomain> featureList = Segment2.getFeature(segPenDomains);
-//            //找疑似分型
-//            int partIndex = Segment2.segmentSelect(featureList);
-//            List<PenDomain> leftPenDomainList = featureList.subList(0, partIndex);
-//            List<PenDomain> rightPenDomainList = featureList.subList(partIndex, featureList.size());
-//            //对分型两边分别做包含处理
-//            List<PenDomain> leftStdFeatureList = Segment2.getStdFeature(leftPenDomainList);
-//            List<PenDomain> rightStdFeatureList = Segment2.getStdFeature(rightPenDomainList);
-//            //获取分型第二元素
-//            PenDomain secondPen = rightStdFeatureList.get(0);
-//            //TODO 判断第三元素不存在（还未走完）
-//            PenDomain thirdPen = rightStdFeatureList.get(1);
-//            //对左边的标准特征序列，顶分型：找最高的特征序列作为第一元素；底分型：找最低的特征序列作为第一元素
-//            double firstPenValue = getExtremumPenDomain(leftStdFeatureList);
-//            /*
-//                判断分型第一，第二种情况
-//             */
-//            if (secondPen.getStartPen() > secondPen.getEndPen()) {//向上的线段
-//                if (secondPen.getStartPen() > thirdPen.getStartPen()
-//                        && secondPen.getEndPen() > thirdPen.getEndPen()) {//分型成立
-//                    if (secondPen.getEndPen() < firstPenValue) {//第一、二元素无缺口
-//                        //线段生成
-//
-//                    } else {//有缺口
-//                        //是否存在底分型，且判断第一，第二元素是否有缺口
-//
-//                    }
-//
-//
-//                }
-//
-//
-//            } else {//向下的线段
-//
-//
-//            }
-//
-//
-//        }
-//    }
-
     public static List<SegmentDomain> getSegment(List<PenDomain> penDomainList) {
         int segIndex = 0;
         int tmpIndex = 0;
@@ -69,8 +22,8 @@ public class Segment3 {
         }
         while (tmpIndex < penDomainList.size()) {
 
-            System.out.println("run");
-            System.out.println("tmpIndex:" + tmpIndex);
+//            System.out.println("run");
+//            System.out.println("tmpIndex:" + tmpIndex);
 
             List<PenDomain> segPenDomains = penDomainList.subList(tmpIndex, penDomainList.size());
             List<PenDomain> partPenDomains = getPartSegment(segPenDomains);
@@ -190,6 +143,10 @@ public class Segment3 {
 
             }
             tmpIndex += 2;
+            if (tmpIndex < segIndex) {
+                tmpIndex = segIndex;
+            }
+
         }
         return segmentDomains;
     }
@@ -198,7 +155,7 @@ public class Segment3 {
     public static SegmentDomain getSegmentDomain(int startSegmentIndex,
                                                  int endSegmentIndex,
                                                  List<PenDomain> penDomainList, PartEnum partEnum) {
-        System.out.println("start:" + startSegmentIndex + ",end:" + endSegmentIndex);
+//        System.out.println("start:" + startSegmentIndex + ",end:" + endSegmentIndex);
         if (startSegmentIndex == endSegmentIndex) {
             return null;
         }
@@ -210,9 +167,9 @@ public class Segment3 {
         segmentDomain.setStartSeg(startPenDomain.getStartPen());
         //
         PenDomain endPenDomain = penDomainList.get(endSegmentIndex);
-        segmentDomain.setEndId(endPenDomain.getEndId());
+        segmentDomain.setEndId(endPenDomain.getStartId());
         segmentDomain.setEndSeg(endPenDomain.getStartPen());
-
+        System.out.println(segmentDomain);
         return segmentDomain;
     }
 
