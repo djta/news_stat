@@ -41,7 +41,7 @@ public class Part {
 ////            marketDao.insertPenMarket(penDomain, "penKLine");
 
 //        List<SegmentDomain> segmentDomainList = Segment.getSegment(penDomainList);
-        List<SegmentDomain> segmentDomainList = Segment2.segmentPart(penDomainList);
+        List<SegmentDomain> segmentDomainList = Segment3.getSegment(penDomainList);
         System.out.println("segmentDomainList.size():" + segmentDomainList.size());
         for (SegmentDomain segmentDomain : segmentDomainList) {
             System.out.println(segmentDomain);
