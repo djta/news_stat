@@ -46,9 +46,9 @@ public class Part {
         for (SegmentDomain segmentDomain : segmentDomainList) {
             System.out.println(segmentDomain);
         }
-//        for (SegmentDomain segmentDomain : segmentDomainList) {
-//            marketDao.insertSegmentMarket(segmentDomain,"segmentKline");
-//        }
+        for (SegmentDomain segmentDomain : segmentDomainList) {
+            marketDao.insertSegmentMarket(segmentDomain,"segmentKline");
+        }
 
     }
 
