@@ -117,6 +117,7 @@ public class MacdUnit extends TendencyUnit {
         core.macd(0, arraylength - 1, input, shortPeriod, longPeriod, midPeriod, begin, length, outputMACD, outputSignl, outputHist);
         List<Double> difList = DataFormatTransformUtil.result2List(outputMACD);
         List<Double> deaList = DataFormatTransformUtil.result2List(outputSignl);
+        //macd
         List<Double> histList = DataFormatTransformUtil.result2List(outputHist);
         List<MacdDomain> resultDomainList = new ArrayList<MacdDomain>();
         for (int i = 0; i < difList.size(); i++) {
