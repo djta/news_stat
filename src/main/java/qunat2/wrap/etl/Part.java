@@ -46,9 +46,14 @@ public class Part {
         for (SegmentDomain segmentDomain : segmentDomainList) {
             System.out.println(segmentDomain);
         }
-        for (SegmentDomain segmentDomain : segmentDomainList) {
-            marketDao.insertSegmentMarket(segmentDomain,"segmentKline");
+//        for (SegmentDomain segmentDomain : segmentDomainList) {
+//            marketDao.insertSegmentMarket(segmentDomain,"segmentKline");
+//        }
+        List<PartEnum> pivotTendency = Pivot.getTrend(segmentDomainList);
+        for (int i = 0; i < pivotTendency.size(); i++) {
+            System.out.println(pivotTendency.get(i));
         }
+
 
     }
 
