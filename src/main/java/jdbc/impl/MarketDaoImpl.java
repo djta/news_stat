@@ -8,6 +8,7 @@ import jdbc.JdbcInital;
 import org.apache.ibatis.io.Resources;
 import qunat2.wrap.domain.PartDomain;
 import qunat2.wrap.domain.PenDomain;
+import qunat2.wrap.domain.SegmentDomain;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -47,6 +48,14 @@ public class MarketDaoImpl extends JdbcInital implements MarketDao {
         }
     }
     public void insertPenMarket(PenDomain md, String queryId) {
+        try {
+            sqlMapClient.insert(queryId, md);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertSegmentMarket(SegmentDomain md, String queryId) {
         try {
             sqlMapClient.insert(queryId, md);
         } catch (SQLException e) {
